@@ -2,6 +2,9 @@ package za.co.rideloop;
 
 import za.co.rideloop.Domain.Car;
 import za.co.rideloop.Domain.Maintenance;
+import za.co.rideloop.Domain.Address;
+import za.co.rideloop.Domain.ContactDetails;
+import za.co.rideloop.Domain.Customer;
 
 public class Main {
     public static void main(String[] args) {
@@ -35,5 +38,56 @@ public class Main {
             .build();
 
         System.out.println(maintenance);
-}}
+
+
+        // Create Address
+        Address address = new Address.Builder()
+                .setStreetName("123 Hope Street")
+                .setSuburb("Ennerdale Ext 4")
+                .setProvince("Gauteng")
+                .setZipCode("1830")
+                .build();
+
+        // Create ContactDetails
+        ContactDetails contactDetails = new ContactDetails.Builder()
+                .setContactEmail("rotondwa@example.com")
+                .setContactNumber("0723456789")
+                .setAlternativeContactNum("0781234567")
+                .build();
+
+        // Create Customer
+        Customer customer = new Customer.Builder()
+                .setCustomerID(1)
+                .setFirstName("Rotondwa")
+                .setLastName("Rambau")
+                .setLicenseNumber("CPT123456")
+                .setUsername("rotondwa22")
+                .setPassword("myPassword123")
+                .setStatus("Active")
+                .setAddress(address)
+                .setContactDetails(contactDetails)
+                .build();
+
+
+        System.out.println("Customer ID: " + customer.getCustomerID());
+        System.out.println("Name: " + customer.getFirstName() + " " + customer.getLastName());
+        System.out.println("License No: " + customer.getLicenseNumber());
+        System.out.println("Username: " + customer.getUsername());
+        System.out.println("Status: " + customer.getStatus());
+
+        System.out.println("Address: " + customer.getAddress().getStreetName() + ", " +
+                customer.getAddress().getSuburb() + ", " +
+                customer.getAddress().getProvince() + ", " +
+                customer.getAddress().getZipCode());
+
+        System.out.println("Contact Email: " + customer.getContactDetails().getContactEmail());
+        System.out.println("Phone: " + customer.getContactDetails().getContactNumber());
+        System.out.println("Alt Phone: " + customer.getContactDetails().getAlternativeContactNum());
+
+
+
+
+
+
+    }}
 
