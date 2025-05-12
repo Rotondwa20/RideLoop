@@ -75,6 +75,28 @@ public class Main {
                 .contractStatus("Active")
                 .build();
 
+        //test securityCompany
+        SecurityCompany securityCompany = new SecurityCompany.Builder()
+                .securityCompanyID(2001)
+                .name("SecureGuard Ltd.")
+                .contactPerson("Jane Doe")
+                .phone("555-1234-5678")
+                .email("contact@secureguard.com")
+                .serviceType("24/7 Monitoring")
+                .contractStartDate(new Date())
+                .contractEndDate(new Date(System.currentTimeMillis() + 31536000000L)) // One year from now
+                .monthlyFee(1500.00)
+                .emergencyHotline("911-SG")
+                .coverageArea("Downtown Area")
+                .build();
+
+        //test incident
+        Incident incident = new Incident.Builder()
+                .incidentID(3001)
+                .incidentType("Security Breach")
+                .description("Unauthorized access detected at the north entrance at 2:30 AM")
+                .build();
+
 
 
         System.out.println("Customer ID: " + customer.getCustomerID());
