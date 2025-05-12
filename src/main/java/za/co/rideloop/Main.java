@@ -1,10 +1,8 @@
 package za.co.rideloop;
 
-import za.co.rideloop.Domain.Car;
-import za.co.rideloop.Domain.Maintenance;
-import za.co.rideloop.Domain.Address;
-import za.co.rideloop.Domain.ContactDetails;
-import za.co.rideloop.Domain.Customer;
+import za.co.rideloop.Domain.*;
+
+import java.util.Date;
 
 public class Main {
     public static void main(String[] args) {
@@ -67,6 +65,16 @@ public class Main {
                 .setAddress(address)
                 .setContactDetails(contactDetails)
                 .build();
+
+        // Create carSupplier object
+        CarSupplier supplier = new CarSupplier.Builder()
+                .supplierID(1001)
+                .name("AutoParts Inc.")
+                .contactPerson("John Smith")
+                .supplyDate(new Date())
+                .contractStatus("Active")
+                .build();
+
 
 
         System.out.println("Customer ID: " + customer.getCustomerID());
