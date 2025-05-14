@@ -1,10 +1,8 @@
 package za.co.rideloop;
 
-import za.co.rideloop.Domain.Car;
-import za.co.rideloop.Domain.Maintenance;
-import za.co.rideloop.Domain.Address;
-import za.co.rideloop.Domain.ContactDetails;
-import za.co.rideloop.Domain.Customer;
+import za.co.rideloop.Domain.*;
+
+import java.util.Date;
 
 public class Main {
     public static void main(String[] args) {
@@ -67,6 +65,38 @@ public class Main {
                 .setAddress(address)
                 .setContactDetails(contactDetails)
                 .build();
+
+        // Create carSupplier object
+        CarSupplier supplier = new CarSupplier.Builder()
+                .supplierID(1001)
+                .name("AutoParts Inc.")
+                .contactPerson("John Smith")
+                .supplyDate(new Date())
+                .contractStatus("Active")
+                .build();
+
+        //test securityCompany
+        SecurityCompany securityCompany = new SecurityCompany.Builder()
+                .securityCompanyID(2001)
+                .name("SecureGuard Ltd.")
+                .contactPerson("Jane Doe")
+                .phone("555-1234-5678")
+                .email("contact@secureguard.com")
+                .serviceType("24/7 Monitoring")
+                .contractStartDate(new Date())
+                .contractEndDate(new Date(System.currentTimeMillis() + 31536000000L)) // One year from now
+                .monthlyFee(1500.00)
+                .emergencyHotline("911-SG")
+                .coverageArea("Downtown Area")
+                .build();
+
+        //test incident
+        Incident incident = new Incident.Builder()
+                .incidentID(3001)
+                .incidentType("Security Breach")
+                .description("Unauthorized access detected at the north entrance at 2:30 AM")
+                .build();
+
 
 
         System.out.println("Customer ID: " + customer.getCustomerID());
