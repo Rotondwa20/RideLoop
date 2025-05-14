@@ -1,4 +1,11 @@
 package za.co.rideloop.Domain;
+/**
+ * Admin.java
+ * Admin Model Class
+ *
+ * @Author: Mziwamangwevu Ntutu
+ * @Student Number: 217054420
+ **/
 
 public class Payment {
     private int paymentId;
