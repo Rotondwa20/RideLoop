@@ -1,23 +1,36 @@
 package za.co.rideloop.Domain;
 
-public class Location {
-    private int locationID;
+
+/**
+ * Address.java
+ * Address model class
+ *
+ * Author: Rotondwa Rambau
+ * Student Number: 222342145
+ * Group: 3I
+ */
+public class Address {
     private String streetName;
     private String suburb;
     private String province;
     private String zipCode;
 
+    public Address() {
 
-    private Location(Builder builder) {
-        this.locationID = builder.locationID;
+    }
+
+    public Address(String streetName, String suburb, String province, String zipCode) {
+        this.streetName = streetName;
+        this.suburb = suburb;
+        this.province = province;
+        this.zipCode = zipCode;
+    }
+
+    private Address(Builder builder) {
         this.streetName = builder.streetName;
         this.suburb = builder.suburb;
         this.province = builder.province;
         this.zipCode = builder.zipCode;
-    }
-
-    public int getLocationID() {
-        return locationID;
     }
 
     public String getStreetName() {
@@ -35,16 +48,14 @@ public class Location {
     public String getZipCode() {
         return zipCode;
     }
+
     public static class Builder {
-        private int locationID;
         private String streetName;
         private String suburb;
         private String province;
         private String zipCode;
 
-        public Builder setLocationID(int locationID) {
-            this.locationID = locationID;
-            return this;
+        public Builder() {
         }
 
         public Builder setStreetName(String streetName) {
@@ -67,18 +78,8 @@ public class Location {
             return this;
         }
 
-        public Location build() {
-            return new Location(this);
+        public Address build() {
+            return new Address(this);
         }
-    }
-    @Override
-    public String toString() {
-        return "Location{" +
-                "locationID=" + locationID +
-                ", streetName='" + streetName + '\'' +
-                ", suburb='" + suburb + '\'' +
-                ", province='" + province + '\'' +
-                ", zipCode='" + zipCode + '\'' +
-                '}';
     }
 }
