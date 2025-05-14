@@ -5,6 +5,7 @@ package za.co.rideloop.Domain;
  *
  * @Author: Mziwamangwevu Ntutu
  * @Student Number: 217054420
+ * Group 3 I
  **/
 public class Rental {
     private int rentalID;
