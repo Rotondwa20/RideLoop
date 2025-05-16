@@ -1,5 +1,8 @@
 package za.co.rideloop.Domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -13,12 +16,14 @@ import java.util.Objects;
  * @date : 5/12/2025
  * @Java version: "21.0.3" 2024-04-16 LTS
  */
+@Entity
 public class CarSupplier {
-    private final int supplierID;
-    private final String name;
-    private final String contactPerson;
-    private final Date supplyDate;
-    private final String contractStatus;
+    @Id
+    private int supplierID;
+    private String name;
+    private String contactPerson;
+    private Date supplyDate;
+    private String contractStatus;
 
     /**
      * Private constructor used by the Builder.
@@ -30,6 +35,10 @@ public class CarSupplier {
         this.contactPerson = builder.contactPerson;
         this.supplyDate = builder.supplyDate;
         this.contractStatus = builder.contractStatus;
+    }
+
+    public CarSupplier() {
+
     }
 
     // Getters

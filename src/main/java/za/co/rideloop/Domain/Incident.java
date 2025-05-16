@@ -1,4 +1,7 @@
 package za.co.rideloop.Domain;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 import java.util.Objects;
 
 /**
@@ -11,10 +14,12 @@ import java.util.Objects;
  * @date : 5/10/2025
  * @Java version: "21.0.3" 2024-04-16 LTS
  */
+@Entity
 public class Incident {
-    private final int incidentID;
-    private final String incidentType;
-    private final String description;
+    @Id
+    private int incidentID;
+    private String incidentType;
+    private String description;
 
     /**
      * Private constructor used by the Builder.
@@ -24,6 +29,10 @@ public class Incident {
         this.incidentID = builder.incidentID;
         this.incidentType = builder.incidentType;
         this.description = builder.description;
+    }
+
+    public Incident() {
+
     }
 
     // Getters
