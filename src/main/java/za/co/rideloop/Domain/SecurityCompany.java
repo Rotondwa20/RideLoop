@@ -1,5 +1,8 @@
 package za.co.rideloop.Domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -13,18 +16,20 @@ import java.util.Objects;
  * @date : 5/12/2025
  * @Java version: "21.0.3" 2024-04-16 LTS
  */
+@Entity
 public class SecurityCompany {
-    private final int securityCompanyID;
-    private final String name;
-    private final String contactPerson;
-    private final String phone;
-    private final String email;
-    private final String serviceType;
-    private final Date contractStartDate;
-    private final Date contractEndDate;
-    private final double monthlyFee;
-    private final String emergencyHotline;
-    private final String coverageArea;
+    @Id
+    private int securityCompanyID;
+    private String name;
+    private String contactPerson;
+    private String phone;
+    private String email;
+    private String serviceType;
+    private Date contractStartDate;
+    private Date contractEndDate;
+    private double monthlyFee;
+    private String emergencyHotline;
+    private String coverageArea;
 
     /**
      * Private constructor used by the Builder.
@@ -42,6 +47,10 @@ public class SecurityCompany {
         this.monthlyFee = builder.monthlyFee;
         this.emergencyHotline = builder.emergencyHotline;
         this.coverageArea = builder.coverageArea;
+    }
+
+    public SecurityCompany() {
+
     }
 
     // Getters
