@@ -3,7 +3,7 @@ package za.co.rideloop.Factory;
 import za.co.rideloop.Domain.Location;
 /* LocationFactory.java
 
-     Location Factory test class
+     Location Factory  class
 
      Author: Natasha Njili(221785345)
 
