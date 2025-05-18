@@ -180,6 +180,9 @@ public class FinancialReport {
                     ", netProfit=" + netProfit +
                     '}';
         }
+
+        public FinancialReport build() {
+        }
     }
 }
 
