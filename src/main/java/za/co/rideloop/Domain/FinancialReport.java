@@ -184,7 +184,8 @@ public class FinancialReport {
 
         public FinancialReport build() {
 
-        return new FinancialReport(this);
+            return new FinancialReport(this);
+
         }
     }
 }
