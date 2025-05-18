@@ -2,6 +2,7 @@ package za.co.rideloop;
 
 import za.co.rideloop.Domain.*;
 import za.co.rideloop.Factory.CarFactory;
+import za.co.rideloop.Factory.InvoiceFactory;
 
 import java.util.Date;
 
