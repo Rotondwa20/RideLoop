@@ -1,6 +1,7 @@
 package za.co.rideloop;
 
 import za.co.rideloop.Domain.*;
+import za.co.rideloop.Factory.CarFactory;
 
 import java.util.Date;
 
@@ -116,6 +117,24 @@ public class Main {
 
 
 
+
+       // Factory
+
+        Car carFac = CarFactory.createCar(
+                1,
+                "Toyota",
+                "Corolla",
+                2021,
+                "CA123456",
+                450.00,
+                "Available",
+                "Sedan",
+                30000,
+                "2025-01-15",
+                "2025-06-15"
+        );
+
+        System.out.println(carFac);
 
 
 
