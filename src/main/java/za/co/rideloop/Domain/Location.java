@@ -1,5 +1,11 @@
 package za.co.rideloop.Domain;
+/* Location.java
 
+     Location PoJO class
+
+     Author: Natasha Njili(221785345)
+
+     Date: 11 May 2025 */
 public class Location {
     private int locationID;
     private String streetName;

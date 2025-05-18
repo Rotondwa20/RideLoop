@@ -3,7 +3,7 @@ package za.co.rideloop.Factory;
 import za.co.rideloop.Domain.Maintenance;
 /* MaintananceFactory.java
 
-     Mainntanence Factory test class
+     Mainntanence Factory class
 
      Author: Natasha Njili(221785345)
 
