@@ -34,7 +34,7 @@ class RentalFactoryTest {
                 totalCost,
                 status
         );
-
+        System.out.println(rental);
         assertNotNull(rental);
         assertEquals(rentalID, rental.getRentalID());
         assertEquals(carID, rental.getCarID());
