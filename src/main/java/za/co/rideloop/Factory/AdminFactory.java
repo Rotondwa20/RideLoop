@@ -16,6 +16,12 @@ public class AdminFactory {
     int adminID,
     String userName,
     String password){
+        if (userName == null || userName.trim().isEmpty()) {
+            throw new IllegalArgumentException("userName cannot be null or empty");
+        }
+        if (password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("password cannot be null or empty");
+        }
 
         return new Admin.adminBuilder()
                 .setAdminID(adminID)
