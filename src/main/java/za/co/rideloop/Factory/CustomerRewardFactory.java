@@ -3,6 +3,12 @@ package za.co.rideloop.Factory;
 import java.util.Date;
 import za.co.rideloop.Domain.CustomerRewards;
 
+/**
+ * Author: Rotondwa Rambau
+ * Student Number: 222342145
+ * Group: 3I
+ */
+
 public class CustomerRewardFactory {
 
     public static CustomerRewards createDefault() {
