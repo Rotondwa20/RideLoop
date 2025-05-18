@@ -25,6 +25,5 @@ class AdminFactoryTest {
         assertEquals("securePass123", admin.getPassword());
     }
 
-   
 
 }
