@@ -1,4 +1,4 @@
-package za.co.rideloop.factory;
+package za.co.rideloop.Factory;
 
 import za.co.rideloop.Domain.Incident;
 
