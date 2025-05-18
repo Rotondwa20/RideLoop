@@ -13,9 +13,7 @@ public class Admin {
     private String password;
 
 
-    private Admin(){
 
-    }
     private  Admin(adminBuilder builder) {
         this.adminID= builder.adminID;
         this.userName = builder.userName;
@@ -25,7 +23,7 @@ public class Admin {
 
     }
 
-    public int getAdminID() {
+  /*  public int getAdminID() {
         return adminID;
     }
 
@@ -35,7 +33,7 @@ public class Admin {
 
     public String getPassword() {
         return password;
-    }
+    }*/
 
 
     public static class adminBuilder {

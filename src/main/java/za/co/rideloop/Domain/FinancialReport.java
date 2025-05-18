@@ -21,9 +21,9 @@ public class FinancialReport {
     private double expenses;
     private double netProfit;
 
-    public FinancialReport(){
+    /*public FinancialReport(){
 
-    }
+    }*/
 
     private FinancialReport(FinancialReport.Builder builder) {
         this.reportID = builder.reportID;
@@ -37,7 +37,7 @@ public class FinancialReport {
         this.expenses = builder.expenses;
         this.netProfit = builder.netProfit;
     }
-
+/*
     public int getReportID() {
         return reportID;
     }
@@ -78,7 +78,7 @@ public class FinancialReport {
         return netProfit;
     }
 
-
+*/
 
 
     public static class Builder {
