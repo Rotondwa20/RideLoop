@@ -2,7 +2,6 @@ package za.co.rideloop.Factory;
 
 import za.co.rideloop.Domain.Incident;
 
-import java.util.Date;
 
 /**
  * IncidentFactory.java
