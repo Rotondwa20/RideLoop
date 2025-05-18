@@ -23,7 +23,7 @@ public class Admin {
 
     }
 
-  /*  public int getAdminID() {
+   public int getAdminID() {
         return adminID;
     }
 
@@ -33,7 +33,7 @@ public class Admin {
 
     public String getPassword() {
         return password;
-    }*/
+    }
 
 
     public static class adminBuilder {
