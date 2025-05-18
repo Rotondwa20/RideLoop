@@ -14,9 +14,9 @@ public class CustomerApproval {
     private boolean approval;
 
 
-    private CustomerApproval(){
+  /*  private CustomerApproval(){
 
-    }
+    }*/
     private  CustomerApproval(CustomerApproval.approvalBuilder builder) {
         this.customerApprovalId= builder.customerApprovalId;
         this.licenseNumber = builder.licenseNumber;
@@ -25,7 +25,7 @@ public class CustomerApproval {
 
 
     }
-
+/*
     public int getCustomerApprovalId() {
         return customerApprovalId;
     }
@@ -38,7 +38,7 @@ public class CustomerApproval {
         return approval;
     }
 
-
+      */
 
 
     public static class approvalBuilder {
