@@ -11,14 +11,12 @@ import za.co.rideloop.Domain.Location;
 public class LocationFactory {
 
     public static Location createLocation(
-            int locationID,
             String streetName,
             String suburb,
             String province,
             String zipCode
     ) {
         return new Location.Builder()
-                .setLocationID(locationID)
                 .setStreetName(streetName)
                 .setSuburb(suburb)
                 .setProvince(province)

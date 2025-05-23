@@ -83,7 +83,14 @@ public class Location {
             this.zipCode = zipCode;
             return this;
         }
-
+        public Builder copy(Location location) {
+            this.locationID = location.locationID;
+            this.streetName = location.streetName;
+            this.suburb = location.suburb;
+            this.province = location.province;
+            this.zipCode = location.zipCode;
+            return this;
+        }
         public Location build() {
             return new Location(this);
         }
