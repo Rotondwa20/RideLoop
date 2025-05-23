@@ -6,13 +6,24 @@ package za.co.rideloop.Domain;
      Author: Natasha Njili(221785345)
 
      Date: 11 May 2025 */
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Location {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int locationID;
     private String streetName;
     private String suburb;
     private String province;
     private String zipCode;
 
+    protected  Location() {
+    }
 
     private Location(Builder builder) {
         this.locationID = builder.locationID;

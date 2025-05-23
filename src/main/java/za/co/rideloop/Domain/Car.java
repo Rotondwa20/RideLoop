@@ -1,4 +1,10 @@
 package za.co.rideloop.Domain;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 /* Car.java
 
      CAR POJO class
@@ -6,8 +12,10 @@ package za.co.rideloop.Domain;
      Author: Natasha Njili(221785345)
 
      Date: 11 May 2025 */
+@Entity
 public class Car {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int carId;
     private String brand;
     private String model;
@@ -19,6 +27,9 @@ public class Car {
     private int mileage;
     private String lastMaintenance;
     private String maintenanceDue;
+
+    protected  Car() {
+    }
 
     private Car(Builder builder) {
         this.carId = builder.carId;

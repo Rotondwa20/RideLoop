@@ -1,6 +1,11 @@
 package za.co.rideloop.Domain;
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 /* Maintenance.java
 
      Maintenance POJO class
@@ -8,15 +13,20 @@ package za.co.rideloop.Domain;
      Author: Natasha Njili(221785345)
 
      Date: 11 May 2025 */
-
+@Entity
 public class Maintenance {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String insuranceCompanyName;
     private String contactPerson;
     private String contactNumber;
     private String coverageType;
     private Double costPerMonth;
     private String description;
+
+    protected Maintenance() {
+    }
 
     private Maintenance(Builder builder) {
         this.insuranceCompanyName = builder.insuranceCompanyName;
