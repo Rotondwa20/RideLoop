@@ -25,7 +25,7 @@ public class CustomerApproval {
 
 
     }
-/*
+
     public int getCustomerApprovalId() {
         return customerApprovalId;
     }
@@ -38,7 +38,7 @@ public class CustomerApproval {
         return approval;
     }
 
-      */
+
 
 
     public static class approvalBuilder {

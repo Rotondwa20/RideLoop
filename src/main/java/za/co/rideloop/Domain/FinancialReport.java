@@ -37,7 +37,7 @@ public class FinancialReport {
         this.expenses = builder.expenses;
         this.netProfit = builder.netProfit;
     }
-/*
+
     public int getReportID() {
         return reportID;
     }
@@ -78,7 +78,7 @@ public class FinancialReport {
         return netProfit;
     }
 
-*/
+
 
 
     public static class Builder {
