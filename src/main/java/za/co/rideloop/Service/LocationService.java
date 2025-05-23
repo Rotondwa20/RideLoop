@@ -33,4 +33,8 @@ public class LocationService {
     public List<Location> getAllLocations(){
         return this.repository.findAll();
     }
+
+    public Location getLocationByStreetName(String streetName) {
+        return this.repository.findByStreetName(streetName).orElse(null);
+    }
 }

@@ -17,7 +17,6 @@ class LocationFactoryTest {
     @Test
     void createLocation_shouldCreateValidLocation() {
         Location location = LocationFactory.createLocation(
-                101,
                 "Main Road",
                 "Claremont",
                 "Western Cape",
@@ -25,7 +24,6 @@ class LocationFactoryTest {
         );
 
         assertNotNull(location);
-        assertEquals(101, location.getLocationID());
         assertEquals("Main Road", location.getStreetName());
         assertEquals("Claremont", location.getSuburb());
         assertEquals("Western Cape", location.getProvince());
