@@ -1,6 +1,7 @@
 package za.co.rideloop.Domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.util.Objects;
 
@@ -8,13 +9,14 @@ import java.util.Objects;
  * RideLoop
  * Incident.java
  *
- * @author : Swatsi Bongani Ratia
- * @studnr : 230724477
- * @group : 3I
- * @date : 5/10/2025
- * @Java version: "21.0.3" 2024-04-16 LTS
+ * author : Swatsi Bongani Ratia
+ * studnr : 230724477
+ * group : 3I
+ * date : 5/10/2025
+ * Java version: "21.0.3" 2024-04-16 LTS
  */
 @Entity
+@Table(name="Incident")
 public class Incident {
     @Id
     private int incidentID;
