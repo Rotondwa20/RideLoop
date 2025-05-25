@@ -1,4 +1,10 @@
 package za.co.rideloop.Domain;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 /**
  * Admin.java
  * Admin Model Class
@@ -7,7 +13,9 @@ package za.co.rideloop.Domain;
  * @Student Number: 217054420
  *  group 3I
  **/
+
 public class Invoice {
+
     private int invoiceID;
     private String invoiceDate;
     private String dueDate;
