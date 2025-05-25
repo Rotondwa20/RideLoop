@@ -1,5 +1,7 @@
 package za.co.rideloop.Domain;
 
+import jakarta.persistence.*;
+
 /**
  * CustomerApproval.java
  * CustomerApproval Model Class
@@ -7,16 +9,25 @@ package za.co.rideloop.Domain;
  * @Author: Ndyebo Qole 210018615
  * @Student Number: 210018615
  **/
+@Entity
+@Table(name = "customer_approvals")
 public class CustomerApproval {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "customer_approval_id")
     private int customerApprovalId;
+
+    @Column(name = "license_number", nullable = false, unique = true)
     private String licenseNumber;
+
+    @Column(name = "approval", nullable = false)
     private boolean approval;
 
 
-  /*  private CustomerApproval(){
+    protected CustomerApproval(){
 
-    }*/
+    }
     private  CustomerApproval(CustomerApproval.approvalBuilder builder) {
         this.customerApprovalId= builder.customerApprovalId;
         this.licenseNumber = builder.licenseNumber;
