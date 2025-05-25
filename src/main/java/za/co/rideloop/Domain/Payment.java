@@ -1,4 +1,10 @@
 package za.co.rideloop.Domain;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 /**
  * Admin.java
  * Admin Model Class
@@ -8,6 +14,7 @@ package za.co.rideloop.Domain;
  **/
 
 public class Payment {
+
     private int paymentId;
     private int rentalID;
     private Double paymentAmount;

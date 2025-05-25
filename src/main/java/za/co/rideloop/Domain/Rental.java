@@ -1,4 +1,10 @@
 package za.co.rideloop.Domain;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 /**
  * Admin.java
  * Admin Model Class
@@ -7,7 +13,9 @@ package za.co.rideloop.Domain;
  * @Student Number: 217054420
  * Group 3 I
  **/
+
 public class Rental {
+
     private int rentalID;
     private int carID;
     private int customerID;
@@ -78,7 +86,7 @@ public class Rental {
 
     @Override
     public String toString() {
-        return "Rental{" +
+        return "RentalRepository{" +
                 "rentalID=" + rentalID +
                 ", carID=" + carID +
                 ", customerID=" + customerID +
