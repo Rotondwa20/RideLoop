@@ -1,5 +1,8 @@
 package za.co.rideloop.Domain;
 
+import jakarta.persistence.*;
+
+
 /**
  * Admin.java
  * Admin Model Class
@@ -7,13 +10,24 @@ package za.co.rideloop.Domain;
  * @Author: Ndyebo Qole 210018615
  * @Student Number: 210018615
  **/
+@Entity
+@Table(name = "admins")
 public class Admin {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "admin_id")
     private int adminID;
+
+    @Column(name = "username"/*, nullable = false, unique = true*/)
     private String userName;
+
+    @Column(name = "password"/*, nullable = false*/)
     private String password;
 
 
+    protected Admin() {
 
+    }
     private  Admin(adminBuilder builder) {
         this.adminID= builder.adminID;
         this.userName = builder.userName;
@@ -23,7 +37,7 @@ public class Admin {
 
     }
 
-   public int getAdminID() {
+      public int getAdminID() {
         return adminID;
     }
 

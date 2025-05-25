@@ -1,5 +1,7 @@
 package za.co.rideloop.Domain;
 
+import jakarta.persistence.*;
+
 /**
  * FinancialReport.java
  * FinancialReport Model Class
@@ -7,23 +9,45 @@ package za.co.rideloop.Domain;
  * @Author: Ndyebo Qole 210018615
  * @Student Number: 210018615
  **/
+@Entity
+@Table(name = "financial_reports")
 public class FinancialReport {
 
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "report_id")
     private int reportID;
+
+    @Column(name = "generate_date", nullable = false)
     private String generateDate;
+
+    @Column(name = "time_period", nullable = false)
     private String timePeriod;
+
+    @Column(name = "export_format")
     private String exportFormat;
+
+    @Column(name = "total_revenue", nullable = false)
     private double totalRevenue;
+
+    @Column(name = "rental_income", nullable = false)
     private double rentalIncome;
+
+    @Column(name = "additional_charges")
     private double additionalCharges;
+
+    @Column(name = "insurance_income")
     private double insuranceIncome;
+
+    @Column(name = "expenses", nullable = false)
     private double expenses;
+
+    @Column(name = "net_profit", nullable = false)
     private double netProfit;
 
-    /*public FinancialReport(){
+    protected FinancialReport(){
 
-    }*/
+    }
 
     private FinancialReport(FinancialReport.Builder builder) {
         this.reportID = builder.reportID;
