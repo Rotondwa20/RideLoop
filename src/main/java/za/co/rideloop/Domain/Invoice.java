@@ -1,21 +1,21 @@
 package za.co.rideloop.Domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 /**
- * Admin.java
- * Admin Model Class
+ * Invoice.java
+ * Invoice Model Class
  *
  * @Author: Mziwamangwevu Ntutu
  * @Student Number: 217054420
  *  group 3I
  **/
-
+@Entity
+@Table(name = "invoices")
 public class Invoice {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int invoiceID;
     private String invoiceDate;
     private String dueDate;

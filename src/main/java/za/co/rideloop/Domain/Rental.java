@@ -1,16 +1,20 @@
 package za.co.rideloop.Domain;
 
+import jakarta.persistence.*;
+
 /**
- * Admin.java
- * Admin Model Class
+ * Rental.java
+ * Rental Model Class
  *
  * @Author: Mziwamangwevu Ntutu
  * @Student Number: 217054420
  * Group 3 I
  **/
-
+@Entity
+@Table(name = "rentals")
 public class Rental {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int rentalID;
     private int carID;
     private int customerID;
