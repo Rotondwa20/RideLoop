@@ -71,7 +71,7 @@ class SecurityCompanyFactoryTest {
             );
         });
 
-        assertTrue(exception.getMessage().contains("All fields"));
+        assertTrue(exception.getMessage().contains("Invalid input"));
         System.err.println(exception.getMessage());
     }
 

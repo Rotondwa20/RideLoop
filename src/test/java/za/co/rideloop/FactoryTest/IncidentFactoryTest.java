@@ -37,7 +37,7 @@ class IncidentFactoryTest {
             IncidentFactory.build(2, "", "Flat tyre on highway.");
         });
 
-        String expectedMessage = "invalid input";
+        String expectedMessage = "Invalid input";
         assertTrue(exception.getMessage().contains(expectedMessage));
         System.err.println(exception.getMessage());
     }
@@ -48,7 +48,7 @@ class IncidentFactoryTest {
             IncidentFactory.build(3, "Mechanical Failure", null);
         });
 
-        String expectedMessage = "invalid input";
+        String expectedMessage = "Invalid input";
         assertTrue(exception.getMessage().contains(expectedMessage));
         System.err.println(exception.getMessage());
     }

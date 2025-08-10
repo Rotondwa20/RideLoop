@@ -1,6 +1,7 @@
 package za.co.rideloop.Factory;
 
 import za.co.rideloop.Domain.Incident;
+import za.co.rideloop.Util.ValidationHelper;
 
 
 /**
@@ -15,12 +16,8 @@ import za.co.rideloop.Domain.Incident;
 
 public class IncidentFactory {
     public static Incident build(int incidentID, String incidentType, String description) {
-        if(incidentType == null || incidentType.isBlank()){
-            throw new IllegalArgumentException("invalid input - 'incidentType' must not be empty");
-        }
-        if(description == null || description.isBlank()){
-            throw new IllegalArgumentException("invalid input - 'description' must not be empty");
-        }
+        ValidationHelper.requireNonBlank(incidentType, "incidentType");
+        ValidationHelper.requireNonBlank(description, "description");
 
 return new Incident.Builder()
         .incidentID(incidentID)

@@ -1,6 +1,7 @@
 package za.co.rideloop.Factory;
 
 import za.co.rideloop.Domain.SecurityCompany;
+import za.co.rideloop.Util.ValidationHelper;
 
 import java.util.Date;
 
@@ -28,12 +29,7 @@ public class SecurityCompanyFactory {
             String emergencyHotline,
             String coverageArea
     ) {
-        if (name == null || name.isEmpty() || contactPerson == null || contactPerson.isEmpty() ||
-                phone == null || phone.isEmpty() || email == null || email.isEmpty() ||
-                serviceType == null || serviceType.isEmpty() || emergencyHotline == null || emergencyHotline.isEmpty() ||
-                coverageArea == null || coverageArea.isEmpty()) {
-            throw new IllegalArgumentException("All fields must be provided and not empty");
-        }
+        ValidationHelper.requireNonBlank(name, "name");
 
         if (contractStartDate == null || contractEndDate == null || contractEndDate.before(contractStartDate)) {
             throw new IllegalArgumentException("Invalid contract dates");

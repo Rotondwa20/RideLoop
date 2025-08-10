@@ -2,6 +2,7 @@ package za.co.rideloop.Factory;
 
 
 import za.co.rideloop.Domain.CarSupplier;
+import za.co.rideloop.Util.ValidationHelper;
 
 import java.util.Date;
 
@@ -17,9 +18,11 @@ import java.util.Date;
 
 public class CarSupplierFactory {
     public static CarSupplier build(int supplierID, String name, String contactPerson, Date supplyDate, String contractStatus) {
-        if(name == null || name.isBlank() || contactPerson == null || contactPerson.isBlank() || contractStatus == null || contractStatus.isBlank()){
-            throw new IllegalArgumentException("invalid input - fields must not be empty");
-        }
+        ValidationHelper.requireNonBlank(name, "name");
+        ValidationHelper.requireNonBlank(contactPerson, "contactPerson");
+        ValidationHelper.requireNonNull(supplyDate, "supplyDate");
+        ValidationHelper.requireNonNull(contractStatus, "contractStatus");
+
         return new CarSupplier.Builder()
                 .supplierID(supplierID)
                 .name(name)
