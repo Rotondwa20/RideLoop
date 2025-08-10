@@ -117,6 +117,7 @@ class SecurityCompanyFactoryTest {
         });
 
         assertTrue(exception.getMessage().contains("Monthly fee"));
+        System.err.println(exception.getMessage());
     }
 
 }
