@@ -1,5 +1,12 @@
 package za.co.rideloop.FactoryTest;
-
+/**
+ * Admin.java
+ * Admin Model Class
+ *
+ * @Author: Mziwamangwevu Ntutu
+ * @Student Number: 217054420
+ * Group 3 I
+ **/
 import org.junit.jupiter.api.Test;
 import za.co.rideloop.Domain.Rental;
 import za.co.rideloop.Factory.RentalFactory;
@@ -47,7 +54,7 @@ class RentalFactoryTest {
         assertEquals(totalCost, rental.getTotalCost(), 0.001); // Using delta for double comparison
         assertEquals(status, rental.getStatus());
 
-        System.out.println(rental);
+        //System.out.println(rental);
 
     }
 }
