@@ -17,7 +17,7 @@ import java.util.Date;
 
 public class CarSupplierFactory {
     public static CarSupplier build(int supplierID, String name, String contactPerson, Date supplyDate, String contractStatus) {
-        if(name == null || name.isEmpty() || contactPerson == null || contactPerson.isEmpty() || contractStatus == null || contractStatus.isEmpty()){
+        if(name == null || name.isBlank() || contactPerson == null || contactPerson.isBlank() || contractStatus == null || contractStatus.isBlank()){
             throw new IllegalArgumentException("invalid input - fields must not be empty");
         }
         return new CarSupplier.Builder()

@@ -45,7 +45,8 @@ class CarSupplierFactoryTest {
         //String expectedMessage = "Invalid Input";
         String actualMessage = exception.getMessage();
 
-        assertTrue(actualMessage.contains("Invalid Input"));
+        assertTrue(actualMessage.contains("invalid input"));
+        System.err.println(actualMessage);
     }
 
 }

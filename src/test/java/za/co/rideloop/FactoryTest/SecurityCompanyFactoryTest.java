@@ -72,6 +72,7 @@ class SecurityCompanyFactoryTest {
         });
 
         assertTrue(exception.getMessage().contains("All fields"));
+        System.err.println(exception.getMessage());
     }
 
     @Test
@@ -116,6 +117,7 @@ class SecurityCompanyFactoryTest {
         });
 
         assertTrue(exception.getMessage().contains("Monthly fee"));
+        System.err.println(exception.getMessage());
     }
 
 }
