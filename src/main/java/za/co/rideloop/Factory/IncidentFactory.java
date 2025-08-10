@@ -15,8 +15,11 @@ import za.co.rideloop.Domain.Incident;
 
 public class IncidentFactory {
     public static Incident build(int incidentID, String incidentType, String description) {
-        if(incidentType == null || incidentType.isBlank()||description == null || description.isBlank()){
-            throw new IllegalArgumentException("invalid input - fields must not be empty");
+        if(incidentType == null || incidentType.isBlank()){
+            throw new IllegalArgumentException("invalid input - 'incidentType' must not be empty");
+        }
+        if(description == null || description.isBlank()){
+            throw new IllegalArgumentException("invalid input - 'description' must not be empty");
         }
 
 return new Incident.Builder()
