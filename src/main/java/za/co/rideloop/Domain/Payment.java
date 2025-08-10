@@ -1,15 +1,20 @@
 package za.co.rideloop.Domain;
 
+import jakarta.persistence.*;
+
 /**
- * Admin.java
- * Admin Model Class
+ * Payment.java
+ * Payment Model Class
  *
  * @Author: Mziwamangwevu Ntutu
  * @Student Number: 217054420
  **/
-
+@Entity
+@Table(name = "payments")
 public class Payment {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int paymentId;
     private int rentalID;
     private Double paymentAmount;

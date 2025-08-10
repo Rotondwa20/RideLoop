@@ -1,7 +1,7 @@
 package za.co.rideloop.Factory;
 /**
- * Admin.java
- * Admin Model Class
+ * InvoiceFactory.java
+ * InvoiceFactory Model Class
  *
  * @Author: Mziwamangwevu Ntutu
  * @Student Number: 217054420
