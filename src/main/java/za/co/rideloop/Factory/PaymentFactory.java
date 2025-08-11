@@ -12,13 +12,13 @@ import za.co.rideloop.util.Helper;
 
 public class PaymentFactory {
     // Factory method to create a full payment with all details
-    public static Payment createPayment(int paymentId, int rentalID, Double paymentAmount,
+    public static Payment createPayment( int rentalID, Double paymentAmount,
                                         String paymentMethod, String paymentDate, String paymentStatus) {
 
 
         // Use the Helper class to validate the parameters
-        if (!Helper.isValidInterger(paymentId) ||
-                !Helper.isValidInterger(rentalID) ||
+        if (
+
                 !Helper.isValidAmount(paymentAmount) ||
                 Helper.isNullOrEmpty(paymentMethod) ||
                 Helper.isNullOrEmpty(paymentDate) ||
@@ -28,7 +28,7 @@ public class PaymentFactory {
             throw new IllegalArgumentException("Invalid input provided for creating a Payment object.");
         }
             return new Payment.PaymentBuilder()
-                    .setPaymentId(paymentId)
+
                     .setRentalID(rentalID)
                     .setPaymentAmount(paymentAmount)
                     .setPaymentMethod(paymentMethod)

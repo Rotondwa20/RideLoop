@@ -18,7 +18,7 @@ class RentalFactoryTest {
     @Test
     void createRental() {
 
-        int rentalID = 1;
+
         int carID = 101;
         int customerID = 201;
         String startDate = "2023-10-01";
@@ -30,7 +30,7 @@ class RentalFactoryTest {
         String status = "Confirmed";
 
         Rental rental = RentalFactory.createRental(
-                rentalID,
+
                 carID,
                 customerID,
                 startDate,
@@ -43,7 +43,7 @@ class RentalFactoryTest {
         );
         System.out.println(rental);
         assertNotNull(rental);
-        assertEquals(rentalID, rental.getRentalID());
+       // assertEquals(rentalID, rental.getRentalID());
         assertEquals(carID, rental.getCarID());
         assertEquals(customerID, rental.getCustomerID());
         assertEquals(startDate, rental.getStartDate());
