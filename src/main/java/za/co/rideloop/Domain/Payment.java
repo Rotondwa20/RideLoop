@@ -122,6 +122,15 @@ public class Payment {
             this.paymentStatus = paymentStatus;
             return this;
         }
+        public PaymentBuilder PaymentBuilderCopy(Payment payment) {
+            this.paymentId = payment.paymentId;
+            this.rentalID = payment.rentalID;
+            this.paymentAmount = payment.paymentAmount;
+            this.paymentMethod = payment.paymentMethod;
+            this.paymentDate = payment.paymentDate;
+            this.paymentStatus = payment.paymentStatus;
+            return this;
+        }
 
         public Payment build() {
 

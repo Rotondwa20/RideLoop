@@ -19,7 +19,7 @@ class InvoiceFactoryTest {
 
     @Test
     void createInvoice() {
-        int invoiceID = 101;
+      //  int invoiceID = 101;
         String invoiceDate = "2023-10-01";
         String dueDate = "2023-10-15";
         String status = "Unpaid";
@@ -31,7 +31,7 @@ class InvoiceFactoryTest {
         String paymentReference = "INV-REF-101";
 
         Invoice invoice = InvoiceFactory.createInvoice(
-                invoiceID,
+
                 invoiceDate,
                 dueDate,
                 status,
@@ -43,7 +43,7 @@ class InvoiceFactoryTest {
                 paymentReference);
 
         assertNotNull(invoice);
-        assertEquals(invoiceID, invoice.getInvoiceID());
+       // assertEquals(invoiceID, invoice.getInvoiceID());
         assertEquals(invoiceDate, invoice.getInvoiceDate());
         assertEquals(dueDate, invoice.getDueDate());
         assertEquals(status, invoice.getStatus());

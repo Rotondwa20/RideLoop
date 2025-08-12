@@ -162,6 +162,19 @@ public class Rental {
             this.status = status;
             return this;
         }
+        public RentalBuilder RentalBuilderCopy(Rental rental) {
+            this.rentalID = rental.rentalID;
+            this.carID = rental.carID;
+            this.customerID = rental.customerID;
+            this.startDate = rental.startDate;
+            this.endDate = rental.endDate;
+            this.pickupLocation = rental.pickupLocation;
+            this.dropoffLocation = rental.dropoffLocation;
+            this.insuranceID = rental.insuranceID;
+            this.totalCost = rental.totalCost;
+            this.status = rental.status;
+            return this;
+        }
 
         public Rental build() {
             // You can add validation here if needed

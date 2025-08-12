@@ -21,6 +21,17 @@ public class Helper {
         return amount > 0;
     }
 
+    public static boolean isNotFutureDate(String paymentDate) {
+        if (isNullOrEmpty(paymentDate)) return false;
+        LocalDate date;
+        try {
+            date = LocalDate.parse(paymentDate);
+        } catch (Exception e) {
+            return false; // Invalid date format
+        }
+        return !date.isAfter(LocalDate.now(ZoneId.of("UTC")));
+    }
+
     // ===== Date Checks =====
    /* public static boolean isValidDateRange(LocalDate start, LocalDate end) {
         if (start == null || end == null) return false;

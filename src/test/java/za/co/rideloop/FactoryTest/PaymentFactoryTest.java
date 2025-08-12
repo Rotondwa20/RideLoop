@@ -17,7 +17,7 @@ class PaymentFactoryTest {
 
     @Test
     void createPayment() {
-        int paymentId = 123;
+
         int rentalID = 456;
         Double paymentAmount = 500.00;
         String paymentMethod = "Credit Card";
@@ -26,7 +26,7 @@ class PaymentFactoryTest {
 
 
         Payment payment= PaymentFactory.createPayment(
-                paymentId,
+
                 rentalID,
                 paymentAmount,
                 paymentMethod,
@@ -34,8 +34,7 @@ class PaymentFactoryTest {
                 paymentStatus
         );
         assertNotNull(payment);
-        assertEquals(paymentId, payment.getPaymentId());
-        assertEquals(paymentId, payment.getPaymentId());
+
         assertEquals(rentalID, payment.getRentalID());
         assertEquals(paymentMethod, payment.getPaymentMethod());
         assertEquals(paymentDate, payment.getPaymentDate());

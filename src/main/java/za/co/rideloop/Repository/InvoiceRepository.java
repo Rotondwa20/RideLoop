@@ -10,8 +10,13 @@ package za.co.rideloop.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import za.co.rideloop.Domain.Invoice;
+
+import java.util.Optional;
+
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
-
+  //  Optional<Invoice> findByPaymentReference(String paymentReference);
+   // Invoice findByPaymentReference(String paymentReference);
+  Optional<Invoice> findByPaymentReference(String paymentReference);
 
 }
