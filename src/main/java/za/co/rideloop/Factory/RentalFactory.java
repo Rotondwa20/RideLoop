@@ -8,7 +8,7 @@ package za.co.rideloop.Factory;
  * Group 3 I
  **/
 import za.co.rideloop.Domain.Rental;
-import za.co.rideloop.util.Helper;
+import za.co.rideloop.Util.Helper;
 
 public class RentalFactory {
     // Factory method to create a rental with all details

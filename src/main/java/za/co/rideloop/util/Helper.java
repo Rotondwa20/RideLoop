@@ -1,4 +1,4 @@
-package za.co.rideloop.util;
+package za.co.rideloop.Util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

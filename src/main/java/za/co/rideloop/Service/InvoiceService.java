@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.co.rideloop.Domain.Invoice;
 import za.co.rideloop.Repository.InvoiceRepository;
-import za.co.rideloop.util.Helper;
+import za.co.rideloop.Util.Helper;
 
 
 
@@ -38,26 +38,35 @@ public class InvoiceService {
     }
 
     public Invoice updateInvoice(Invoice invoice) {
-        if (invoice == null) return null;
-
-        Optional<Invoice> opt = repository.findById(invoice.getInvoiceID());
-        if (opt.isPresent()) {
-            Invoice existing = opt.get();
-
-            // Update fields (only if incoming values are not null/empty - you can adjust rules)
-            if (invoice.getInvoiceDate() != null) existing.setInvoiceDate(invoice.getInvoiceDate());
-            if (invoice.getDueDate() != null) existing.setDueDate(invoice.getDueDate());
-            if (invoice.getStatus() != null) existing.setStatus(invoice.getStatus());
-            existing.setSubtotal(invoice.getSubtotal());
-            existing.setTaxAmount(invoice.getTaxAmount());
-            existing.setDiscountAmount(invoice.getDiscountAmount());
-            existing.setTotalAmount(invoice.getTotalAmount());
-            if (invoice.getPaymentMethod() != null) existing.setPaymentMethod(invoice.getPaymentMethod());
-            if (invoice.getPaymentReference() != null) existing.setPaymentReference(invoice.getPaymentReference());
-
-            return repository.save(existing);
+        // Check if the input invoice is valid and has an ID
+        if (invoice == null || invoice.getInvoiceID() == 0) {
+            return null;
         }
-        return null; // not found
+
+        // Find the existing invoice by its ID
+        Optional<Invoice> existingInvoiceOpt = repository.findById(invoice.getInvoiceID());
+
+        if (existingInvoiceOpt.isPresent()) {
+            Invoice existingInvoice = existingInvoiceOpt.get();
+
+            // Use the builder to create a new updated object.
+            // This is a robust way to handle updates when your entity doesn't have public setters.
+            Invoice updatedInvoice = new Invoice.InvoiceBuilder()
+                    .setInvoiceID(existingInvoice.getInvoiceID()) // Keep the original ID
+                    .setInvoiceDate(invoice.getInvoiceDate())
+                    .setDueDate(invoice.getDueDate())
+                    .setStatus(invoice.getStatus())
+                    .setSubtotal(invoice.getSubtotal())
+                    .setTaxAmount(invoice.getTaxAmount())
+                    .setDiscountAmount(invoice.getDiscountAmount())
+                    .setTotalAmount(invoice.getTotalAmount())
+                    .setPaymentMethod(invoice.getPaymentMethod())
+                    .setPaymentReference(invoice.getPaymentReference())
+                    .build();
+
+            return repository.save(updatedInvoice);
+        }
+        return null; // Not found
     }
 
     public List<Invoice> getAllInvoices() {
