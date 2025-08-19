@@ -7,7 +7,8 @@ import za.co.rideloop.Domain.Location;
 import java.util.Optional;
 
 @Repository
-public interface LocationRepository extends JpaRepository<Location , Integer> {
+public interface LocationRepository extends JpaRepository<Location, Integer> {
 
-    Optional<Location> findByStreetName(String streetName);
+    Optional<Location> findByLongitudeAndLatitude(double longitude, double latitude);
 }
+

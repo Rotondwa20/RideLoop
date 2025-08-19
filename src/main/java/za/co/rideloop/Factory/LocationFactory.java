@@ -10,18 +10,16 @@ import za.co.rideloop.Domain.Location;
      Date: 18 May 2025 */
 public class LocationFactory {
 
+    // 🔹 Factory method for creating a Location
     public static Location createLocation(
-            String streetName,
-            String suburb,
-            String province,
-            String zipCode
+            double longitude,
+            double latitude
     ) {
         return new Location.Builder()
-                .setStreetName(streetName)
-                .setSuburb(suburb)
-                .setProvince(province)
-                .setZipCode(zipCode)
+                .setLongitude(longitude)
+                .setLatitude(latitude)
                 .build();
     }
 }
+
 
