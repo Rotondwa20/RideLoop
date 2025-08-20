@@ -1,11 +1,10 @@
 package za.co.rideloop.Domain;
+
 /* Location.java
-
-     Location PoJO class
-
-     Author: Natasha Njili(221785345)
-
-     Date: 11 May 2025 */
+   Location POJO class with Builder pattern
+   Author: Natasha Njili(221785345)
+   Date: 11 May 2025
+*/
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,95 +13,78 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Location {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int locationID;
-    private String streetName;
-    private String suburb;
-    private String province;
-    private String zipCode;
+    private double longitude;
+    private double latitude;
 
-    protected  Location() {
-    }
+    // 🔹 Default constructor (required by JPA)
+    protected Location() {}
 
+    // 🔹 Private constructor for builder
     private Location(Builder builder) {
         this.locationID = builder.locationID;
-        this.streetName = builder.streetName;
-        this.suburb = builder.suburb;
-        this.province = builder.province;
-        this.zipCode = builder.zipCode;
+        this.longitude = builder.longitude;
+        this.latitude = builder.latitude;
     }
 
+    // 🔹 Getters
     public int getLocationID() {
         return locationID;
     }
 
-    public String getStreetName() {
-        return streetName;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public String getSuburb() {
-        return suburb;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public String getProvince() {
-        return province;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
+    // 🔹 Builder Class
     public static class Builder {
-        private int locationID;
-        private String streetName;
-        private String suburb;
-        private String province;
-        private String zipCode;
+        private int locationID; // optional (usually generated)
+        private double longitude;
+        private double latitude;
 
         public Builder setLocationID(int locationID) {
             this.locationID = locationID;
             return this;
         }
 
-        public Builder setStreetName(String streetName) {
-            this.streetName = streetName;
+        public Builder setLongitude(double longitude) {
+            this.longitude = longitude;
             return this;
         }
 
-        public Builder setSuburb(String suburb) {
-            this.suburb = suburb;
+        public Builder setLatitude(double latitude) {
+            this.latitude = latitude;
             return this;
         }
 
-        public Builder setProvince(String province) {
-            this.province = province;
-            return this;
-        }
-
-        public Builder setZipCode(String zipCode) {
-            this.zipCode = zipCode;
-            return this;
-        }
-        public Builder copy(Location location) {
-            this.locationID = location.locationID;
-            this.streetName = location.streetName;
-            this.suburb = location.suburb;
-            this.province = location.province;
-            this.zipCode = location.zipCode;
-            return this;
-        }
         public Location build() {
             return new Location(this);
         }
+
+        public Builder copy(Location location) {
+            this.locationID = location.locationID;
+            this.longitude = location.longitude;
+            this.latitude = location.latitude;
+            return this;
+        }
+
     }
+
+    // 🔹 toString() for debugging
     @Override
     public String toString() {
         return "Location{" +
                 "locationID=" + locationID +
-                ", streetName='" + streetName + '\'' +
-                ", suburb='" + suburb + '\'' +
-                ", province='" + province + '\'' +
-                ", zipCode='" + zipCode + '\'' +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
                 '}';
     }
 }
+

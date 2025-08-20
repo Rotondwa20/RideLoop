@@ -12,57 +12,66 @@ import za.co.rideloop.Service.LocationService;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class LocationServiceTest {
+
     @Autowired
     private LocationService service;
-    private  Location location ;
-    @Test
-    void a_createLocation(){
-        Location newlocation = LocationFactory.createLocation("XasoCress" ,"Khayelitsha" ,"Western Cape" ,"8001");
 
-        location = service.createLocation(newlocation);
+    private static Location location;
+
+    //  Create a Location
+    @Test
+    void a_createLocation() {
+        Location newLocation = LocationFactory.createLocation(18.4233, -33.9189);
+
+        location = service.createLocation(newLocation);
         assertNotNull(location);
-        System.out.println(location.toString());
-
+        System.out.println("Created: " + location);
     }
 
+    //  Read a Location by ID
     @Test
-    void b_readLocation(){
-        Location location1= service.readLocation(352);
+    void b_readLocation() {
+        // Use the location created in previous test
+        Location location1 = service.readLocation(location.getLocationID());
         assertNotNull(location1);
-        System.out.println(location1.toString());
+        System.out.println("Read: " + location1);
     }
 
+    // 🔹 Update a Location
     @Test
-    void c_updateLocation(){
-        //let's find a street name XasCress and update it
-        Location findXasoCres = service.getLocationByStreetName("XasoCress");
-        assertNotNull(findXasoCres);
+    void c_updateLocation() {
+        // Copy existing location and modify coordinates
+        Location updatedLocation = new Location.Builder()
+                .copy(location)
+                .setLongitude(18.5000)
+                .setLatitude(-33.9500)
+                .build();
 
-        // change "XasoCres" to "Xaso Creasant"
-        Location updateLocation = new Location.Builder()
-                                              .copy(findXasoCres)
-                                               .setStreetName("Xaso Creasant")
-                                              .build();
-        Location updated = service.updateLocation(updateLocation);
-        assertNotNull(updated);
-        System.out.println(updated);
+        Location result = service.updateLocation(updatedLocation);
+        assertNotNull(result);
+        System.out.println("Updated: " + result);
     }
 
+    //  Delete a Location
     @Test
-    void d_deleteLocation (){
-       service.delete(402);
-
+    void d_deleteLocation() {
+        service.delete(location.getLocationID());
+        Location deleted = service.readLocation(location.getLocationID());
+        assertNull(deleted);
+        System.out.println("Deleted location with ID: " + location.getLocationID());
     }
 
+    // 🔹 Get all Locations
     @Test
-    void e_getAllLocations(){
-        List<Location> locList=service.getAllLocations();
+    void e_getAllLocations() {
+        List<Location> locList = service.getAllLocations();
         assertNotNull(locList);
-        System.out.println(locList.toString());
+        System.out.println("All locations: " + locList);
     }
-
 }
