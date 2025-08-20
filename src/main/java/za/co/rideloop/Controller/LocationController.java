@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/locations")
+@CrossOrigin(origins = "http://localhost:3000")
 public class LocationController {
 
     @Autowired
@@ -60,7 +61,7 @@ public class LocationController {
         return ResponseEntity.ok(locList);
     }
 
-    // 🔹 Optional: Get Location by coordinates
+    // 🔹 Get Location by coordinates
     @GetMapping("/search")
     public ResponseEntity<Location> getLocationByCoordinates(
             @RequestParam double longitude,

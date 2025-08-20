@@ -24,7 +24,7 @@ public class LocationServiceTest {
 
     private static Location location;
 
-    // 🔹 Test A: Create a Location
+    //  Create a Location
     @Test
     void a_createLocation() {
         Location newLocation = LocationFactory.createLocation(18.4233, -33.9189);
@@ -34,7 +34,7 @@ public class LocationServiceTest {
         System.out.println("Created: " + location);
     }
 
-    // 🔹 Test B: Read a Location by ID
+    //  Read a Location by ID
     @Test
     void b_readLocation() {
         // Use the location created in previous test
@@ -43,7 +43,7 @@ public class LocationServiceTest {
         System.out.println("Read: " + location1);
     }
 
-    // 🔹 Test C: Update a Location
+    // 🔹 Update a Location
     @Test
     void c_updateLocation() {
         // Copy existing location and modify coordinates
@@ -58,7 +58,7 @@ public class LocationServiceTest {
         System.out.println("Updated: " + result);
     }
 
-    // 🔹 Test D: Delete a Location
+    //  Delete a Location
     @Test
     void d_deleteLocation() {
         service.delete(location.getLocationID());
@@ -67,7 +67,7 @@ public class LocationServiceTest {
         System.out.println("Deleted location with ID: " + location.getLocationID());
     }
 
-    // 🔹 Test E: Get all Locations
+    // 🔹 Get all Locations
     @Test
     void e_getAllLocations() {
         List<Location> locList = service.getAllLocations();

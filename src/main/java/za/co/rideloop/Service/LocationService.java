@@ -38,8 +38,9 @@ public class LocationService {
         return this.repository.findAll();
     }
 
-    // 🔹 Optional: Find by longitude and latitude (since streetName does not exist)
+    // 🔹 Find by longitude and latitude
     public Location getLocationByCoordinates(double longitude, double latitude) {
-        return this.repository.findByLongitudeAndLatitude(longitude, latitude).orElse(null);
+        List<Location> locations = this.repository.findByLongitudeAndLatitude(longitude, latitude);
+        return locations.isEmpty() ? null : locations.get(0);
     }
 }
