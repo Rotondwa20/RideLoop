@@ -7,7 +7,7 @@ package za.co.rideloop.Factory;
  * @Student Number: 217054420
  **/
 import za.co.rideloop.Domain.Invoice;
-import za.co.rideloop.util.Helper;
+import za.co.rideloop.Util.Helper;
 
 public class InvoiceFactory {
     public static Invoice createInvoice(String invoiceDate, String dueDate, String status,

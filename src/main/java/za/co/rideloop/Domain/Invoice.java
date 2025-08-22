@@ -52,27 +52,26 @@ public class Invoice {
     }
 
     // ----- Getters -----
-    public int getInvoiceID() { return invoiceID; }
-    public String getInvoiceDate() { return invoiceDate; }
-    public String getDueDate() { return dueDate; }
-    public String getStatus() { return status; }
-    public double getSubtotal() { return subtotal; }
-    public double getTaxAmount() { return taxAmount; }
-    public double getDiscountAmount() { return discountAmount; }
-    public double getTotalAmount() { return totalAmount; }
-    public String getPaymentMethod() { return paymentMethod; }
-    public String getPaymentReference() { return paymentReference; }
-
-    // ----- Setters (required for updates) -----
-    public void setInvoiceDate(String invoiceDate) { this.invoiceDate = invoiceDate; }
-    public void setDueDate(String dueDate) { this.dueDate = dueDate; }
-    public void setStatus(String status) { this.status = status; }
-    public void setSubtotal(double subtotal) { this.subtotal = subtotal; }
-    public void setTaxAmount(double taxAmount) { this.taxAmount = taxAmount; }
-    public void setDiscountAmount(double discountAmount) { this.discountAmount = discountAmount; }
-    public void setTotalAmount(double totalAmount) { this.totalAmount = totalAmount; }
-    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
-    public void setPaymentReference(String paymentReference) { this.paymentReference = paymentReference; }
+    public int getInvoiceID() {
+        return invoiceID; }
+    public String getInvoiceDate() {
+        return invoiceDate; }
+    public String getDueDate() {
+        return dueDate; }
+    public String getStatus() {
+        return status; }
+    public double getSubtotal() {
+        return subtotal; }
+    public double getTaxAmount() {
+        return taxAmount; }
+    public double getDiscountAmount() {
+        return discountAmount; }
+    public double getTotalAmount() {
+        return totalAmount; }
+    public String getPaymentMethod() {
+        return paymentMethod; }
+    public String getPaymentReference() {
+        return paymentReference; }
 
     @Override
     public String toString() {
@@ -103,16 +102,37 @@ public class Invoice {
         private String paymentMethod;
         private String paymentReference;
 
-        public InvoiceBuilder setInvoiceID(int invoiceID) { this.invoiceID = invoiceID; return this; }
-        public InvoiceBuilder setInvoiceDate(String invoiceDate) { this.invoiceDate = invoiceDate; return this; }
-        public InvoiceBuilder setDueDate(String dueDate) { this.dueDate = dueDate; return this; }
-        public InvoiceBuilder setStatus(String status) { this.status = status; return this; }
-        public InvoiceBuilder setSubtotal(double subtotal) { this.subtotal = subtotal; return this; }
-        public InvoiceBuilder setTaxAmount(double taxAmount) { this.taxAmount = taxAmount; return this; }
-        public InvoiceBuilder setDiscountAmount(double discountAmount) { this.discountAmount = discountAmount; return this; }
-        public InvoiceBuilder setTotalAmount(double totalAmount) { this.totalAmount = totalAmount; return this; }
-        public InvoiceBuilder setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; return this; }
-        public InvoiceBuilder setPaymentReference(String paymentReference) { this.paymentReference = paymentReference; return this; }
+        public InvoiceBuilder setInvoiceID(int invoiceID) {
+            this.invoiceID = invoiceID;
+            return this; }
+        public InvoiceBuilder setInvoiceDate(String invoiceDate)
+        {
+            this.invoiceDate = invoiceDate;
+            return this; }
+        public InvoiceBuilder setDueDate(String dueDate) {
+            this.dueDate = dueDate;
+            return this; }
+        public InvoiceBuilder setStatus(String status) {
+            this.status = status;
+            return this; }
+        public InvoiceBuilder setSubtotal(double subtotal) {
+            this.subtotal = subtotal;
+            return this; }
+        public InvoiceBuilder setTaxAmount(double taxAmount) {
+            this.taxAmount = taxAmount;
+            return this; }
+        public InvoiceBuilder setDiscountAmount(double discountAmount) {
+            this.discountAmount = discountAmount;
+            return this; }
+        public InvoiceBuilder setTotalAmount(double totalAmount) {
+            this.totalAmount = totalAmount;
+            return this; }
+        public InvoiceBuilder setPaymentMethod(String paymentMethod) {
+            this.paymentMethod = paymentMethod;
+            return this; }
+        public InvoiceBuilder setPaymentReference(String paymentReference) {
+            this.paymentReference = paymentReference;
+            return this; }
 
         public InvoiceBuilder InvoiceBuilderCopy(Invoice invoice) {
             this.invoiceID = invoice.invoiceID;

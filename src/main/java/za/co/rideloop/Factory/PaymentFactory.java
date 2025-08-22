@@ -8,7 +8,7 @@ package za.co.rideloop.Factory;
  * Group 3 I
  **/
 import za.co.rideloop.Domain.Payment;
-import za.co.rideloop.util.Helper;
+import za.co.rideloop.Util.Helper;
 
 public class PaymentFactory {
     // Factory method to create a full payment with all details

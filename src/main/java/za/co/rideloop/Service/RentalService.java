@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.co.rideloop.Domain.Rental;
 import za.co.rideloop.Repository.RentalRepository;
-import za.co.rideloop.util.Helper;
+import za.co.rideloop.Util.Helper;
 
 import java.util.List;
 
