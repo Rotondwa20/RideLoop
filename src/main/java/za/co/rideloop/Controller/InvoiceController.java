@@ -20,27 +20,27 @@ public class InvoiceController {
 
     @PostMapping("/create")
     public Invoice create(@RequestBody Invoice invoice) {
-        return service.createInvoice(invoice);
+        return service.create(invoice);
     }
 
     @GetMapping("/read/{id}")
     public Invoice read(@PathVariable Integer id) {
-        return service.readInvoice(id);
+        return service.read(id);
     }
 
     @PutMapping("/update")
     public Invoice update(@RequestBody Invoice invoice) {
-        return service.updateInvoice(invoice);
+        return service.update(invoice);
     }
 
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Integer id) {
-        service.deleteInvoice(id);
+        service.delete(id);
     }
 
     @GetMapping("/getAll")
     public List<Invoice> getAll() {
-        return service.getAllInvoices();
+        return service.getAll();
     }
 
     @GetMapping("/get-by-reference/{paymentReference}")

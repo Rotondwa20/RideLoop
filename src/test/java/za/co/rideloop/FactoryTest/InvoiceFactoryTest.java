@@ -12,6 +12,8 @@ import za.co.rideloop.Domain.Invoice;
 import za.co.rideloop.Factory.InvoiceFactory;
 
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -20,8 +22,8 @@ class InvoiceFactoryTest {
     @Test
     void createInvoice() {
       //  int invoiceID = 101;
-        String invoiceDate = "2023-10-01";
-        String dueDate = "2023-10-15";
+        LocalDate invoiceDate = LocalDate.now();
+        LocalDate dueDate = LocalDate.of(2023, 10, 1);
         String status = "Unpaid";
         double subtotal = 1000.00;
         double taxAmount = 150.00;

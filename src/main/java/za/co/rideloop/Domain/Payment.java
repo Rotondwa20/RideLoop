@@ -2,6 +2,8 @@ package za.co.rideloop.Domain;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 /**
  * Payment.java
  * Payment Model Class
@@ -19,10 +21,10 @@ public class Payment {
     private int rentalID;
     private Double paymentAmount;
     private String paymentMethod;
-    private String paymentDate;
+    private LocalDate paymentDate;
     private String paymentStatus;
 
-    public Payment() {
+    protected Payment() {
     }
 
     // Private constructor to ensure that instances are created through the builder
@@ -51,7 +53,7 @@ public class Payment {
         return paymentMethod;
     }
 
-    public String getPaymentDate() {
+    public LocalDate getPaymentDate() {
         return paymentDate;
     }
 
@@ -76,21 +78,9 @@ public class Payment {
         private int rentalID;
         private Double paymentAmount;
         private String paymentMethod;
-        private String paymentDate;
+        private LocalDate paymentDate;
         private String paymentStatus;
 
-        public PaymentBuilder() {
-        }
-
-        // Parameterized constructor to set all fields at once
-        public PaymentBuilder(int paymentId, int rentalID, Double paymentAmount, String paymentMethod, String paymentDate, String paymentStatus) {
-            this.paymentId = paymentId;
-            this.rentalID = rentalID;
-            this.paymentAmount = paymentAmount;
-            this.paymentMethod = paymentMethod;
-            this.paymentDate = paymentDate;
-            this.paymentStatus = paymentStatus;
-        }
 
         public PaymentBuilder setPaymentId(int paymentId) {
             this.paymentId = paymentId;
@@ -113,7 +103,7 @@ public class Payment {
             return this;
         }
 
-        public PaymentBuilder setPaymentDate(String paymentDate) {
+        public PaymentBuilder setPaymentDate(LocalDate paymentDate) {
             this.paymentDate = paymentDate;
             return this;
         }

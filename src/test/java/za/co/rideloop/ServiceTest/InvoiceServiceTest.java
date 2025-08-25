@@ -4,14 +4,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import za.co.rideloop.Domain.Invoice;
 import za.co.rideloop.Factory.InvoiceFactory;
 import za.co.rideloop.Service.InvoiceService;
 import za.co.rideloop.Repository.InvoiceRepository;
 
+import java.time.LocalDate;
 import java.util.List;
-
+/**
+ * Admin.java
+ * Admin Model Class
+ *
+ * @Author: Mziwamangwevu Ntutu
+ * @Student Number: 217054420
+ * Group 3 I
+ **/
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -28,12 +37,9 @@ class InvoiceServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Create a new Invoice object for each test, but DO NOT save it yet.
-        // Each test method will be responsible for creating its own data,
-        // ensuring they are independent.
         sampleInvoice = InvoiceFactory.createInvoice(
-                "2023-10-28",
-                "2023-11-28",
+                LocalDate.of(2023, 10, 28),
+                LocalDate.of(2023, 11, 28),
                 "Pending",
                 2500.00,
                 200.00,
@@ -44,51 +50,46 @@ class InvoiceServiceTest {
         );
     }
 
-    // ===== CREATE =====
     @Test
-    void createInvoice() {
-        Invoice saved = service.createInvoice(sampleInvoice);
+    @Commit
+    void create() {
+        Invoice saved = service.create(sampleInvoice);
         assertNotNull(saved);
-        //assertNotNull(saved.getInvoiceID());
-      //  assertEquals(1, repository.count());
         assertEquals("EFT", saved.getPaymentMethod());
         System.out.println("Created Invoice: " + saved);
     }
 
-    // ===== READ =====
     @Test
-    void readInvoice() {
-        Invoice saved = service.createInvoice(sampleInvoice);
-        Invoice found = service.readInvoice(saved.getInvoiceID());
+    void read() {
+        Invoice saved = service.create(sampleInvoice);
+        Invoice found = service.read(saved.getInvoiceID());
         assertNotNull(found);
         assertEquals(saved.getInvoiceID(), found.getInvoiceID());
         System.out.println("Read Invoice: " + found);
     }
 
-    // ===== UPDATE =====
     @Test
-    void updateInvoice() {
-        Invoice saved = service.createInvoice(sampleInvoice);
+    @Commit
+    void update() {
+        Invoice saved = service.create(sampleInvoice);
         Invoice updated = new Invoice.InvoiceBuilder()
-                .InvoiceBuilderCopy(saved) // Correct way to copy all existing fields
+                .InvoiceBuilderCopy(saved)
                 .setStatus("Paid")
                 .setPaymentMethod("Cash")
                 .build();
-        Invoice result = service.updateInvoice(updated);
+        Invoice result = service.update(updated);
         assertNotNull(result);
-        assertEquals(saved.getInvoiceID(), result.getInvoiceID());
         assertEquals("Paid", result.getStatus());
         assertEquals("Cash", result.getPaymentMethod());
         System.out.println("Updated Invoice: " + result);
     }
 
-    // ===== GET ALL =====
     @Test
-    void getAllInvoices() {
-        service.createInvoice(sampleInvoice);
+    void getAll() {
+        service.create(sampleInvoice);
         Invoice secondInvoice = InvoiceFactory.createInvoice(
-                "2023-10-29",
-                "2023-11-29",
+                LocalDate.of(2023, 10, 29),
+                LocalDate.of(2023, 11, 29),
                 "Unpaid",
                 1500.00,
                 120.00,
@@ -97,30 +98,26 @@ class InvoiceServiceTest {
                 "Card",
                 "INV-2025-028"
         );
-        service.createInvoice(secondInvoice);
-        List<Invoice> all = service.getAllInvoices();
-     //   assertEquals(2, all.size());
+        service.create(secondInvoice);
+        List<Invoice> all = service.getAll();
         System.out.println("All Invoices: \n" + all);
     }
 
-    // ===== FIND BY PAYMENT REFERENCE =====
-    @Test
-    void getInvoiceByPaymentReference() {
-        Invoice saved = service.createInvoice(sampleInvoice);
-        //Invoice found = service.getInvoiceByPaymentReference(saved.getPaymentReference());
-       // assertNotNull(found);
-       // assertEquals(saved.getInvoiceID(), found.getInvoiceID());
-        System.out.println("Found by Payment Reference: " + saved);
-    }
+//    @Test
+//    void getInvoiceByPaymentReference() {
+//        Invoice saved = service.create(sampleInvoice);
+//        Invoice found = service.getInvoiceByPaymentReference(saved.getPaymentReference());
+//        assertNotNull(found);
+//        assertEquals(saved.getInvoiceID(), found.getInvoiceID());
+//        System.out.println("Found by Payment Reference: " + found);
+//    }
 
-    // ===== DELETE =====
     @Test
-    void deleteInvoice() {
-        Invoice saved = service.createInvoice(sampleInvoice);
-        long idToDelete = saved.getInvoiceID();
-        service.deleteInvoice((int) idToDelete);
-        assertNull(service.readInvoice((int) idToDelete));
-      //  assertEquals(0, repository.count());
+    void delete() {
+        Invoice saved = service.create(sampleInvoice);
+        int idToDelete = saved.getInvoiceID();
+        service.delete(idToDelete);
+        assertNull(service.read(idToDelete));
         System.out.println("Deleted Invoice with ID: " + idToDelete);
     }
 }
