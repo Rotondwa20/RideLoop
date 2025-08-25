@@ -36,10 +36,16 @@ public class IncidentServiceImpl implements IIncidentService {
 
     @Override
     public Incident update(Incident incident) {
-        if (repository.existsById(incident.getIncidentID())) {
-            return repository.save(incident);
-        }
-        return null;
+        return repository.findById(incident.getIncidentID())
+                .map(existing -> {
+                    Incident updated = new Incident.Builder()
+                            .incidentID(existing.getIncidentID())
+                            .incidentType(incident.getIncidentType() != null ? incident.getIncidentType() : existing.getIncidentType())
+                            .description(incident.getDescription() != null ? incident.getDescription() : existing.getDescription())
+                            .build();
+                    return repository.save(updated);
+                })
+                .orElse(null);
     }
 
     @Override
