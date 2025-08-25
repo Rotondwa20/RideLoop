@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import za.co.rideloop.Domain.Payment;
 import za.co.rideloop.Factory.PaymentFactory;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PaymentFactoryTest {
@@ -21,7 +23,7 @@ class PaymentFactoryTest {
         int rentalID = 456;
         Double paymentAmount = 500.00;
         String paymentMethod = "Credit Card";
-        String paymentDate = "2023-10-05";
+        LocalDate paymentDate = LocalDate.now();
         String paymentStatus = "Completed";
 
 

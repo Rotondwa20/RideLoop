@@ -11,6 +11,7 @@ import za.co.rideloop.Factory.RentalFactory;
 import za.co.rideloop.Service.RentalService;
 import za.co.rideloop.Repository.RentalRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,8 +36,8 @@ class RentalServiceTest {
         rental = RentalFactory.createRental(
                 103,
                 203,
-                "2025-11-04",
-                "2025-11-08",
+                LocalDate.of(2025, 11, 1),
+                LocalDate.of(2025, 11, 2),
                 "Cape Town",
                 "Worcester",
                 303,
@@ -48,10 +49,9 @@ class RentalServiceTest {
     // ===== CREATE =====
     @Commit
     @Test
-    void createRental_validInput_returnsSavedRental() {
-        Rental saved = service.createRental(rental);
+    void createRental() {
+        Rental saved = service.create(rental);
         assertNotNull(saved);
-        assertNotNull(saved.getRentalID());
         assertEquals("Booked", saved.getStatus());
         //  assertEquals(1, repository.count());
         System.out.println("Created Rental: " + saved);
@@ -59,12 +59,12 @@ class RentalServiceTest {
 
     // ===== READ =====
     @Test
-    void readRental_found_returnsRental() {
+    void readRental() {
         // Create and save a new rental for this specific test
-        Rental saved = service.createRental(rental);
+        Rental saved = service.create(rental);
         assertNotNull(saved);
 
-        Rental found = service.readRental(saved.getRentalID());
+        Rental found = service.read(saved.getRentalID());
         assertNotNull(found);
         assertEquals(saved.getRentalID(), found.getRentalID());
         assertEquals(saved.getStatus(), found.getStatus());
@@ -73,9 +73,10 @@ class RentalServiceTest {
 
     // ===== UPDATE =====
     @Test
-    void updateRental_existing_returnsUpdated() {
+    @Commit
+    void updateRental() {
         // Create and save a new rental for this specific test
-        Rental saved = service.createRental(rental);
+        Rental saved = service.create(rental);
         assertNotNull(saved);
 
         // Prepare the updated data using a builder pattern
@@ -85,7 +86,7 @@ class RentalServiceTest {
                 .setTotalCost(600.50) // Change a field to verify update
                 .build();
 
-        Rental result = service.updateRental(updatedRentalData);
+        Rental result = service.update(updatedRentalData);
         assertNotNull(result);
         assertEquals(saved.getRentalID(), result.getRentalID());
         assertEquals("Completed", result.getStatus());
@@ -97,21 +98,21 @@ class RentalServiceTest {
     @Test
     void getAllRentals_returnsAll() {
         // Create and save two distinct rentals for this test
-        service.createRental(rental);
+        service.create(rental);
         Rental secondRental = RentalFactory.createRental(
                 102,
                 202,
-                "2025-12-01",
-                "2025-12-10",
+                LocalDate.of(2025,12,01),
+                LocalDate.of(2025,12,10),
                 "Johannesburg",
                 "Durban",
                 302,
                 1200.00,
                 "Confirmed"
         );
-        service.createRental(secondRental);
+        service.create(secondRental);
 
-        List<Rental> all = service.getAllRentals();
+        List<Rental> all = service.getAll();
         // assertEquals(2, all.size());
         System.out.println("All Rentals: " + all);
     }
@@ -120,19 +121,19 @@ class RentalServiceTest {
     @Test
     void getRentalsByStatus_found_returnsMatchingRentals() {
         // Create and save multiple rentals with different statuses
-        service.createRental(rental); // Status: "Booked"
+        service.create(rental); // Status: "Booked"
         Rental confirmedRental = RentalFactory.createRental(
                 103,
                 203,
-                "2025-12-15",
-                "2025-12-20",
+                LocalDate.of(2025,12,15),
+                LocalDate.of(2025,12,20),
                 "Cape Town",
                 "Stellenbosch",
                 303,
                 750.00,
                 "Confirmed"
         );
-        service.createRental(confirmedRental);
+        service.create(confirmedRental);
 
         List<Rental> foundBooked = service.getRentalsByStatus("Booked");
         // assertEquals(1, foundBooked.size());
@@ -147,14 +148,14 @@ class RentalServiceTest {
     @Test
     void deleteRental_removesRecord() {
         // Create and save a new rental for this specific test
-        Rental saved = service.createRental(rental);
+        Rental saved = service.create(rental);
         assertNotNull(saved);
 
         long idToDelete = saved.getRentalID();
 
-        service.deleteRental((int) idToDelete);
+        service.delete((int) idToDelete);
 
-        assertNull(service.readRental((int) idToDelete));
+        assertNull(service.read((int) idToDelete));
         // assertEquals(0, repository.count());
         System.out.println("Deleted Rental with ID: " + idToDelete);
     }

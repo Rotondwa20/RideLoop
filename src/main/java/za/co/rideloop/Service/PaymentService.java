@@ -17,17 +17,22 @@ import java.util.List;
  * Group 3 I
  **/
 @Service
-public class PaymentService {
+public class PaymentService implements IPaymentService {
 
 
     @Autowired
     private PaymentRepository repository;
 
+    public PaymentService(PaymentRepository repository) {
+        this.repository = repository;
+    }
+
     // ===== Create =====
-    public Payment createPayment(Payment payment) {
+    @Override
+    public Payment create(Payment payment) {
         if (payment == null ||
-               // !Helper.isValidId(payment.getPaymentID()) ||
-               // !Helper.isValidId(payment.getRentalID()) ||
+                // !Helper.isValidId(payment.getPaymentID()) ||
+                // !Helper.isValidId(payment.getRentalID()) ||
                 !Helper.isValidAmount(payment.getPaymentAmount()) ||
                 Helper.isNullOrEmpty(payment.getPaymentMethod()) ||
                 payment.getPaymentDate() == null ||
@@ -38,14 +43,15 @@ public class PaymentService {
         return this.repository.save(payment);
     }
 
-    // ===== Read =====
-    public Payment readPayment(Integer id) {
+                     // ===== Read =====
+    @Override
+    public Payment read(Integer id) {
+
         return this.repository.findById(id).orElse(null);
     }
-
-    // ===== Update =====
-    // ===== Update (Prevents duplicates) =====
-    public Payment updatePayment(Payment payment) {
+                        // ===== Update =====
+    @Override
+    public Payment update(Payment payment) {
         if (payment == null) {
             return null;
         }
@@ -71,55 +77,22 @@ public class PaymentService {
         return null; // Not found
     }
 
-//    public Payment updatePayment(Payment payment) {
-//        Payment existingPayment = repository.findById(payment.getPaymentId()).orElse(null);
-//        if (existingPayment != null) {
-//
-//            return repository.save(existingPayment);
-//        } else {
-//            return null;
-//        }
-//    }
-//    public Payment updatePayment(Payment payment) {
-//        if (payment == null || payment.getPaymentId() == null ||
-//                !repository.existsById(payment.getPaymentId())) {
-//            return null;
-//        }
-//        return repository.save(payment);
-//    }
-//    public Payment updatePayment(Payment payment) {
-//        if (payment.getPaymentId() == null || !repository.existsById(payment.getPaymentId())) {
-//            return null; // No update if it doesn't exist
-//        }
-//        return repository.save(payment);
-//    }
-
-//    public Payment updatePayment(Payment payment) {
-//        if (payment == null ||
-//             //   !Helper.isValidId(payment.getPaymentID()) ||
-//             //   !Helper.isValidId(payment.getRentalID()) ||
-//                !Helper.isValidAmount(payment.getPaymentAmount()) ||
-//                Helper.isNullOrEmpty(payment.getPaymentMethod()) ||
-//                payment.getPaymentDate() == null ||
-//                !Helper.isNotFutureDate(payment.getPaymentDate()) ||
-//                Helper.isNullOrEmpty(payment.getPaymentStatus())) {
-//            return null;
-//        }
-//        return this.repository.save(payment);
-//    }
-
-    // ===== Delete =====
-    public void deletePayment(Integer id) {
-        this.repository.deleteById(id);
-    }
 
     // ===== Get All =====
-    public List<Payment> getAllPayments() {
+    @Override
+    public List<Payment> getAll() {
         return this.repository.findAll();
+    }
+
+    @Override
+    public void delete(int id) {
+        this.repository.deleteById(id);
     }
 
     // ===== Find by Status =====
     public List<Payment> getPaymentsByStatus(String status) {
         return this.repository.findByPaymentStatus(status);
     }
-}
+
+    }
+

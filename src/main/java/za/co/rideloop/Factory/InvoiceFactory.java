@@ -8,14 +8,14 @@ package za.co.rideloop.Factory;
  **/
 import za.co.rideloop.Domain.Invoice;
 import za.co.rideloop.Util.Helper;
+import java.time.LocalDate;
 
 public class InvoiceFactory {
-    public static Invoice createInvoice(String invoiceDate, String dueDate, String status,
+    public static Invoice createInvoice(LocalDate invoiceDate, LocalDate dueDate, String status,
                                         double subtotal, double taxAmount, double discountAmount,
                                         double totalAmount, String paymentMethod, String paymentReference) {
 
-        if (Helper.isNullOrEmpty(invoiceDate) ||
-                Helper.isNullOrEmpty(dueDate) ||
+        if (invoiceDate == null || dueDate == null ||
                 Helper.isNullOrEmpty(status) ||
                 !Helper.isValidAmount(subtotal) ||
                 !Helper.isValidAmount(totalAmount)) {

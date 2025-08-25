@@ -27,7 +27,7 @@ public class PaymentController {
      */
     @PostMapping("/create")
     public Payment create(@RequestBody Payment payment) {
-        return service.createPayment(payment);
+        return service.create(payment);
     }
 
     /**
@@ -38,7 +38,7 @@ public class PaymentController {
      */
     @GetMapping("/read/{id}")
     public Payment read(@PathVariable Integer id) {
-        return service.readPayment(id);
+        return service.read(id);
     }
 
     /**
@@ -49,7 +49,7 @@ public class PaymentController {
      */
     @PutMapping("/update")
     public Payment update(@RequestBody Payment payment) {
-        return service.updatePayment(payment);
+        return service.update(payment);
     }
 
     /**
@@ -59,7 +59,7 @@ public class PaymentController {
      */
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Integer id) {
-        service.deletePayment(id);
+        service.delete(id);
     }
 
     /**
@@ -68,7 +68,7 @@ public class PaymentController {
      */
     @GetMapping("/getAll")
     public List<Payment> getAll() {
-        return service.getAllPayments();
+        return service.getAll();
     }
 
     /**

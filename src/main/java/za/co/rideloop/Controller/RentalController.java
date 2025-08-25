@@ -20,27 +20,27 @@ public class RentalController {
 
     @PostMapping("/create")
     public Rental create(@RequestBody Rental rental) {
-        return service.createRental(rental);
+        return service.create(rental);
     }
 
     @GetMapping("/read/{id}")
     public Rental read(@PathVariable Integer id) {
-        return service.readRental(id);
+        return service.read(id);
     }
 
     @PutMapping("/update")
     public Rental update(@RequestBody Rental rental) {
-        return service.updateRental(rental);
+        return service.update(rental);
     }
 
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Integer id) {
-        service.deleteRental(id);
+        service.delete(id);
     }
 
     @GetMapping("/getAll")
     public List<Rental> getAll() {
-        return service.getAllRentals();
+        return service.getAll();
     }
 
     @GetMapping("/get-by-status/{status}")

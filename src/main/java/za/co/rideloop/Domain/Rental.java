@@ -2,6 +2,8 @@ package za.co.rideloop.Domain;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 /**
  * Rental.java
  * Rental Model Class
@@ -18,8 +20,8 @@ public class Rental {
     private int rentalID;
     private int carID;
     private int customerID;
-    private String startDate;
-    private String endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String pickupLocation;
     private String dropoffLocation;
     private int insuranceID;
@@ -27,10 +29,10 @@ public class Rental {
     private double totalCost;
     private String status;
 
-    public Rental() {
+    protected Rental() {
     }
 
-    public Rental(RentalBuilder builder) {
+    private Rental(RentalBuilder builder) {
         this.rentalID = builder.rentalID;
         this.carID = builder.carID;
         this.customerID = builder.customerID;
@@ -55,11 +57,11 @@ public class Rental {
         return customerID;
     }
 
-    public String getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public String getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
@@ -102,8 +104,8 @@ public class Rental {
         private int rentalID;
         private int carID;
         private int customerID;
-        private String startDate;
-        private String endDate;
+        private LocalDate startDate;
+        private LocalDate endDate;
         private String pickupLocation;
         private String dropoffLocation;
         private int insuranceID;
@@ -128,12 +130,12 @@ public class Rental {
             return this;
         }
 
-        public RentalBuilder setStartDate(String startDate) {
+        public RentalBuilder setStartDate(LocalDate startDate) {
             this.startDate = startDate;
             return this;
         }
 
-        public RentalBuilder setEndDate(String endDate) {
+        public RentalBuilder setEndDate(LocalDate endDate) {
             this.endDate = endDate;
             return this;
         }
