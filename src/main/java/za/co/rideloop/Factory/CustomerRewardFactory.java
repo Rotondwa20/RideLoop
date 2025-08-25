@@ -1,6 +1,7 @@
 package za.co.rideloop.Factory;
 
 import java.util.Date;
+import za.co.rideloop.Domain.Customer;
 import za.co.rideloop.Domain.CustomerRewards;
 
 /**
@@ -8,33 +9,37 @@ import za.co.rideloop.Domain.CustomerRewards;
  * Student Number: 222342145
  * Group: 3I
  */
-
 public class CustomerRewardFactory {
 
-    public static CustomerRewards createDefault() {
-        return create(0, 0, 0, "Bronze", new Date());
+
+    public static CustomerRewards createDefault(Customer customer) {
+        return create(customer, 0, 0, "Bronze", new Date());
     }
 
-    public static CustomerRewards create(int customerID, int currentPoints,
+    public static CustomerRewards create(Customer customer, int currentPoints,
                                          int lifetimePoints, String currentTier,
                                          Date lastActivityDate) {
+        if (lastActivityDate == null) lastActivityDate = new Date();
+
         return new CustomerRewards.Builder()
-                .setCustomerID(customerID)
+                .setCustomer(customer)
                 .setCurrentPoints(currentPoints)
                 .setLifetimePoints(lifetimePoints)
                 .setCurrentTier(currentTier)
-                .setLastActivityDate(lastActivityDate != null ? lastActivityDate : new Date())
+                .setLastActivityDate(lastActivityDate)
                 .build();
     }
 
-    public static CustomerRewards createNewCustomer(int customerID) {
-        return create(customerID, 0, 0, "Bronze", new Date());
+
+    public static CustomerRewards createNewCustomer(Customer customer) {
+        return create(customer, 0, 0, "Bronze", new Date());
     }
 
+
     public static CustomerRewards copy(CustomerRewards original) {
-        if (original == null) return createDefault();
+        if (original == null) return createDefault(null);
         return create(
-                original.getCustomerID(),
+                original.getCustomer(),
                 original.getCurrentPoints(),
                 original.getLifetimePoints(),
                 original.getCurrentTier(),
