@@ -1,9 +1,6 @@
 package za.co.rideloop.Domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 /* Car.java
 
@@ -28,6 +25,13 @@ public class Car {
     private String lastMaintenance;
     private String maintenanceDue;
 
+
+//Relashionship with Location
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id", referencedColumnName = "locationID")
+    private Location location;
+
+
     protected  Car() {
     }
 
@@ -43,6 +47,54 @@ public class Car {
         this.mileage = builder.mileage;
         this.lastMaintenance = builder.lastMaintenance;
         this.maintenanceDue = builder.maintenanceDue;
+        this.location = builder.location;
+    }
+
+    public int getCarId() {
+        return carId;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public double getRentalRate() {
+        return rentalRate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public int getMileage() {
+        return mileage;
+    }
+
+    public String getLastMaintenance() {
+        return lastMaintenance;
+    }
+
+    public String getMaintenanceDue() {
+        return maintenanceDue;
+    }
+    public Location getLocation() {
+        return location;
     }
 
     public static class Builder {
@@ -57,6 +109,7 @@ public class Car {
         private int mileage;
         private String lastMaintenance;
         private String maintenanceDue;
+        private Location location;
 
         public Builder setCarId(int carId) {
             this.carId = carId;
@@ -113,6 +166,11 @@ public class Car {
             return this;
         }
 
+        public Builder setLocation(Location location) {
+            this.location = location;
+            return this;
+        }
+
         public Car build() {
             return new Car(this);
         }
@@ -132,6 +190,7 @@ public class Car {
                 ", mileage=" + mileage +
                 ", lastMaintenance='" + lastMaintenance + '\'' +
                 ", maintenanceDue='" + maintenanceDue + '\'' +
+                ", location=" + location +
                 '}';
     }
 

@@ -1,6 +1,9 @@
 package za.co.rideloop.Factory;
 
+import jdk.javadoc.doclet.Taglet;
 import za.co.rideloop.Domain.Car;
+import za.co.rideloop.Domain.Location;
+
 /* CarFactory.java
 
      CAR Factory class
@@ -10,7 +13,6 @@ import za.co.rideloop.Domain.Car;
      Date: 18 May 2025 */
 public class CarFactory {
     public static Car createCar(
-            int carId,
             String brand,
             String model,
             int year,
@@ -20,10 +22,10 @@ public class CarFactory {
             String category,
             int mileage,
             String lastMaintenance,
-            String maintenanceDue
+            String maintenanceDue,
+            Location location
     ) {
         return new Car.Builder()
-                .setCarId(carId)
                 .setBrand(brand)
                 .setModel(model)
                 .setYear(year)
@@ -34,6 +36,7 @@ public class CarFactory {
                 .setMileage(mileage)
                 .setLastMaintenance(lastMaintenance)
                 .setMaintenanceDue(maintenanceDue)
+                .setLocation(location)
                 .build();
     }
 

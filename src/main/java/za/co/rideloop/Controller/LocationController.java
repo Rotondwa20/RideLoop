@@ -18,61 +18,40 @@ import java.util.List;
 @RequestMapping("/api/locations")
 @CrossOrigin(origins = "http://localhost:3000")
 public class LocationController {
-
     @Autowired
     private LocationService service;
 
-    // 🔹 Create a new Location
     @PostMapping("/create")
-    public ResponseEntity<Location> createLocation(@RequestBody Location location) {
-        Location created = service.createLocation(location);
-        return ResponseEntity.ok(created);
+    public Location createLocation(@RequestBody Location location) {
+        return service.createLocation(location);
     }
 
-    // 🔹 Read a Location by ID
-    @GetMapping("/read/{id}")
-    public ResponseEntity<Location> readLocation(@PathVariable Integer id) {
-        Location loc = service.readLocation(id);
-        if (loc != null) {
-            return ResponseEntity.ok(loc);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/{id}")
+    public Location readLocation(@PathVariable Integer id) {
+        return service.readLocation(id);
     }
 
-    // 🔹 Update a Location
     @PutMapping("/update")
-    public ResponseEntity<Location> updateLocation(@RequestBody Location location) {
-        Location updated = service.updateLocation(location);
-        return ResponseEntity.ok(updated);
+    public Location updateLocation(@RequestBody Location location) {
+        return service.updateLocation(location);
     }
 
-    // 🔹 Delete a Location by ID
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteLocation(@PathVariable Integer id) {
+    @DeleteMapping("/{id}")
+    public void deleteLocation(@PathVariable Integer id) {
         service.delete(id);
-        return ResponseEntity.noContent().build();
     }
 
-    // 🔹 Get all Locations
     @GetMapping("/all")
-    public ResponseEntity<List<Location>> getAllLocations() {
-        List<Location> locList = service.getAllLocations();
-        return ResponseEntity.ok(locList);
+    public List<Location> getAllLocations() {
+        return service.getAllLocations();
     }
 
-    // 🔹 Get Location by coordinates
     @GetMapping("/search")
-    public ResponseEntity<Location> getLocationByCoordinates(
+    public Location getLocationByCoordinates(
             @RequestParam double longitude,
             @RequestParam double latitude
     ) {
-        Location loc = service.getLocationByCoordinates(longitude, latitude);
-        if (loc != null) {
-            return ResponseEntity.ok(loc);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return service.getLocationByCoordinates(longitude, latitude);
     }
 }
 

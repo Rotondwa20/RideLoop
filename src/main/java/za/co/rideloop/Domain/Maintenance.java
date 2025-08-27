@@ -37,6 +37,34 @@ public class Maintenance {
         this.description = builder.description;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getInsuranceCompanyName() {
+        return insuranceCompanyName;
+    }
+
+    public String getContactPerson() {
+        return contactPerson;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public String getCoverageType() {
+        return coverageType;
+    }
+
+    public Double getCostPerMonth() {
+        return costPerMonth;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     public static class Builder {
         private String insuranceCompanyName;
         private String contactPerson;
