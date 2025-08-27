@@ -22,4 +22,6 @@ public class ValidationHelper {
             throw new IllegalArgumentException("Invalid input - '" + fieldName + "' must not be null");
         }
     }
+
+
 }
