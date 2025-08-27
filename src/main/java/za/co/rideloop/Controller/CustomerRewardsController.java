@@ -1,63 +1,43 @@
 package za.co.rideloop.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.co.rideloop.Domain.CustomerRewards;
 import za.co.rideloop.Service.CustomerRewardsService;
 
 import java.util.List;
 
+
 @RestController
-@RequestMapping("/customerRewards")
+@RequestMapping("/api/customerRewards")
+@CrossOrigin(origins = "http://localhost:3000")
 public class CustomerRewardsController {
 
-    private final CustomerRewardsService service;
-
     @Autowired
-    public CustomerRewardsController(CustomerRewardsService service) {
-        this.service = service;
-    }
+    private CustomerRewardsService service;
 
     @PostMapping("/create")
-    public ResponseEntity<CustomerRewards> create(@RequestBody CustomerRewards customerRewards) {
-        CustomerRewards created = service.create(customerRewards);
-        return ResponseEntity.ok(created);
+    public CustomerRewards createReward(@RequestBody CustomerRewards reward) {
+        return service.createReward(reward);
     }
 
-    @GetMapping("/read/{id}")
-    public ResponseEntity<CustomerRewards> read(@PathVariable Long id) {
-        try {
-            CustomerRewards reward = service.read(id);
-            return ResponseEntity.ok(reward);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/{id}")
+    public CustomerRewards readReward(@PathVariable Long id) {
+        return service.readReward(id);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<CustomerRewards> update(@PathVariable Long id, @RequestBody CustomerRewards updatedReward) {
-        try {
-            CustomerRewards updated = service.updateReward(id, updatedReward);
-            return ResponseEntity.ok(updated);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    @PutMapping("/update")
+    public CustomerRewards updateReward(@RequestBody CustomerRewards reward) {
+        return service.updateReward(reward);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        try {
-            service.delete(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/{id}")
+    public void deleteReward(@PathVariable Long id) {
+        service.deleteReward(id);
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<List<CustomerRewards>> getAll() {
-        List<CustomerRewards> rewards = service.getAll();
-        return ResponseEntity.ok(rewards);
+    @GetMapping("/all")
+    public List<CustomerRewards> getAllRewards() {
+        return service.getAllRewards();
     }
 }
