@@ -15,4 +15,6 @@ import java.util.List;
  */
 public interface ICarSupplierService extends IService<CarSupplier, Integer> {
     List<CarSupplier> getAll();
+
+    void delete(Integer id);
 }

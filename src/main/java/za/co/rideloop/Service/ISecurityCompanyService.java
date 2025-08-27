@@ -17,4 +17,6 @@ public interface ISecurityCompanyService extends IService<SecurityCompany, Integ
     SecurityCompany create(SecurityCompany securityCompany);
 
     List<SecurityCompany> getAll();
+
+    void delete(Integer id);
 }
