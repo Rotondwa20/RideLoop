@@ -10,9 +10,11 @@ package za.co.rideloop.Factory;
 import za.co.rideloop.Domain.Rental;
 import za.co.rideloop.Util.Helper;
 
+import java.time.LocalDate;
+
 public class RentalFactory {
     // Factory method to create a rental with all details
-    public static Rental createRental( int carID, int customerID, String startDate, String endDate,
+    public static Rental createRental(int carID, int customerID, LocalDate startDate, LocalDate endDate,
                                       String pickupLocation, String dropoffLocation, int insuranceID,
                                       double totalCost, String status) {
 
@@ -20,8 +22,8 @@ public class RentalFactory {
         if (
                 !Helper.isValidInterger(carID) ||
                 !Helper.isValidInterger(customerID) ||
-                Helper.isNullOrEmpty(startDate) ||
-                Helper.isNullOrEmpty(endDate) ||
+//                Helper.isNullOrEmpty(startDate) ||
+//                Helper.isNullOrEmpty(endDate) ||
                 Helper.isNullOrEmpty(pickupLocation) ||
                 Helper.isNullOrEmpty(dropoffLocation) ||
                 !Helper.isValidInterger(insuranceID) ||

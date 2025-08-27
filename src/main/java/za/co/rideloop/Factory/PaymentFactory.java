@@ -10,10 +10,12 @@ package za.co.rideloop.Factory;
 import za.co.rideloop.Domain.Payment;
 import za.co.rideloop.Util.Helper;
 
+import java.time.LocalDate;
+
 public class PaymentFactory {
     // Factory method to create a full payment with all details
-    public static Payment createPayment( int rentalID, Double paymentAmount,
-                                        String paymentMethod, String paymentDate, String paymentStatus) {
+    public static Payment createPayment(int rentalID, Double paymentAmount,
+                                        String paymentMethod, LocalDate paymentDate, String paymentStatus) {
 
 
         // Use the Helper class to validate the parameters
@@ -21,7 +23,7 @@ public class PaymentFactory {
 
                 !Helper.isValidAmount(paymentAmount) ||
                 Helper.isNullOrEmpty(paymentMethod) ||
-                Helper.isNullOrEmpty(paymentDate) ||
+        //  Helper.isNullOrEmpty(paymentDate) ||
                 Helper.isNullOrEmpty(paymentStatus)) {
 
             // If any validation fails, throw an exception

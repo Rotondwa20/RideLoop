@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import za.co.rideloop.Domain.Rental;
 import za.co.rideloop.Factory.RentalFactory;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class RentalFactoryTest {
@@ -21,8 +23,8 @@ class RentalFactoryTest {
 
         int carID = 101;
         int customerID = 201;
-        String startDate = "2023-10-01";
-        String endDate = "2023-10-05";
+        LocalDate startDate = LocalDate.of(2023, 10, 1); // Corrected to use LocalDate.of
+        LocalDate endDate = LocalDate.of(2023, 10, 10); // Corrected to use LocalDate.of
         String pickupLocation = "Johannesburg Airport";
         String dropoffLocation = "Cape Town Airport";
         int insuranceID = 301;

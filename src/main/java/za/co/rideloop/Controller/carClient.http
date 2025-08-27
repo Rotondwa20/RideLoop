@@ -1,0 +1,85 @@
+### 🔹 1. CREATE A CAR (POST)
+POST http://localhost:8080/rideloop/api/cars/create
+Content-Type: application/json
+
+{
+  "brand": "Toyota",
+  "model": "Corolla",
+  "year": 2022,
+  "licensePlate": "CA 123-456",
+  "rentalRate": 150.0,
+  "status": "AVAILABLE",
+  "category": "SEDAN",
+  "mileage": 15000,
+  "lastMaintenance": "2024-06-01",
+  "maintenanceDue": "2025-06-01",
+  "location": {
+    "latitude": -30.9249,
+    "longitude": 18.4241
+  }
+}
+
+
+### 🔹 2. GET CAR BY ID (GET)
+GET http://localhost:8080/api/cars/1
+
+
+### 🔹 3. UPDATE CAR (PUT)
+PUT http://localhost:8080/api/cars/update
+Content-Type: application/json
+
+{
+  "carId": 1,
+  "brand": "Toyota",
+  "model": "Corolla",
+  "year": 2022,
+  "licensePlate": "CA 123-456",
+  "rentalRate": 160.0,
+  "status": "RENTED",
+  "category": "SEDAN",
+  "mileage": 15700,
+  "lastMaintenance": "2024-06-01",
+  "maintenanceDue": "2025-06-01",
+  "location": {
+    "latitude": -33.9249,
+    "longitude": 18.4241
+  }
+}
+
+
+### 🔹 4. UPDATE CAR LOCATION AND MILEAGE (PUT)
+PUT http://localhost:8080/api/cars/update-location/1
+Content-Type: application/json
+
+{
+  "location": {
+    "latitude": -26.2041,
+    "longitude": 28.0473
+  },
+  "distanceTravelled": 750
+}
+
+
+### 🔹 5. GET ALL CARS (GET)
+GET http://localhost:8080/api/cars/all
+
+
+### 🔹 6. GET CARS BY BRAND (GET)
+GET http://localhost:8080/api/cars/brand/Toyota
+
+
+### 🔹 7. GET CARS BY MODEL (GET)
+GET http://localhost:8080/api/cars/model/Corolla
+
+
+### 🔹 8. DELETE CAR BY ID (DELETE)
+DELETE http://localhost:8080/api/cars/1
+
+
+### 🔹 9. GET CAR THAT DOES NOT EXIST
+GET http://localhost:8080/api/cars/999
+
+
+### 🔹 10. GET CARS BY STATUS AND CATEGORY (if you add it later)
+# Example placeholder:
+GET http://localhost:8080/api/cars/status/AVAILABLE/category/SEDAN

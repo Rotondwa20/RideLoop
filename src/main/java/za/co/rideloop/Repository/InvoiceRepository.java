@@ -22,4 +22,5 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
 
   @Override
   List<Invoice> findAllById(Iterable<Integer> integers);
+
 }

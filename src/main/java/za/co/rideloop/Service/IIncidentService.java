@@ -15,4 +15,6 @@ import java.util.List;
  */
 public interface IIncidentService extends IService<Incident, Integer> {
     List<Incident> getAll();
+
+    void delete(Integer id);
 }
