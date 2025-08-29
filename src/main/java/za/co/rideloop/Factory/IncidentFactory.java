@@ -15,12 +15,11 @@ import za.co.rideloop.Util.ValidationHelper;
  */
 
 public class IncidentFactory {
-    public static Incident build(int incidentID, String incidentType, String description) {
+    public static Incident build( String incidentType, String description) {
         ValidationHelper.requireNonBlank(incidentType, "incidentType");
         ValidationHelper.requireNonBlank(description, "description");
 
 return new Incident.Builder()
-        .incidentID(incidentID)
         .incidentType(incidentType)
         .description(description)
         .build();

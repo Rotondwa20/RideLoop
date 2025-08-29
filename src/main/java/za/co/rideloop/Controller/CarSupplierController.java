@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.co.rideloop.Domain.CarSupplier;
-import za.co.rideloop.Service.ICarSupplierService;
+import za.co.rideloop.Service.CarSupplierService;
 
 import java.net.URI;
 import java.util.List;
@@ -19,57 +19,64 @@ import java.util.List;
  * @Java version: "21.0.3" 2024-04-16 LTS
  */
 @RestController
-@RequestMapping("/api/car-suppliers")
+@RequestMapping("/carsupplier") // The base path for all CarSupplier related endpoints
 public class CarSupplierController {
-    private final ICarSupplierService carSupplierService;
+    private final CarSupplierService service;
 
     @Autowired
-    public CarSupplierController(ICarSupplierService carSupplierService) {
-        this.carSupplierService = carSupplierService;
+    public CarSupplierController(CarSupplierService service) {
+        this.service = service;
     }
 
-    @PostMapping
-    public ResponseEntity<CarSupplier> createCarSupplier(@RequestBody CarSupplier carSupplier) {
-        CarSupplier created = carSupplierService.create(carSupplier);
-        return ResponseEntity.created(URI.create("/api/car-suppliers/" + created.getSupplierID()))
-                .body(created);
+    /**
+     * Handles HTTP POST requests to create a new CarSupplier.
+     * The CarSupplier object is sent in the request body.
+     * @param carSupplier The CarSupplier object to be created.
+     * @return The created CarSupplier object, including its generated ID.
+     */
+    @PostMapping("/create")
+    public CarSupplier create(@RequestBody CarSupplier carSupplier) {
+        return service.createCarSupplier(carSupplier);
     }
 
-    @GetMapping
-    public ResponseEntity<List<CarSupplier>> getAllCarSuppliers() {
-        return ResponseEntity.ok(carSupplierService.getAll());
+    /**
+     * Handles HTTP GET requests to read a CarSupplier by its ID.
+     * The CarSupplier ID is passed as a path variable.
+     * @param id The ID of the CarSupplier to retrieve.
+     * @return The found CarSupplier object, or null if not found.
+     */
+    @GetMapping("/read/{id}")
+    public CarSupplier read(@PathVariable Integer id) {
+        return service.readCarSupplier(id);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CarSupplier> getCarSupplierById(@PathVariable Integer id) {
-        CarSupplier existing = carSupplierService.read(id);
-        if (existing == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(existing);
+    /**
+     * Handles HTTP PUT requests to update an existing CarSupplier.
+     * The updated CarSupplier object is sent in the request body.
+     * @param carSupplier The CarSupplier object with updated details.
+     * @return The updated CarSupplier object, or null if the original CarSupplier was not found.
+     */
+    @PutMapping("/update")
+    public CarSupplier update(@RequestBody CarSupplier carSupplier) {
+        return service.updateCarSupplier(carSupplier);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CarSupplier> updateCarSupplier(@PathVariable Integer id,
-                                                         @RequestBody CarSupplier carSupplier) {
-        CarSupplier existing = carSupplierService.read(id);
-        if (existing == null) return ResponseEntity.notFound().build();
-
-        CarSupplier toUpdate = new CarSupplier.Builder()
-                .supplierID(id)
-                .name(carSupplier.getName() != null ? carSupplier.getName() : existing.getName())
-                .contactPerson(carSupplier.getContactPerson() != null ? carSupplier.getContactPerson() : existing.getContactPerson())
-                .supplyDate(carSupplier.getSupplyDate() != null ? carSupplier.getSupplyDate() : existing.getSupplyDate())
-                .contractStatus(carSupplier.getContractStatus() != null ? carSupplier.getContractStatus() : existing.getContractStatus())
-                .build();
-
-        CarSupplier updated = carSupplierService.update(toUpdate);
-        return ResponseEntity.ok(updated);
+    /**
+     * Handles HTTP DELETE requests to remove a CarSupplier by its ID.
+     * The CarSupplier ID is passed as a path variable.
+     * @param id The ID of the CarSupplier to be deleted.
+     */
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable Integer id) {
+        service.deleteCarSupplier(id);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCarSupplier(@PathVariable Integer id) {
-        CarSupplier existing = carSupplierService.read(id);
-        if (existing == null) return ResponseEntity.notFound().build();
-        carSupplierService.delete(id);
-        return ResponseEntity.noContent().build();
+    /**
+     * Handles HTTP GET requests to retrieve all CarSuppliers.
+     * @return A list of all CarSupplier objects in the database.
+     */
+    @GetMapping("/getAll")
+    public List<CarSupplier> getAll() {
+        return service.getAllCarSuppliers();
     }
 }

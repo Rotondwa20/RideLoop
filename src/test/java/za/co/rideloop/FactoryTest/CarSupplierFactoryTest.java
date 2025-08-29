@@ -18,25 +18,26 @@ import java.util.Date;
  */
 
 class CarSupplierFactoryTest {
-  @Test
-  void testBuildSuccess() {
-      CarSupplier supplier = CarSupplierFactory.build(
-              1,
-              "AutoWorld",
-              "Kruben Naidoo",
-              new Date(),
-              "Active");
-      assertNotNull(supplier);
-      assertEquals("AutoWorld", supplier.getName());
-      assertEquals("Kruben Naidoo", supplier.getContactPerson());
+    @Test
+    void testBuildSuccess() {
+        CarSupplier supplier = CarSupplierFactory.build(
 
-      assertEquals("Active", supplier.getContractStatus());
-  }
+                "AutoWorld",
+                "Kruben Naidoo",
+                new Date(),
+                "Active");
+        assertNotNull(supplier);
+        assertEquals("AutoWorld", supplier.getName());
+        assertEquals("Kruben Naidoo", supplier.getContactPerson());
+
+        assertEquals("Active", supplier.getContractStatus());
+        System.out.println(supplier.toString());
+    }
     @Test
     void testBuildWithEmptyName_shouldThrowException() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             CarSupplierFactory.build(
-                    2,
+
                     "",
                     "Swatsi Ratia",
                     new Date(),
