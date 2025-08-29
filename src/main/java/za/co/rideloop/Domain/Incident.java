@@ -1,8 +1,6 @@
 package za.co.rideloop.Domain;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
+import jakarta.persistence.*;
 import java.util.Objects;
 
 /**
@@ -16,25 +14,27 @@ import java.util.Objects;
  * Java version: "21.0.3" 2024-04-16 LTS
  */
 @Entity
-@Table(name="Incident")
+@Table(name = "incidents")   // ✅ table name should not conflict with SQL reserved keywords
 public class Incident {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)   // ✅ auto-generate IDs
     private int incidentID;
+
+   // @Column(nullable = false)   // ✅ enforce required fields
     private String incidentType;
+
+  //  @Column(nullable = false)
     private String description;
 
-    /**
-     * Private constructor used by the Builder.
-     * Can only be instantiated through the Builder.
-     */
+    // Default constructor (required by JPA)
+    protected Incident() {}
+
+    // Private constructor for Builder
     private Incident(Builder builder) {
         this.incidentID = builder.incidentID;
         this.incidentType = builder.incidentType;
         this.description = builder.description;
-    }
-
-    public Incident() {
-
     }
 
     // Getters
@@ -50,11 +50,11 @@ public class Incident {
         return description;
     }
 
+    // equals & hashCode
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Incident incident = (Incident) o;
+        if (!(o instanceof Incident incident)) return false;
         return incidentID == incident.incidentID &&
                 Objects.equals(incidentType, incident.incidentType) &&
                 Objects.equals(description, incident.description);
@@ -65,6 +65,7 @@ public class Incident {
         return Objects.hash(incidentID, incidentType, description);
     }
 
+    // toString
     @Override
     public String toString() {
         return "Incident{" +
@@ -74,10 +75,7 @@ public class Incident {
                 '}';
     }
 
-    /**
-     * Builder class for Incident.
-     * Implements the Builder Pattern to create Incident instances in a fluent API style.
-     */
+    // Builder Pattern
     public static class Builder {
         private int incidentID;
         private String incidentType;

@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.co.rideloop.Domain.Incident;
-import za.co.rideloop.Service.IIncidentService;
+import za.co.rideloop.Repository.IncidentRepository;
+import za.co.rideloop.Service.IncidentService;
 
 import java.net.URI;
 import java.util.List;
@@ -19,55 +20,65 @@ import java.util.List;
  * @Java version: "21.0.3" 2024-04-16 LTS
  */
 @RestController
-@RequestMapping("/api/incidents")
+@RequestMapping("/incident") // The base path for all Incident related endpoints
 public class IncidentController {
-    private final IIncidentService incidentService;
 
-    @Autowired
-    public IncidentController(IIncidentService incidentService) {
-        this.incidentService = incidentService;
-    }
+        private final IncidentService service;
 
-    @PostMapping
-    public ResponseEntity<Incident> createIncident(@RequestBody Incident incident) {
-        Incident created = incidentService.create(incident);
-        return ResponseEntity.created(URI.create("/api/incidents/" + created.getIncidentID()))
-                .body(created);
-    }
+        @Autowired
+        public IncidentController(IncidentService service) {
+            this.service = service;
+        }
 
-    @GetMapping
-    public ResponseEntity<List<Incident>> getAllIncidents() {
-        return ResponseEntity.ok(incidentService.getAll());
-    }
+        /**
+         * Handles HTTP POST requests to create a new Incident.
+         * The Incident object is sent in the request body.
+         * @param incident The Incident object to be created.
+         * @return The created Incident object, including its generated ID.
+         */
+        @PostMapping("/create")
+        public Incident create(@RequestBody Incident incident) {
+            return service.createIncident(incident);
+        }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Incident> getIncidentById(@PathVariable Integer id) {
-        Incident existing = incidentService.read(id);
-        if (existing == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(existing);
-    }
+        /**
+         * Handles HTTP GET requests to read an Incident by its ID.
+         * The Incident ID is passed as a path variable.
+         * @param id The ID of the Incident to retrieve.
+         * @return The found Incident object, or null if not found.
+         */
+        @GetMapping("/read/{id}")
+        public Incident read(@PathVariable Integer id) {
+            return service.readIncident(id);
+        }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Incident> updateIncident(@PathVariable Integer id,
-                                                   @RequestBody Incident incident) {
-        Incident existing = incidentService.read(id);
-        if (existing == null) return ResponseEntity.notFound().build();
+        /**
+         * Handles HTTP PUT requests to update an existing Incident.
+         * The updated Incident object is sent in the request body.
+         * @param incident The Incident object with updated details.
+         * @return The updated Incident object, or null if the original Incident was not found.
+         */
+        @PutMapping("/update")
+        public Incident update(@RequestBody Incident incident) {
+            return service.updateIncident(incident);
+        }
 
-        Incident toUpdate = new Incident.Builder()
-                .incidentID(id)
-                .incidentType(incident.getIncidentType() != null ? incident.getIncidentType() : existing.getIncidentType())
-                .description(incident.getDescription() != null ? incident.getDescription() : existing.getDescription())
-                .build();
+        /**
+         * Handles HTTP DELETE requests to remove an Incident by its ID.
+         * The Incident ID is passed as a path variable.
+         * @param id The ID of the Incident to be deleted.
+         */
+        @DeleteMapping("/delete/{id}")
+        public void delete(@PathVariable Integer id) {
+            service.deleteIncident(id);
+        }
 
-        Incident updated = incidentService.update(toUpdate);
-        return ResponseEntity.ok(updated);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteIncident(@PathVariable Integer id) {
-        Incident existing = incidentService.read(id);
-        if (existing == null) return ResponseEntity.notFound().build();
-        incidentService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
+        /**
+         * Handles HTTP GET requests to retrieve all Incidents.
+         * @return A list of all Incident objects in the database.
+         */
+        @GetMapping("/getAll")
+        public List<Incident> getAll() {
+            return service.getAllIncidents();
+        }
 }

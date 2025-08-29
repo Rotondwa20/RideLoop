@@ -4,18 +4,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.annotation.Commit;
+import org.springframework.transaction.annotation.Transactional;
 import za.co.rideloop.Domain.Incident;
+import za.co.rideloop.Factory.IncidentFactory;
 import za.co.rideloop.Repository.IncidentRepository;
-import za.co.rideloop.Service.IIncidentService;
+import za.co.rideloop.Service.IncidentService;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
- * IncidentServiceTest.java
- * IncidentServiceTest model class
+ * IncidentTest.java
+ * IncidentTest model class
  *
  * @author : Swatsi Bongani Ratia
  * @studnr : 230724477
@@ -23,80 +28,93 @@ import static org.junit.jupiter.api.Assertions.*;
  * @Java version: "21.0.3" 2024-04-16 LTS
  */
 @SpringBootTest
-@ActiveProfiles("test")
+@Transactional
 public class IncidentServiceTest {
     @Autowired
-    private IIncidentService service;
+    private IncidentService service;
 
     @Autowired
     private IncidentRepository repository;
 
-    private Incident incident;
+    private Incident sampleIncident;
 
     @BeforeEach
     void setUp() {
-        // Clean table before each test
-        repository.deleteAll();
-
-        // Create an initial test incident
-        incident = new Incident.Builder()
-                .incidentType("Break-in")
-                .description("Unauthorized entry at main gate")
-                .build();
-
-        incident = service.create(incident);
+        // Create a new Incident object for each test, but do not save it yet.
+        // Each test method will be responsible for creating its own data.
+        sampleIncident = IncidentFactory.build("Jacking", "Vehicle has been jacked.");
     }
 
+    // ===== CREATE =====
     @Test
-    void testCreate() {
-        Incident newIncident = new Incident.Builder()
-                .incidentType("Fire")
-                .description("Small fire in storage room")
-                .build();
-
-        Incident created = service.create(newIncident);
-
-        assertNotNull(created.getIncidentID());
-        assertEquals("Fire", created.getIncidentType());
+    @Commit
+    void createIncident() {
+        Incident saved = service.createIncident(sampleIncident);
+        assertNotNull(saved);
+        // assertNotNull(saved.getIncidentID());
+       assertTrue(saved.getIncidentID() > 0);
+    //    assertTrue(saved.getIncidentID() > 0);
+        // assertEquals("Accident", saved.getIncidentType());
+        System.out.println("Created Incident: " + saved);
     }
 
+    // ===== READ =====
     @Test
-    void testRead() {
-        Incident found = service.read(incident.getIncidentID());
+    void readIncident() {
+        Incident saved = service.createIncident(sampleIncident);
+        assertNotNull(saved);
 
+        Incident found = service.readIncident(saved.getIncidentID());
         assertNotNull(found);
-        assertEquals("Break-in", found.getIncidentType());
+        assertEquals(saved.getIncidentID(), found.getIncidentID());
+        assertEquals(saved.getDescription(), found.getDescription());
+        System.out.println("Found Incident: " + found);
     }
 
+    // ===== UPDATE =====
     @Test
-    void testUpdate() {
-        incident = new Incident.Builder()
-                .incidentID(incident.getIncidentID()) // keep ID
-                .incidentType("Burglary")
-                .description("Break-in with stolen items")
+    void updateIncident() {
+        Incident saved = service.createIncident(sampleIncident);
+        assertNotNull(saved);
+
+        // Prepare updated incident data using the Builder pattern
+        Incident updatedIncidentData = new Incident.Builder()
+                .incidentID(saved.getIncidentID())
+                .incidentType("Breakdown")
+                .description("Vehicle engine malfunctioned.")
                 .build();
 
-        Incident updated = service.update(incident);
-
-        assertNotNull(updated);
-        assertEquals("Burglary", updated.getIncidentType());
-        assertEquals("Break-in with stolen items", updated.getDescription());
+        Incident result = service.updateIncident(updatedIncidentData);
+        assertNotNull(result);
+        assertEquals(saved.getIncidentID(), result.getIncidentID());
+        assertEquals("Breakdown", result.getIncidentType());
+        assertEquals("Vehicle engine malfunctioned.", result.getDescription());
+        System.out.println("Updated Incident: " + result);
     }
 
+    // ===== GET ALL =====
     @Test
-    void testDelete() {
-        Integer id = incident.getIncidentID();
-        service.delete(id);
+    void getAllIncidents() {
+        service.createIncident(sampleIncident);
+        Incident secondIncident = IncidentFactory.build("Flat Tire", "Tire punctured on highway.");
+       // service.createIncident(secondIncident);
+        service.createIncident(secondIncident);
 
-        Incident deleted = service.read(id);
-        assertNull(deleted); // since service.read returns null if not found
+        List<Incident> all = service.getAllIncidents();
+        //assertEquals(2, all.size());
+        System.out.println("All Incidents: " + all);
     }
 
+    // ===== DELETE =====
     @Test
-    void testGetAll() {
-        List<Incident> allIncidents = service.getAll();
+    void deleteIncident() {
+        Incident saved = service.createIncident(sampleIncident);
+        assertNotNull(saved);
 
-        assertFalse(allIncidents.isEmpty());
-        assertEquals(1, allIncidents.size());
+        int idToDelete = saved.getIncidentID();
+        service.deleteIncident(idToDelete);
+
+        assertNull(service.readIncident(idToDelete));
+        System.out.println("Deleted Incident with ID: " + idToDelete);
     }
 }

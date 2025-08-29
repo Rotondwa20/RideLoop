@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.co.rideloop.Domain.SecurityCompany;
-import za.co.rideloop.Service.ISecurityCompanyService;
+import za.co.rideloop.Service.SecurityCompanyService;
+
 
 import java.net.URI;
 import java.util.List;
@@ -19,63 +20,65 @@ import java.util.List;
  * @Java version: "21.0.3" 2024-04-16 LTS
  */
 @RestController
-@RequestMapping("/api/security-companies")
+@RequestMapping("/securitycompany")
 public class SecurityCompanyController {
-    private final ISecurityCompanyService securityCompanyService;
+    private final SecurityCompanyService service;
 
     @Autowired
-    public SecurityCompanyController(ISecurityCompanyService securityCompanyService) {
-        this.securityCompanyService = securityCompanyService;
+    public SecurityCompanyController(SecurityCompanyService service) {
+        this.service = service;
     }
 
-    @PostMapping
-    public ResponseEntity<SecurityCompany> createSecurityCompany(@RequestBody SecurityCompany securityCompany) {
-        SecurityCompany created = securityCompanyService.create(securityCompany);
-        return ResponseEntity.created(URI.create("/api/security-companies/" + created.getSecurityCompanyID()))
-                .body(created);
+    /**
+     * Handles HTTP POST requests to create a new SecurityCompany.
+     * The SecurityCompany object is sent in the request body.
+     * @param securityCompany The SecurityCompany object to be created.
+     * @return The created SecurityCompany object, including its generated ID.
+     */
+    @PostMapping("/create")
+    public SecurityCompany create(@RequestBody SecurityCompany securityCompany) {
+        return service.createSecurityCompany(securityCompany);
     }
 
-    @GetMapping
-    public ResponseEntity<List<SecurityCompany>> getAllSecurityCompanies() {
-        return ResponseEntity.ok(securityCompanyService.getAll());
+    /**
+     * Handles HTTP GET requests to read a SecurityCompany by its ID.
+     * The SecurityCompany ID is passed as a path variable.
+     * @param id The ID of the SecurityCompany to retrieve.
+     * @return The found SecurityCompany object, or null if not found.
+     */
+    @GetMapping("/read/{id}")
+    public SecurityCompany read(@PathVariable Integer id) {
+        return service.readSecurityCompany(id);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<SecurityCompany> getSecurityCompanyById(@PathVariable Integer id) {
-        SecurityCompany existing = securityCompanyService.read(id);
-        if (existing == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(existing);
+    /**
+     * Handles HTTP PUT requests to update an existing SecurityCompany.
+     * The updated SecurityCompany object is sent in the request body.
+     * @param securityCompany The SecurityCompany object with updated details.
+     * @return The updated SecurityCompany object, or null if the original SecurityCompany was not found.
+     */
+    @PutMapping("/update")
+    public SecurityCompany update(@RequestBody SecurityCompany securityCompany) {
+        return service.updateSecurityCompany(securityCompany);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<SecurityCompany> updateSecurityCompany(@PathVariable Integer id,
-                                                                 @RequestBody SecurityCompany securityCompany) {
-        SecurityCompany existing = securityCompanyService.read(id);
-        if (existing == null) return ResponseEntity.notFound().build();
-
-        SecurityCompany toUpdate = new SecurityCompany.Builder()
-                .securityCompanyID(id)
-                .name(securityCompany.getName() != null ? securityCompany.getName() : existing.getName())
-                .contactPerson(securityCompany.getContactPerson() != null ? securityCompany.getContactPerson() : existing.getContactPerson())
-                .phone(securityCompany.getPhone() != null ? securityCompany.getPhone() : existing.getPhone())
-                .email(securityCompany.getEmail() != null ? securityCompany.getEmail() : existing.getEmail())
-                .serviceType(securityCompany.getServiceType() != null ? securityCompany.getServiceType() : existing.getServiceType())
-                .contractStartDate(securityCompany.getContractStartDate() != null ? securityCompany.getContractStartDate() : existing.getContractStartDate())
-                .contractEndDate(securityCompany.getContractEndDate() != null ? securityCompany.getContractEndDate() : existing.getContractEndDate())
-                .monthlyFee(securityCompany.getMonthlyFee() != 0 ? securityCompany.getMonthlyFee() : existing.getMonthlyFee())
-                .emergencyHotline(securityCompany.getEmergencyHotline() != null ? securityCompany.getEmergencyHotline() : existing.getEmergencyHotline())
-                .coverageArea(securityCompany.getCoverageArea() != null ? securityCompany.getCoverageArea() : existing.getCoverageArea())
-                .build();
-
-        SecurityCompany updated = securityCompanyService.update(toUpdate);
-        return ResponseEntity.ok(updated);
+    /**
+     * Handles HTTP DELETE requests to remove a SecurityCompany by its ID.
+     * The SecurityCompany ID is passed as a path variable.
+     * @param id The ID of the SecurityCompany to be deleted.
+     */
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable Integer id) {
+        service.deleteSecurityCompany(id);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSecurityCompany(@PathVariable Integer id) {
-        SecurityCompany existing = securityCompanyService.read(id);
-        if (existing == null) return ResponseEntity.notFound().build();
-        securityCompanyService.delete(id);
-        return ResponseEntity.noContent().build();
+    /**
+     * Handles HTTP GET requests to retrieve all SecurityCompanies.
+     * @return A list of all SecurityCompany objects in the database.
+     */
+    @GetMapping("/getAll")
+    public List<SecurityCompany> getAll() {
+        return  service.getAllSecurityCompanies();
+        //return service.getAllSecurityCompanies();
     }
 }

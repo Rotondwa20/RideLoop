@@ -1,42 +1,39 @@
 package za.co.rideloop.Domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
-/**
- * RideLoop
- * SecurityCompany.java
- *
- * author : Swatsi Bongani Ratia
- * studnr : 230724477
- * group : 3I
- * date : 5/12/2025
- * Java version: "21.0.3" 2024-04-16 LTS
- */
 @Entity
-@Table(name="SecurityCompany")
+@Table(name = "security_companies") // safer naming
 public class SecurityCompany {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int securityCompanyID;
+
     private String name;
     private String contactPerson;
     private String phone;
     private String email;
     private String serviceType;
-    private Date contractStartDate;
-    private Date contractEndDate;
+   // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private LocalDate contractStartDate;
+  //  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private LocalDate  contractEndDate;
+
     private double monthlyFee;
     private String emergencyHotline;
     private String coverageArea;
 
-    /**
-     * Private constructor used by the Builder.
-     * Can only be instantiated through the Builder.
-     */
+    // === Constructors ===
+    public SecurityCompany() {}
+
     private SecurityCompany(Builder builder) {
         this.securityCompanyID = builder.securityCompanyID;
         this.name = builder.name;
@@ -51,77 +48,26 @@ public class SecurityCompany {
         this.coverageArea = builder.coverageArea;
     }
 
-    public SecurityCompany() {
+    // === Getters ===
+    public int getSecurityCompanyID() { return securityCompanyID; }
+    public String getName() { return name; }
+    public String getContactPerson() { return contactPerson; }
+    public String getPhone() { return phone; }
+    public String getEmail() { return email; }
+    public String getServiceType() { return serviceType; }
+    public LocalDate  getContractStartDate() { return contractStartDate; }
+    public LocalDate  getContractEndDate() { return contractEndDate; }
+    public double getMonthlyFee() { return monthlyFee; }
+    public String getEmergencyHotline() { return emergencyHotline; }
+    public String getCoverageArea() { return coverageArea; }
 
-    }
 
-    // Getters
-    public int getSecurityCompanyID() {
-        return securityCompanyID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getContactPerson() {
-        return contactPerson;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getServiceType() {
-        return serviceType;
-    }
-
-    public Date getContractStartDate() {
-        return contractStartDate != null ? new Date(contractStartDate.getTime()) : null; // Return a copy to maintain immutability
-    }
-
-    public Date getContractEndDate() {
-        return contractEndDate != null ? new Date(contractEndDate.getTime()) : null; // Return a copy to maintain immutability
-    }
-
-    public double getMonthlyFee() {
-        return monthlyFee;
-    }
-
-    public String getEmergencyHotline() {
-        return emergencyHotline;
-    }
-
-    public String getCoverageArea() {
-        return coverageArea;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SecurityCompany that = (SecurityCompany) o;
-        return securityCompanyID == that.securityCompanyID &&
-                Double.compare(that.monthlyFee, monthlyFee) == 0 &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(contactPerson, that.contactPerson) &&
-                Objects.equals(phone, that.phone) &&
-                Objects.equals(email, that.email) &&
-                Objects.equals(serviceType, that.serviceType) &&
-                Objects.equals(contractStartDate, that.contractStartDate) &&
-                Objects.equals(contractEndDate, that.contractEndDate) &&
-                Objects.equals(emergencyHotline, that.emergencyHotline) &&
-                Objects.equals(coverageArea, that.coverageArea);
-    }
 
     @Override
     public int hashCode() {
-        return Objects.hash(securityCompanyID, name, contactPerson, phone, email, serviceType,
-                contractStartDate, contractEndDate, monthlyFee, emergencyHotline, coverageArea);
+        return Objects.hash(securityCompanyID, name, contactPerson, phone, email,
+                serviceType, contractStartDate, contractEndDate,
+                monthlyFee, emergencyHotline, coverageArea);
     }
 
     @Override
@@ -141,10 +87,7 @@ public class SecurityCompany {
                 '}';
     }
 
-    /**
-     * Builder class for SecurityCompany.
-     * Implements the Builder Pattern to create SecurityCompany instances in a fluent API style.
-     */
+    // === Builder ===
     public static class Builder {
         private int securityCompanyID;
         private String name;
@@ -152,73 +95,24 @@ public class SecurityCompany {
         private String phone;
         private String email;
         private String serviceType;
-        private Date contractStartDate;
-        private Date contractEndDate;
+        private LocalDate  contractStartDate;
+        private LocalDate  contractEndDate;
         private double monthlyFee;
         private String emergencyHotline;
         private String coverageArea;
 
-        public Builder securityCompanyID(int securityCompanyID) {
-            this.securityCompanyID = securityCompanyID;
-            return this;
-        }
+        public Builder securityCompanyID(int id) { this.securityCompanyID = id; return this; }
+        public Builder name(String name) { this.name = name; return this; }
+        public Builder contactPerson(String contactPerson) { this.contactPerson = contactPerson; return this; }
+        public Builder phone(String phone) { this.phone = phone; return this; }
+        public Builder email(String email) { this.email = email; return this; }
+        public Builder serviceType(String serviceType) { this.serviceType = serviceType; return this; }
+        public Builder contractStartDate(LocalDate  date) { this.contractStartDate = date; return this; }
+        public Builder contractEndDate(LocalDate  date) { this.contractEndDate = date; return this; }
+        public Builder monthlyFee(double fee) { this.monthlyFee = fee; return this; }
+        public Builder emergencyHotline(String hotline) { this.emergencyHotline = hotline; return this; }
+        public Builder coverageArea(String area) { this.coverageArea = area; return this; }
 
-        public Builder name(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder contactPerson(String contactPerson) {
-            this.contactPerson = contactPerson;
-            return this;
-        }
-
-        public Builder phone(String phone) {
-            this.phone = phone;
-            return this;
-        }
-
-        public Builder email(String email) {
-            this.email = email;
-            return this;
-        }
-
-        public Builder serviceType(String serviceType) {
-            this.serviceType = serviceType;
-            return this;
-        }
-
-        public Builder contractStartDate(Date contractStartDate) {
-            this.contractStartDate = contractStartDate != null ? new Date(contractStartDate.getTime()) : null;
-            return this;
-        }
-
-        public Builder contractEndDate(Date contractEndDate) {
-            this.contractEndDate = contractEndDate != null ? new Date(contractEndDate.getTime()) : null;
-            return this;
-        }
-
-        public Builder monthlyFee(double monthlyFee) {
-            this.monthlyFee = monthlyFee;
-            return this;
-        }
-
-        public Builder emergencyHotline(String emergencyHotline) {
-            this.emergencyHotline = emergencyHotline;
-            return this;
-        }
-
-        public Builder coverageArea(String coverageArea) {
-            this.coverageArea = coverageArea;
-            return this;
-        }
-
-        /**
-         * Builds and returns a new SecurityCompany instance.
-         * @return A new SecurityCompany instance.
-         */
-        public SecurityCompany build() {
-            return new SecurityCompany(this);
-        }
+        public SecurityCompany build() { return new SecurityCompany(this); }
     }
 }
