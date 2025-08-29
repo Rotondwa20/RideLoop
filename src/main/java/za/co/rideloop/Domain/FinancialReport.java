@@ -189,6 +189,20 @@ public class FinancialReport {
             return this;
         }
 
+        public Builder copy(FinancialReport financialReport) {
+            this.reportID = financialReport.reportID;
+            this.generateDate = financialReport.generateDate;
+            this.timePeriod = financialReport.timePeriod;
+            this.exportFormat = financialReport.exportFormat;
+            this.totalRevenue = financialReport.totalRevenue;
+            this.rentalIncome = financialReport.rentalIncome;
+            this.additionalCharges = financialReport.additionalCharges;
+            this.insuranceIncome = financialReport.insuranceIncome;
+            this.expenses = financialReport.expenses;
+            this.netProfit = financialReport.netProfit;
+            return this;
+        }
+
         @Override
         public String toString() {
             return "Builder{" +
