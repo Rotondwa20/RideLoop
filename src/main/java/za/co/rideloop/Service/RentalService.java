@@ -19,7 +19,7 @@ import java.util.List;
  * Group 3 I
  **/
 @Service
-public class RentalService implements IRentalService {
+public class RentalService {
 
 
     @Autowired
@@ -44,7 +44,7 @@ public class RentalService implements IRentalService {
         return this.repository.save(rental);
     }
     // ===== Create =====
-    @Override
+
     public Rental read(Integer id) {
         return repository.findById(id).orElse(null);
     }
@@ -52,7 +52,7 @@ public class RentalService implements IRentalService {
 
     // ===== Update =====
 
-    @Override
+
     public Rental update(Rental rental) {
         // 1. Check if the input rental object is null or has no ID.
         if (rental == null || rental.getRentalID() == 0) {
@@ -88,12 +88,12 @@ public class RentalService implements IRentalService {
 
 
     // ===== Get All =====
-    @Override
+
     public List<Rental> getAll() {
         return this.repository.findAll();
     }
     // ===== Delete =====
-    @Override
+
     public void delete(int id) {
         this.repository.deleteById(id);
     }
