@@ -17,7 +17,7 @@ import java.util.List;
  * Group 3 I
  **/
 @Service
-public class PaymentService implements IPaymentService {
+public class PaymentService {
 
 
     @Autowired
@@ -28,7 +28,7 @@ public class PaymentService implements IPaymentService {
     }
 
     // ===== Create =====
-    @Override
+
     public Payment create(Payment payment) {
         if (payment == null ||
                 // !Helper.isValidId(payment.getPaymentID()) ||
@@ -44,13 +44,13 @@ public class PaymentService implements IPaymentService {
     }
 
                      // ===== Read =====
-    @Override
+
     public Payment read(Integer id) {
 
         return this.repository.findById(id).orElse(null);
     }
                         // ===== Update =====
-    @Override
+
     public Payment update(Payment payment) {
         if (payment == null) {
             return null;
@@ -79,12 +79,12 @@ public class PaymentService implements IPaymentService {
 
 
     // ===== Get All =====
-    @Override
+
     public List<Payment> getAll() {
         return this.repository.findAll();
     }
 
-    @Override
+
     public void delete(int id) {
         this.repository.deleteById(id);
     }

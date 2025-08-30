@@ -20,13 +20,11 @@ class IncidentFactoryTest {
     @Test
     void testBuildSuccess() {
         Incident incident = IncidentFactory.build(
-                1,
                 "Accident",
                 "Car was rear-ended at signal."
         );
 
         assertNotNull(incident);
-        assertEquals(1, incident.getIncidentID());
         assertEquals("Accident", incident.getIncidentType());
         assertEquals("Car was rear-ended at signal.", incident.getDescription());
     }
@@ -34,7 +32,7 @@ class IncidentFactoryTest {
     @Test
     void testBuildWithEmptyIncidentType_shouldThrowException() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            IncidentFactory.build(2, "", "Flat tyre on highway.");
+            IncidentFactory.build("", "Flat tyre on highway.");
         });
 
         String expectedMessage = "Invalid input";
@@ -45,7 +43,7 @@ class IncidentFactoryTest {
     @Test
     void testBuildWithNullDescription_shouldThrowException() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            IncidentFactory.build(3, "Mechanical Failure", null);
+            IncidentFactory.build("Mechanical Failure", null);
         });
 
         String expectedMessage = "Invalid input";
