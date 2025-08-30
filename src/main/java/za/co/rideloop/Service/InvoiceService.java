@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class InvoiceService implements IInvoiceService {
+public class InvoiceService{
 
     @Autowired
     private InvoiceRepository repository;
@@ -26,19 +26,19 @@ public class InvoiceService implements IInvoiceService {
 
 
 
-    @Override
+
     public Invoice create(Invoice invoice) {
 
             return repository.save(invoice);
 
     }
 
-    @Override
+
     public Invoice read(Integer invoiceID) {
         return repository.findById(invoiceID).orElse(null);
     }
 
-    @Override
+
     public Invoice update(Invoice invoice) {
 
             // Check if the input invoice is valid and has an ID
@@ -72,7 +72,7 @@ public class InvoiceService implements IInvoiceService {
             return null; // Not found
 
     }
-    @Override
+
     public List<Invoice> getAll() {
         return repository.findAll();
     }
@@ -83,7 +83,7 @@ public class InvoiceService implements IInvoiceService {
     public Invoice getInvoiceByPaymentReference(String paymentReference) {
         return repository.findByPaymentReference(paymentReference).orElse(null);
     }
-   @Override
+
     public void delete(int id) {
         repository.deleteById(id);
     }
