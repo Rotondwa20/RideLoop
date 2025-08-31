@@ -25,7 +25,25 @@ public class CarService {
         return this.repository.findById(id).orElse(null);
     }
 
-    public Car updateCar(Car car) {
+    public Car updateCar(Integer id, Car car) {
+        Car existing = readCar(id);
+        if (existing == null) return null;
+
+        Car updatedCar = CarFactory.createCar(
+                id,
+                car.getBrand(),
+                car.getModel(),
+                car.getYear(),
+                car.getLicensePlate(),
+                car.getRentalRate(),
+                car.getStatus(),
+                car.getCategory(),
+                car.getMileage(),
+                car.getLastMaintenance(),
+                car.getMaintenanceDue(),
+                car.getLocation()
+        );
+
         return repository.save(car);
     }
 

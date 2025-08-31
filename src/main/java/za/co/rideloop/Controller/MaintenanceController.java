@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/maintenance")
-@CrossOrigin(origins = "http://localhost:3000")
+
 public class MaintenanceController {
     @Autowired
     private MaintenanceService service;

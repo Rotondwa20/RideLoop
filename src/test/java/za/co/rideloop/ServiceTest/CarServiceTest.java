@@ -78,7 +78,7 @@ public class CarServiceTest {
                 .setLocation(car.getLocation())
                 .build();
 
-        Car result = service.updateCar(updatedCar);
+        Car result = service.updateCar(updatedCar.getCarId(), updatedCar);
         assertNotNull(result);
         assertEquals("Rented", result.getStatus());
         System.out.println("Updated Car: " + result);
