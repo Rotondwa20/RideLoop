@@ -29,6 +29,7 @@ public class Maintenance {
     }
 
     private Maintenance(Builder builder) {
+        this.id = builder.id;
         this.insuranceCompanyName = builder.insuranceCompanyName;
         this.contactPerson = builder.contactPerson;
         this.contactNumber = builder.contactNumber;
@@ -66,6 +67,7 @@ public class Maintenance {
     }
 
     public static class Builder {
+        private Long id;
         private String insuranceCompanyName;
         private String contactPerson;
         private String contactNumber;
@@ -73,6 +75,11 @@ public class Maintenance {
         private Double costPerMonth;
         private String description;
 
+
+        public Builder setId(Long id) {
+            this.id = id;
+            return this;
+        }
         public Builder setInsuranceCompanyName(String insuranceCompanyName) {
             this.insuranceCompanyName = insuranceCompanyName;
             return this;

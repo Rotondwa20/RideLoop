@@ -11,6 +11,7 @@ import za.co.rideloop.Domain.Maintenance;
 public class MaintenanceFactory {
 
     public static Maintenance createMaintenance(
+            Long id,
     String insuranceCompanyName,
     String contactPerson,
     String contactNumber,
@@ -19,6 +20,7 @@ public class MaintenanceFactory {
     String description
     ) {
         return new Maintenance.Builder()
+            .setId(id)
             .setInsuranceCompanyName(insuranceCompanyName)
             .setContactPerson(contactPerson)
             .setContactNumber(contactNumber)
