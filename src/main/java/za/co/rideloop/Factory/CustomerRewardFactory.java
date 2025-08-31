@@ -1,49 +1,56 @@
 package za.co.rideloop.Factory;
 
-import java.util.Date;
-import za.co.rideloop.Domain.Customer;
 import za.co.rideloop.Domain.CustomerRewards;
+import za.co.rideloop.Domain.User;
+
+import java.util.Date;
 
 /**
+ * Factory class for creating CustomerRewards objects linked to User.
+ *
  * Author: Rotondwa Rambau
  * Student Number: 222342145
  * Group: 3I
  */
 public class CustomerRewardFactory {
 
-
-    public static CustomerRewards createDefault(Customer customer) {
-        return create(customer, 0, 0, "Bronze", new Date());
+    /**
+     * Create a basic CustomerRewards object with default points, tier, and current date.
+     *
+     * @param user The user associated with the reward
+     * @return CustomerRewards instance
+     */
+    public static CustomerRewards createCustomerRewards(User user) {
+        return new CustomerRewards.Builder()
+                .setUser(user)
+                .setCurrentPoints(0)
+                .setLifetimePoints(0)
+                .setCurrentTier("Bronze")
+                .setLastActivityDate(new Date())
+                .build();
     }
 
-    public static CustomerRewards create(Customer customer, int currentPoints,
-                                         int lifetimePoints, String currentTier,
-                                         Date lastActivityDate) {
-        if (lastActivityDate == null) lastActivityDate = new Date();
-
+    /**
+     * Create a full CustomerRewards object with custom points, tier, and last activity date.
+     *
+     * @param user The user associated with the reward
+     * @param currentPoints Current reward points
+     * @param lifetimePoints Total lifetime points
+     * @param currentTier Customer tier
+     * @param lastActivityDate Last activity date
+     * @return CustomerRewards instance
+     */
+    public static CustomerRewards createFullCustomerRewards(User user,
+                                                            int currentPoints,
+                                                            int lifetimePoints,
+                                                            String currentTier,
+                                                            Date lastActivityDate) {
         return new CustomerRewards.Builder()
-                .setCustomer(customer)
+                .setUser(user)
                 .setCurrentPoints(currentPoints)
                 .setLifetimePoints(lifetimePoints)
                 .setCurrentTier(currentTier)
                 .setLastActivityDate(lastActivityDate)
                 .build();
-    }
-
-
-    public static CustomerRewards createNewCustomer(Customer customer) {
-        return create(customer, 0, 0, "Bronze", new Date());
-    }
-
-
-    public static CustomerRewards copy(CustomerRewards original) {
-        if (original == null) return createDefault(null);
-        return create(
-                original.getCustomer(),
-                original.getCurrentPoints(),
-                original.getLifetimePoints(),
-                original.getCurrentTier(),
-                original.getLastActivityDate()
-        );
     }
 }

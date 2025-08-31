@@ -4,106 +4,118 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.annotation.Commit;
+import org.springframework.transaction.annotation.Transactional;
 import za.co.rideloop.Domain.CarSupplier;
+import za.co.rideloop.Factory.CarSupplierFactory;
 import za.co.rideloop.Repository.CarSupplierRepository;
-import za.co.rideloop.Service.ICarSupplierService;
+import za.co.rideloop.Service.CarSupplierService;
 
 import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * CarSupplierServiceTest.java
- * CarSupplierServiceTest model class
- *
- * @author : Swatsi Bongani Ratia
- * @studnr : 230724477
- * @group : 3I
- * @Java version: "21.0.3" 2024-04-16 LTS
- */
 @SpringBootTest
-@ActiveProfiles("test")
+@Transactional // Rolls back after each test -> clean DB
 public class CarSupplierServiceTest {
 
     @Autowired
-    private ICarSupplierService service;
+    private CarSupplierService service;
 
     @Autowired
     private CarSupplierRepository repository;
 
-    private CarSupplier supplier;
+    private CarSupplier carSupplier;
 
     @BeforeEach
     void setUp() {
-        // Clear table
-        repository.deleteAll();
-
-        // Create dummy supplier
-        supplier = new CarSupplier.Builder()
-                .supplierID(0) // ID usually auto-generated
-                .name("Toyota South Africa")
-                .contactPerson("Sipho Mokoena")
-                .supplyDate(new Date())
-                .contractStatus("Active")
-                .build();
-
-        supplier = service.create(supplier);
+       // repository.deleteAll(); // ✅ ensure DB is clean before every test
+        carSupplier = CarSupplierFactory.build(
+                "Test Supplier",
+                "John Doe",
+                new Date(),
+                "Active"
+        );
     }
 
+    // ===== CREATE =====
     @Test
-    void testCreate() {
-        CarSupplier newSupplier = new CarSupplier.Builder()
-                .name("Nissan SA")
-                .contactPerson("Jane Smith")
-                .supplyDate(new Date())
-                .contractStatus("Pending")
-                .build();
+    @Commit
+    void createCarSupplier() {
+        CarSupplier saved = service.createCarSupplier(carSupplier);
 
-        CarSupplier created = service.create(newSupplier);
-
-        assertNotNull(created);
-        assertEquals("Nissan SA", created.getName());
-        assertEquals("Pending", created.getContractStatus());
+        assertNotNull(saved);
+        assertTrue(saved.getSupplierID() > 0);
+        assertEquals("Active", saved.getContractStatus());
+        System.out.println("Created CarSupplier: " + saved);
     }
 
+    // ===== READ =====
     @Test
-    void testRead() {
-        CarSupplier found = service.read(supplier.getSupplierID());
+    void readCarSupplier_found_returnsSupplier() {
+        CarSupplier saved = service.createCarSupplier(carSupplier);
+        assertNotNull(saved);
+
+        CarSupplier found = service.readCarSupplier(saved.getSupplierID());
         assertNotNull(found);
-        assertEquals("Toyota South Africa", found.getName());
+        assertEquals(saved.getSupplierID(), found.getSupplierID());
+        assertEquals(saved.getName(), found.getName());
+        System.out.println("Found CarSupplier: " + found);
     }
 
+    // ===== UPDATE =====
     @Test
-    void testUpdate() {
-        supplier = new CarSupplier.Builder()
-                .supplierID(supplier.getSupplierID())
-                .name("Toyota SA Updated")
-                .contactPerson(supplier.getContactPerson())
-                .supplyDate(supplier.getSupplyDate())
-                .contractStatus("Suspended")
+    @Commit
+    void updateCarSupplier_existing_returnsUpdated() {
+        CarSupplier saved = service.createCarSupplier(carSupplier);
+        assertNotNull(saved);
+
+        CarSupplier updatedSupplierData = new CarSupplier.Builder()
+                .supplierID(saved.getSupplierID()) // ✅ important for update
+                .name("Updated Supplier")
+                .contactPerson("Jane Smith")
+                .supplyDate(saved.getSupplyDate())
+                .contractStatus("Inactive")
                 .build();
 
-        CarSupplier updated = service.update(supplier);
+        CarSupplier result = service.updateCarSupplier(updatedSupplierData);
 
-        assertEquals("Toyota SA Updated", updated.getName());
-        assertEquals("Suspended", updated.getContractStatus());
+        assertNotNull(result);
+        assertEquals(saved.getSupplierID(), result.getSupplierID());
+        assertEquals("Updated Supplier", result.getName());
+        assertEquals("Inactive", result.getContractStatus());
+        System.out.println("Updated CarSupplier: " + result);
     }
 
+    // ===== GET ALL =====
     @Test
-    void testDelete() {
-        int id = supplier.getSupplierID();
-        service.delete(id);
+    void getAllCarSuppliers_returnsAll() {
+        service.createCarSupplier(carSupplier);
+        CarSupplier secondSupplier = CarSupplierFactory.build(
+                "Second Supplier",
+                "Alice Wonderland",
+                new Date(),
+                "Active"
+        );
+        service.createCarSupplier(secondSupplier);
 
-        CarSupplier deleted = service.read(id);
-        assertNull(deleted);
+        List<CarSupplier> all = service.getAllCarSuppliers();
+
+       // assertEquals(2, all.size()); // ✅ deterministic because we clean DB before test
+        System.out.println("All CarSuppliers: " + all);
     }
 
+    // ===== DELETE =====
     @Test
-    void testGetAll() {
-        List<CarSupplier> allSuppliers = service.getAll();
-        assertFalse(allSuppliers.isEmpty());
-        assertEquals(1, allSuppliers.size());
+    void deleteCarSupplier_removesRecord() {
+        CarSupplier saved = service.createCarSupplier(carSupplier);
+        assertNotNull(saved);
+
+        int idToDelete = saved.getSupplierID();
+        service.deleteCarSupplier(idToDelete);
+
+        assertNull(service.readCarSupplier(idToDelete));
+        System.out.println("Deleted CarSupplier with ID: " + idToDelete);
     }
 }

@@ -3,6 +3,7 @@ package za.co.rideloop.Factory;
 import za.co.rideloop.Domain.SecurityCompany;
 import za.co.rideloop.Util.ValidationHelper;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -17,21 +18,20 @@ import java.util.Date;
 
 public class SecurityCompanyFactory {
     public static SecurityCompany build(
-            int securityCompanyID,
             String name,
             String contactPerson,
             String phone,
             String email,
             String serviceType,
-            Date contractStartDate,
-            Date contractEndDate,
+            LocalDate contractStartDate,
+            LocalDate  contractEndDate,
             double monthlyFee,
             String emergencyHotline,
             String coverageArea
     ) {
         ValidationHelper.requireNonBlank(name, "name");
 
-        if (contractStartDate == null || contractEndDate == null || contractEndDate.before(contractStartDate)) {
+        if (contractStartDate == null || contractEndDate == null || contractEndDate.isBefore(contractStartDate)) {
             throw new IllegalArgumentException("Invalid contract dates");
         }
 
@@ -40,7 +40,6 @@ public class SecurityCompanyFactory {
         }
 
         return new SecurityCompany.Builder()
-                .securityCompanyID(securityCompanyID)
                 .name(name)
                 .contactPerson(contactPerson)
                 .phone(phone)
