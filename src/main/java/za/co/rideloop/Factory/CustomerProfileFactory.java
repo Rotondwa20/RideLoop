@@ -6,7 +6,6 @@ import za.co.rideloop.Domain.User;
 
 public class CustomerProfileFactory {
 
-    // Creates a basic CustomerProfile with mandatory fields
     public static CustomerProfile createCustomerProfile(User user, String firstName, String lastName,
                                                         String idNumber, String phoneNumber, String status) {
         return new CustomerProfile.Builder()

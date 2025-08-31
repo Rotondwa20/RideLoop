@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import za.co.rideloop.Domain.User;
-import za.co.rideloop.Repository.CustomerRewardsRepository;
 import za.co.rideloop.Repository.UserRepository;
 
 import java.util.List;
@@ -15,22 +14,18 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository repository;
-    private final CustomerRewardsRepository rewardsRepository;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Value("${admin.security.code}")
     private String adminSecurityCode;
 
     @Autowired
-    public UserService(UserRepository repository, CustomerRewardsRepository rewardsRepository) {
+    public UserService(UserRepository repository) {
         this.repository = repository;
-        this.rewardsRepository = rewardsRepository;
     }
 
-    // -----------------------
-    // Register user (Customer or Admin)
+    // Register new user
     public String registerUser(User user, String securityCode) {
-
         Optional<User> existingUser = repository.findByEmail(user.getEmail());
         if (existingUser.isPresent()) {
             return "Email already exists";
@@ -42,48 +37,40 @@ public class UserService {
             }
         }
 
-        // Hash password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         repository.save(user);
 
         return "User registered successfully";
     }
 
-    // -----------------------
     // Get all users
     public List<User> findAll() {
         return repository.findAll();
     }
 
-    // -----------------------
     // Find user by ID
     public Optional<User> findById(int id) {
         return repository.findById(id);
     }
 
-    // -----------------------
-    // Delete user
+    // Delete user by ID
     public void deleteById(int id) {
-        rewardsRepository.deleteByUserUserID(id);
         repository.deleteById(id);
     }
 
-    // -----------------------
-    // Login and return User object if successful
+    // User login
     public Optional<User> loginUser(String email, String password) {
         Optional<User> userOpt = repository.findByEmail(email);
         if (userOpt.isEmpty()) {
-            return Optional.empty(); // user not found
+            return Optional.empty();
         }
 
         User user = userOpt.get();
 
-        // check password
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            return Optional.empty(); // invalid password
+            return Optional.empty();
         }
 
-        return Optional.of(user); // success
+        return Optional.of(user);
     }
-
 }

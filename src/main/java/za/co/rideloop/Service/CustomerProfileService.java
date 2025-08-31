@@ -19,36 +19,30 @@ public class CustomerProfileService {
     @Autowired
     private UserRepository userRepository;
 
-    // ---------------- Get User by ID ----------------
     public User getUserById(int userID) {
         return userRepository.findById(userID)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + userID));
     }
 
-    // ---------------- Create or update profile for a user ----------------
     public CustomerProfile createProfileForUser(CustomerProfile profile, int userID) {
         User user = getUserById(userID);
         profile.setUser(user);
 
-        // Default status to "pending" if not set
         if (profile.getStatus() == null) {
             profile.setStatus("pending");
         }
 
-        // If profile exists, preserve its ID
         repository.findByUser_Id(userID)
                 .ifPresent(existing -> profile.setProfileID(existing.getProfileID()));
 
         return repository.save(profile);
     }
 
-    // ---------------- Update profile ----------------
-    // isAdmin = true allows status change, false keeps original status
+
     public CustomerProfile updateProfile(CustomerProfile profile, boolean isAdmin) {
         CustomerProfile existing = repository.findById(profile.getProfileID())
                 .orElseThrow(() -> new RuntimeException("Profile not found with ID: " + profile.getProfileID()));
 
-        // Only admin can change status
         if (!isAdmin) {
             profile.setStatus(existing.getStatus());
         }
@@ -64,7 +58,6 @@ public class CustomerProfileService {
         return repository.save(existing);
     }
 
-    // ---------------- Fetch methods ----------------
     public Optional<CustomerProfile> getProfileByUserId(int userID) {
         return repository.findByUser_Id(userID);
     }

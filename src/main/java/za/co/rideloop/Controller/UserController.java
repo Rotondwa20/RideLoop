@@ -18,15 +18,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // -----------------------
-    // Get all users
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.findAll());
     }
 
-    // -----------------------
-    // Get user by ID
+
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getUserById(@PathVariable int id) {
         Optional<User> user = userService.findById(id);
@@ -40,8 +37,7 @@ public class UserController {
         }
     }
 
-    // -----------------------
-    // Register a user
+
     @PostMapping
     public ResponseEntity<Map<String, String>> createUser(
             @RequestBody User user,
@@ -58,8 +54,7 @@ public class UserController {
         }
     }
 
-    // -----------------------
-    // Delete a user by ID
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteUser(@PathVariable int id) {
         userService.deleteById(id);
@@ -68,7 +63,6 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    // -----------------------
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> loginUser(@RequestBody Map<String, String> loginData) {
         String email = loginData.get("email");

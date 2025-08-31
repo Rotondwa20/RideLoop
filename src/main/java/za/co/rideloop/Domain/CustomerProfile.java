@@ -16,7 +16,7 @@ public class CustomerProfile {
     private String licenseNumber;
     private String phoneNumber;
 
-    private String status; // new status field
+    private String status;
 
     @OneToOne
     @JoinColumn(name = "user_id", unique = true)
@@ -25,7 +25,6 @@ public class CustomerProfile {
     @Embedded
     private Address address;
 
-    // ---------- Constructors ----------
     public CustomerProfile() {
         this.status = "pending"; // default status
     }
@@ -41,7 +40,6 @@ public class CustomerProfile {
         this.status = builder.status != null ? builder.status : "pending"; // default
     }
 
-    // ---------- Getters ----------
     public int getProfileID() { return profileID; }
     public String getFirstName() { return firstName; }
     public String getLastName() { return lastName; }
@@ -54,7 +52,7 @@ public class CustomerProfile {
     public String getEmail() { return user != null ? user.getEmail() : null; }
     public String getUsername() { return user != null ? user.getUsername() : null; }
 
-    // ---------- Setters ----------
+
     public void setProfileID(int profileID) { this.profileID = profileID; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
     public void setLastName(String lastName) { this.lastName = lastName; }
@@ -65,7 +63,6 @@ public class CustomerProfile {
     public void setUser(User user) { this.user = user; }
     public void setAddress(Address address) { this.address = address; }
 
-    // ---------- Builder ----------
     public static class Builder {
         private String firstName;
         private String lastName;
