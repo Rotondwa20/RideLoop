@@ -17,7 +17,6 @@ public class Address {
     private String province;
     private String zipCode;
 
-
     public Address() {}
 
     public Address(String streetName, String suburb, String province, String zipCode) {
