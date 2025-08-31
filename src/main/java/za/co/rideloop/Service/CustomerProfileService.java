@@ -8,6 +8,7 @@ import za.co.rideloop.Repository.CustomerProfileRepository;
 import za.co.rideloop.Repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerProfileService {
@@ -18,51 +19,62 @@ public class CustomerProfileService {
     @Autowired
     private UserRepository userRepository;
 
-    // ---------------- Get User by ID ----------------
     public User getUserById(int userID) {
         return userRepository.findById(userID)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + userID));
     }
 
-    // ---------------- Create a profile (admin/other) ----------------
-    public CustomerProfile createProfile(CustomerProfile profile) {
-        return repository.save(profile);
-    }
-
-    // ---------------- Create or update a profile for logged-in user ----------------
-    public CustomerProfile saveProfileForUser(int userID, CustomerProfile profile) {
-        User user = getUserById(userID); // use the method above
+    public CustomerProfile createProfileForUser(CustomerProfile profile, int userID) {
+        User user = getUserById(userID);
         profile.setUser(user);
 
-        repository.findByUser_Id(userID).ifPresent(existingProfile ->
-                profile.setProfileID(existingProfile.getProfileID())
-        );
+        if (profile.getStatus() == null) {
+            profile.setStatus("pending");
+        }
+
+        repository.findByUser_Id(userID)
+                .ifPresent(existing -> profile.setProfileID(existing.getProfileID()));
 
         return repository.save(profile);
     }
 
-    // ---------------- Get profile by user ID ----------------
-    public CustomerProfile getProfileByUserId(int userID) {
-        return repository.findByUser_Id(userID).orElse(null);
+
+    public CustomerProfile updateProfile(CustomerProfile profile, boolean isAdmin) {
+        CustomerProfile existing = repository.findById(profile.getProfileID())
+                .orElseThrow(() -> new RuntimeException("Profile not found with ID: " + profile.getProfileID()));
+
+        if (!isAdmin) {
+            profile.setStatus(existing.getStatus());
+        }
+
+        existing.setFirstName(profile.getFirstName());
+        existing.setLastName(profile.getLastName());
+        existing.setIdNumber(profile.getIdNumber());
+        existing.setLicenseNumber(profile.getLicenseNumber());
+        existing.setPhoneNumber(profile.getPhoneNumber());
+        existing.setAddress(profile.getAddress());
+        existing.setStatus(profile.getStatus());
+
+        return repository.save(existing);
     }
 
-    // ---------------- Get profile by profile ID ----------------
-    public CustomerProfile readProfile(int id) {
-        return repository.findById(id).orElse(null);
+    public Optional<CustomerProfile> getProfileByUserId(int userID) {
+        return repository.findByUser_Id(userID);
     }
 
-    // ---------------- Update profile ----------------
-    public CustomerProfile updateProfile(CustomerProfile profile) {
-        return repository.save(profile);
+    public Optional<CustomerProfile> readProfile(int profileID) {
+        return repository.findById(profileID);
     }
 
-    // ---------------- Delete profile ----------------
-    public void deleteProfile(int id) {
-        repository.deleteById(id);
+    public void deleteProfile(int profileID) {
+        repository.deleteById(profileID);
     }
 
-    // ---------------- Get all profiles ----------------
     public List<CustomerProfile> getAllProfiles() {
         return repository.findAll();
+    }
+
+    public List<CustomerProfile> findProfilesByStatus(String status) {
+        return repository.findByStatus(status);
     }
 }

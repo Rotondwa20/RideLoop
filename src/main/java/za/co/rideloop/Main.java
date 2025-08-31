@@ -3,7 +3,6 @@ package za.co.rideloop;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import za.co.rideloop.Domain.*;
-import za.co.rideloop.Factory.AdminFactory;
 import za.co.rideloop.Factory.CarFactory;
 import za.co.rideloop.Factory.InvoiceFactory;
 

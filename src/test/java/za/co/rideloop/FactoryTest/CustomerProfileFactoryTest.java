@@ -23,10 +23,11 @@ class CustomerProfileFactoryTest {
         String lastName = "Doe";
         String idNumber = "1234567890123";
         String phoneNumber = "0712345678";
+        String status = "pending";
 
         // Act
         CustomerProfile profile = CustomerProfileFactory.createCustomerProfile(
-                user, firstName, lastName, idNumber, phoneNumber
+                user, firstName, lastName, idNumber, phoneNumber, status
         );
 
         // Assert
@@ -36,8 +37,8 @@ class CustomerProfileFactoryTest {
         assertEquals(lastName, profile.getLastName());
         assertEquals(idNumber, profile.getIdNumber());
         assertEquals(phoneNumber, profile.getPhoneNumber());
+        assertEquals(status, profile.getStatus());
         assertNull(profile.getAddress());
-        assertNull(profile.getProfileImage());
     }
 
     @Test
@@ -54,25 +55,18 @@ class CustomerProfileFactoryTest {
         String idNumber = "9876543210987";
         String licenseNumber = "L123456789";
         String phoneNumber = "0798765432";
+        String status = "pending";
 
         Address address = new Address.Builder()
                 .setStreetName("123 Main St")
-                .setSuburb("Cape Town")   // was setCity()
-                .setProvince("Western Cape") // instead of setCountry()
-                .setZipCode("8001")       // was setPostalCode()
+                .setSuburb("Cape Town")
+                .setProvince("Western Cape")
+                .setZipCode("8001")
                 .build();
-
-
-
-        byte[] idDocument = new byte[]{1, 2, 3};
-        byte[] licenseDocument = new byte[]{4, 5, 6};
-        byte[] proofOfAddress = new byte[]{7, 8, 9};
-        byte[] profileImage = new byte[]{10, 11, 12};
 
         // Act
         CustomerProfile profile = CustomerProfileFactory.createFullCustomerProfile(
-                user, firstName, lastName, idNumber, licenseNumber, phoneNumber,
-                address, idDocument, licenseDocument, proofOfAddress, profileImage
+                user, firstName, lastName, idNumber, licenseNumber, phoneNumber, address, status
         );
 
         // Assert
@@ -84,9 +78,6 @@ class CustomerProfileFactoryTest {
         assertEquals(licenseNumber, profile.getLicenseNumber());
         assertEquals(phoneNumber, profile.getPhoneNumber());
         assertEquals(address, profile.getAddress());
-        assertArrayEquals(idDocument, profile.getIdDocument());
-        assertArrayEquals(licenseDocument, profile.getLicenseDocument());
-        assertArrayEquals(proofOfAddress, profile.getProofOfAddress());
-        assertArrayEquals(profileImage, profile.getProfileImage());
+        assertEquals(status, profile.getStatus());
     }
 }
