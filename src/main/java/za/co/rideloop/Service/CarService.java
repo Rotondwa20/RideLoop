@@ -35,6 +35,7 @@ public class CarService {
 
         // Use the factory to rebuild the car
         Car updatedCar = CarFactory.createCar(
+                car.getCarId(),
                 car.getBrand(),
                 car.getModel(),
                 car.getYear(),

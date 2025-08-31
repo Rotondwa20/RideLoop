@@ -1,24 +1,3 @@
-### 🔹 1. CREATE A CAR (POST)
-POST http://localhost:8080/rideloop/api/cars/create
-Content-Type: application/json
-
-{
-  "brand": "Toyota",
-  "model": "Corolla",
-  "year": 2022,
-  "licensePlate": "CA 123-456",
-  "rentalRate": 150.0,
-  "status": "AVAILABLE",
-  "category": "SEDAN",
-  "mileage": 15000,
-  "lastMaintenance": "2024-06-01",
-  "maintenanceDue": "2025-06-01",
-  "location": {
-    "latitude": -30.9249,
-    "longitude": 18.4241
-  }
-}
-
 
 ### 🔹 2. GET CAR BY ID (GET)
 GET http://localhost:8080/api/cars/1
@@ -60,8 +39,6 @@ Content-Type: application/json
 }
 
 
-### 🔹 5. GET ALL CARS (GET)
-GET http://localhost:8080/api/cars/all
 
 
 ### 🔹 6. GET CARS BY BRAND (GET)

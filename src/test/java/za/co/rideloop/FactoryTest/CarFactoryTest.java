@@ -26,6 +26,7 @@ public class CarFactoryTest {
                 .build();
 
         Car car = CarFactory.createCar(
+                89899,
                 "Toyota",
                 "Corolla",
                 2022,

@@ -15,4 +15,5 @@ import za.co.rideloop.Domain.SecurityCompany;
  */
 public interface SecurityCompanyRepository extends JpaRepository<SecurityCompany, Integer> {
 
+
 }
