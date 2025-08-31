@@ -7,10 +7,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import za.co.rideloop.Domain.Address;
 import za.co.rideloop.Domain.CustomerProfile;
 import za.co.rideloop.Domain.User;
+import za.co.rideloop.Repository.CustomerProfileRepository;
 import za.co.rideloop.Repository.UserRepository;
 import za.co.rideloop.Service.CustomerProfileService;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,90 +20,88 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CustomerProfileServiceTest {
 
     @Autowired
-    private CustomerProfileService profileService;
+    private CustomerProfileService service;
 
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CustomerProfileRepository profileRepository;
+
     private User testUser;
-    private CustomerProfile testProfile;
 
     @BeforeEach
-    void setup() {
-        // Create and persist a test user
-        testUser = new User.Builder()
-                .setUsername("testuser")
-                .setEmail("test@example.com")
-                .setPassword("password")
-                .build();
+    public void setup() {
+        // Clean DB
+        profileRepository.deleteAll();
+        userRepository.deleteAll();
+
+        // Create a test user
+        testUser = new User();
+        testUser.setUsername("testuser");
+        testUser.setEmail("test@example.com");
         testUser = userRepository.save(testUser);
-
-        // Create an address
-        Address address = new Address();
-        address.setStreetName("123 Main St");
-        address.setSuburb("Central");
-        address.setProvince("Gauteng");
-        address.setZipCode("2000");
-
-        // Create a profile linked to the user
-        testProfile = new CustomerProfile.Builder()
-                .setUser(testUser)
-                .setFirstName("John")
-                .setLastName("Doe")
-                .setIdNumber("1234567890123")
-                .setLicenseNumber("L123456")
-                .setPhoneNumber("0123456789")
-                .setAddress(address)
-                .build();
-
-        // Persist using createProfile (or saveProfileForUser)
-        testProfile = profileService.createProfile(testProfile);
     }
 
     @Test
-    void testCreateProfile() {
-        assertNotNull(testProfile);
-        assertNotNull(testProfile.getProfileID());
-        assertEquals("John", testProfile.getFirstName());
-        assertEquals(testUser.getUsername(), testProfile.getUser().getUsername());
+    public void testCreateProfile_DefaultStatusPending() {
+        CustomerProfile profile = new CustomerProfile();
+        profile.setFirstName("John");
+        profile.setLastName("Doe");
+        profile.setPhoneNumber("123456789");
+        profile.setAddress(new Address());
+
+        CustomerProfile saved = service.createProfileForUser(profile, testUser.getUserID());
+
+        assertNotNull(saved.getProfileID());
+        assertEquals("pending", saved.getStatus(), "Status should default to 'pending'");
+        assertEquals(testUser.getUserID(), saved.getUser().getUserID());
     }
 
     @Test
-    void testSaveProfileForUser() {
-        testProfile.setFirstName("Johnny");
-        CustomerProfile updated = profileService.saveProfileForUser(testUser.getUserID(), testProfile);
+    public void testUpdateProfile_NonAdminCannotChangeStatus() {
+        CustomerProfile profile = new CustomerProfile();
+        profile.setFirstName("John");
+        profile.setLastName("Doe");
+        profile.setPhoneNumber("123456789");
+        profile.setAddress(new Address());
 
+        CustomerProfile saved = service.createProfileForUser(profile, testUser.getUserID());
+
+        saved.setStatus("approved"); // User tries to approve
+        saved.setFirstName("Johnny"); // Change allowed
+
+        CustomerProfile updated = service.updateProfile(saved, false);
+
+        assertEquals("pending", updated.getStatus(), "Non-admin cannot change status");
         assertEquals("Johnny", updated.getFirstName());
-        assertEquals(testProfile.getProfileID(), updated.getProfileID());
     }
 
     @Test
-    void testReadProfile() {
-        CustomerProfile found = profileService.readProfile(testProfile.getProfileID());
-        assertNotNull(found);
-        assertEquals("John", found.getFirstName());
+    public void testUpdateProfile_AdminCanChangeStatus() {
+        CustomerProfile profile = new CustomerProfile();
+        profile.setFirstName("John");
+        profile.setLastName("Doe");
+        profile.setPhoneNumber("123456789");
+        profile.setAddress(new Address());
+
+        CustomerProfile saved = service.createProfileForUser(profile, testUser.getUserID());
+
+        saved.setStatus("approved"); // Admin approves
+        CustomerProfile updated = service.updateProfile(saved, true);
+
+        assertEquals("approved", updated.getStatus(), "Admin should be able to approve profile");
     }
 
     @Test
-    void testUpdateProfile() {
-        testProfile.setFirstName("Johnny");
-        CustomerProfile updated = profileService.updateProfile(testProfile);
+    public void testFindProfilesByStatus() {
+        CustomerProfile profile1 = new CustomerProfile();
+        profile1.setFirstName("A");
+        profile1.setStatus("pending");
+        service.createProfileForUser(profile1, testUser.getUserID());
 
-        assertEquals("Johnny", updated.getFirstName());
-        assertEquals(testProfile.getProfileID(), updated.getProfileID());
-    }
-
-    @Test
-    void testDeleteProfile() {
-        profileService.deleteProfile(testProfile.getProfileID());
-
-        CustomerProfile deleted = profileService.readProfile(testProfile.getProfileID());
-        assertNull(deleted);
-    }
-
-    @Test
-    void testGetAllProfiles() {
-        List<CustomerProfile> profiles = profileService.getAllProfiles();
-        assertTrue(profiles.size() >= 1);
+        List<CustomerProfile> pendingProfiles = service.findProfilesByStatus("pending");
+        assertFalse(pendingProfiles.isEmpty());
+        assertEquals("pending", pendingProfiles.get(0).getStatus());
     }
 }

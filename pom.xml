@@ -10,6 +10,9 @@
         <relativePath/>
     </parent>
 
+
+
+
     <groupId>za.co.rideloop</groupId>
     <artifactId>RideLoop</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -46,6 +49,10 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
         <!-- Spring Boot Data JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

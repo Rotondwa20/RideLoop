@@ -8,21 +8,21 @@ public class CustomerProfileFactory {
 
     // Creates a basic CustomerProfile with mandatory fields
     public static CustomerProfile createCustomerProfile(User user, String firstName, String lastName,
-                                                        String idNumber, String phoneNumber) {
+                                                        String idNumber, String phoneNumber, String status) {
         return new CustomerProfile.Builder()
-                .setUser(user)               // link to user
+                .setUser(user)
                 .setFirstName(firstName)
                 .setLastName(lastName)
                 .setIdNumber(idNumber)
                 .setPhoneNumber(phoneNumber)
+                .setStatus(status)
                 .build();
     }
 
-    // Creates a full CustomerProfile with all optional fields
+    // Creates a full CustomerProfile with all optional fields (without documents)
     public static CustomerProfile createFullCustomerProfile(User user, String firstName, String lastName,
                                                             String idNumber, String licenseNumber, String phoneNumber,
-                                                            Address address, byte[] idDocument, byte[] licenseDocument,
-                                                            byte[] proofOfAddress, byte[] profileImage) {
+                                                            Address address, String status) {
         return new CustomerProfile.Builder()
                 .setUser(user)
                 .setFirstName(firstName)
@@ -31,10 +31,7 @@ public class CustomerProfileFactory {
                 .setLicenseNumber(licenseNumber)
                 .setPhoneNumber(phoneNumber)
                 .setAddress(address)
-                .setIdDocument(idDocument)
-                .setLicenseDocument(licenseDocument)
-                .setProofOfAddress(proofOfAddress)
-                .setProfileImage(profileImage)
+                .setStatus(status)
                 .build();
     }
 }
