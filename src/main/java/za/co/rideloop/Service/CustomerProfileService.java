@@ -13,11 +13,14 @@ import java.util.Optional;
 @Service
 public class CustomerProfileService {
 
-    @Autowired
-    private CustomerProfileRepository repository;
+    private final CustomerProfileRepository profileRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    public CustomerProfileService(CustomerProfileRepository profileRepository, UserRepository userRepository) {
+        this.profileRepository = profileRepository;
+        this.userRepository = userRepository;
+    }
 
     public User getUserById(int userID) {
         return userRepository.findById(userID)
@@ -32,19 +35,18 @@ public class CustomerProfileService {
             profile.setStatus("pending");
         }
 
-        repository.findByUser_Id(userID)
+        profileRepository.findByUser_Id(userID)
                 .ifPresent(existing -> profile.setProfileID(existing.getProfileID()));
 
-        return repository.save(profile);
+        return profileRepository.save(profile);
     }
 
-
     public CustomerProfile updateProfile(CustomerProfile profile, boolean isAdmin) {
-        CustomerProfile existing = repository.findById(profile.getProfileID())
+        CustomerProfile existing = profileRepository.findById(profile.getProfileID())
                 .orElseThrow(() -> new RuntimeException("Profile not found with ID: " + profile.getProfileID()));
 
-        if (!isAdmin) {
-            profile.setStatus(existing.getStatus());
+        if (isAdmin) {
+            existing.setStatus(profile.getStatus());
         }
 
         existing.setFirstName(profile.getFirstName());
@@ -53,28 +55,34 @@ public class CustomerProfileService {
         existing.setLicenseNumber(profile.getLicenseNumber());
         existing.setPhoneNumber(profile.getPhoneNumber());
         existing.setAddress(profile.getAddress());
-        existing.setStatus(profile.getStatus());
 
-        return repository.save(existing);
+        return profileRepository.save(existing);
+    }
+
+
+    // Direct return (throws exception if not found)
+    public CustomerProfile readProfile(int profileID) {
+        return profileRepository.findById(profileID)
+                .orElseThrow(() -> new RuntimeException("Profile not found with ID: " + profileID));
+    }
+
+    public Optional<CustomerProfile> getProfileById(int profileID) {
+        return profileRepository.findById(profileID);
     }
 
     public Optional<CustomerProfile> getProfileByUserId(int userID) {
-        return repository.findByUser_Id(userID);
-    }
-
-    public Optional<CustomerProfile> readProfile(int profileID) {
-        return repository.findById(profileID);
-    }
-
-    public void deleteProfile(int profileID) {
-        repository.deleteById(profileID);
+        return profileRepository.findByUser_Id(userID);
     }
 
     public List<CustomerProfile> getAllProfiles() {
-        return repository.findAll();
+        return profileRepository.findAll();
     }
 
-    public List<CustomerProfile> findProfilesByStatus(String status) {
-        return repository.findByStatus(status);
+    public List<CustomerProfile> getProfilesByStatus(String status) {
+        return profileRepository.findByStatusIgnoreCase(status);
+    }
+
+    public void deleteProfile(int profileID) {
+        profileRepository.deleteById(profileID);
     }
 }

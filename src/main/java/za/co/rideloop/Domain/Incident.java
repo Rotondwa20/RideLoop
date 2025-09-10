@@ -1,40 +1,38 @@
 package za.co.rideloop.Domain;
 
 import jakarta.persistence.*;
-import java.util.Objects;
+import java.time.LocalDateTime;
 
-/**
- * RideLoop
- * Incident.java
- *
- * author : Swatsi Bongani Ratia
- * studnr : 230724477
- * group : 3I
- * date : 5/10/2025
- * Java version: "21.0.3" 2024-04-16 LTS
- */
 @Entity
-@Table(name = "incidents")   // ✅ table name should not conflict with SQL reserved keywords
+@Table(name = "incidents")
 public class Incident {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)   // ✅ auto-generate IDs
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int incidentID;
 
-   // @Column(nullable = false)   // ✅ enforce required fields
-    private String incidentType;
+    @Column(nullable = false)
+    private String incidentType; // Security or Maintenance
 
-  //  @Column(nullable = false)
+    @Column(nullable = false)
     private String description;
 
-    // Default constructor (required by JPA)
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime incidentDate;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "profile_id", nullable = false)
+    private CustomerProfile profile;
+
+    // Default constructor for JPA
     protected Incident() {}
 
-    // Private constructor for Builder
-    private Incident(Builder builder) {
-        this.incidentID = builder.incidentID;
-        this.incidentType = builder.incidentType;
-        this.description = builder.description;
+    // Simple constructor
+    public Incident(String incidentType, String description, CustomerProfile profile) {
+        this.incidentType = incidentType;
+        this.description = description;
+        this.profile = profile;
+        this.incidentDate = LocalDateTime.now(); // Automatically set current time
     }
 
     // Getters
@@ -50,54 +48,28 @@ public class Incident {
         return description;
     }
 
-    // equals & hashCode
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Incident incident)) return false;
-        return incidentID == incident.incidentID &&
-                Objects.equals(incidentType, incident.incidentType) &&
-                Objects.equals(description, incident.description);
+    public LocalDateTime getIncidentDate() {
+        return incidentDate;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(incidentID, incidentType, description);
+    public CustomerProfile getProfile() {
+        return profile;
     }
 
-    // toString
-    @Override
-    public String toString() {
-        return "Incident{" +
-                "incidentID=" + incidentID +
-                ", incidentType='" + incidentType + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+    // Setters
+    public void setIncidentType(String incidentType) {
+        this.incidentType = incidentType;
     }
 
-    // Builder Pattern
-    public static class Builder {
-        private int incidentID;
-        private String incidentType;
-        private String description;
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-        public Builder incidentID(int incidentID) {
-            this.incidentID = incidentID;
-            return this;
-        }
+    public void setProfile(CustomerProfile profile) {
+        this.profile = profile;
+    }
 
-        public Builder incidentType(String incidentType) {
-            this.incidentType = incidentType;
-            return this;
-        }
-
-        public Builder description(String description) {
-            this.description = description;
-            return this;
-        }
-
-        public Incident build() {
-            return new Incident(this);
-        }
+    public void setIncidentDate(LocalDateTime incidentDate) {
+        this.incidentDate = incidentDate;
     }
 }

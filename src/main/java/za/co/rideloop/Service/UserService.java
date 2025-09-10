@@ -24,7 +24,6 @@ public class UserService {
         this.repository = repository;
     }
 
-    // Register new user
     public String registerUser(User user, String securityCode) {
         Optional<User> existingUser = repository.findByEmail(user.getEmail());
         if (existingUser.isPresent()) {
@@ -43,17 +42,14 @@ public class UserService {
         return "User registered successfully";
     }
 
-    // Get all users
     public List<User> findAll() {
         return repository.findAll();
     }
 
-    // Find user by ID
     public Optional<User> findById(int id) {
         return repository.findById(id);
     }
 
-    // Delete user by ID
     public void deleteById(int id) {
         repository.deleteById(id);
     }

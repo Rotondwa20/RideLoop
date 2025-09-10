@@ -15,6 +15,7 @@ public class CustomerProfileController {
     @Autowired
     private CustomerProfileService service;
 
+
     @GetMapping("/me")
     public CustomerProfile getOrCreateMyProfile(@RequestParam int userID) {
         return service.getProfileByUserId(userID)
@@ -33,13 +34,15 @@ public class CustomerProfileController {
         return service.updateProfile(profile, false);
     }
 
+
     @PutMapping("/{id}/status")
     public CustomerProfile updateProfileStatus(@PathVariable int id, @RequestParam String status) {
-        CustomerProfile profile = service.readProfile(id)
-                .orElseThrow(() -> new RuntimeException("Profile not found with ID: " + id));
+        CustomerProfile profile = service.readProfile(id);
         profile.setStatus(status);
-        return service.updateProfile(profile, true); // true = admin
+        return service.updateProfile(profile, true); // admin = true
     }
+
+
 
     @PostMapping("/admin")
     public CustomerProfile createProfileForAdmin(@RequestBody CustomerProfile profile) {
@@ -48,8 +51,8 @@ public class CustomerProfileController {
 
     @PutMapping("/{id}")
     public CustomerProfile updateProfile(@PathVariable int id, @RequestBody CustomerProfile profile) {
-        profile.setProfileID(id); // ensure ID is correct
-        return service.updateProfile(profile, false); // false = not admin
+        profile.setProfileID(id);
+        return service.updateProfile(profile, false); // not changing status
     }
 
     @GetMapping
@@ -59,13 +62,16 @@ public class CustomerProfileController {
 
     @GetMapping("/{id}")
     public CustomerProfile getProfileById(@PathVariable int id) {
-        return service.readProfile(id)
-                .orElseThrow(() -> new RuntimeException("Profile not found with ID: " + id));
+        return service.readProfile(id); // already throws exception if not found
     }
 
-    @GetMapping("/status")
-    public List<CustomerProfile> getProfilesByStatus(@RequestParam String status) {
-        return service.findProfilesByStatus(status);
+
+    @GetMapping("/filter")
+    public List<CustomerProfile> getProfilesByStatus(@RequestParam(defaultValue = "all") String status) {
+        if ("all".equalsIgnoreCase(status)) {
+            return service.getAllProfiles();
+        }
+        return service.getProfilesByStatus(status);
     }
 
     @DeleteMapping("/{id}")

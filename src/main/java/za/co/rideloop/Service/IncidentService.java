@@ -1,77 +1,60 @@
 package za.co.rideloop.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
+import za.co.rideloop.Domain.CustomerProfile;
 import za.co.rideloop.Domain.Incident;
+import za.co.rideloop.Factory.IncidentFactory;
+import za.co.rideloop.Repository.CustomerProfileRepository;
 import za.co.rideloop.Repository.IncidentRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-/**
- * IncidentService.java
- * IncidentService model class
- *
- * @author : Swatsi Bongani Ratia
- * @studnr : 230724477
- * @group : 3I
- * @Java version: "21.0.3" 2024-04-16 LTS
- */
 @Service
 public class IncidentService {
-    @Autowired
-    private IncidentRepository repository;
 
-    public IncidentService(IncidentRepository repository) {
-        this.repository = repository;
+    private final IncidentRepository incidentRepository;
+    private final CustomerProfileRepository profileRepository;
+
+    public IncidentService(IncidentRepository incidentRepository, CustomerProfileRepository profileRepository) {
+        this.incidentRepository = incidentRepository;
+        this.profileRepository = profileRepository;
     }
 
-    /**
-     * Creates a new Incident in the database.
-     * @param incident The Incident object to save.
-     * @return The saved Incident with the generated ID.
-     */
-    public Incident createIncident(Incident incident) {
-        return repository.save(incident);
-    }
-
-    /**
-     * Reads an Incident from the database by its ID.
-     * @param id The ID of the Incident to find.
-     * @return The found Incident or null if not found.
-     */
-    public Incident readIncident(int id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    /**
-     * Updates an existing Incident in the database.
-     * It checks if the incident exists by ID before saving.
-     * @param incident The Incident object with updated information.
-     * @return The updated Incident or null if the original incident was not found.
-     */
-    public Incident updateIncident(Incident incident) {
-        if (incident == null || incident.getIncidentID() == 0) {
-            return null;
+    // Create a new incident linked to a CustomerProfile
+    public Incident createIncident(String type, String description, CustomerProfile profile) {
+        if (profile == null) {
+            throw new IllegalArgumentException("Incident must be linked to a CustomerProfile");
         }
-        return repository.existsById(incident.getIncidentID())
-                ? repository.save(incident)
-                : null;
+
+        // Allow all three types
+        if (!"Security".equalsIgnoreCase(type)
+                && !"Maintenance".equalsIgnoreCase(type)
+                && !"Accident".equalsIgnoreCase(type)) {
+            throw new IllegalArgumentException("Incident type must be 'Security', 'Maintenance' or 'Accident'");
+        }
+
+        Incident incident = IncidentFactory.createIncident(type, description, profile);
+        return incidentRepository.save(incident);
     }
 
-    /**
-     * Deletes an Incident from the database by its ID.
-     * @param id The ID of the Incident to delete.
-     */
-    public void deleteIncident(int id) {
-        repository.deleteById(id);
-    }
-
-    /**
-     * Retrieves all Incidents from the database.
-     * @return A list of all Incidents.
-     */
+    // Get all incidents
     public List<Incident> getAllIncidents() {
-        return repository.findAll();
+        return incidentRepository.findAll();
+    }
+
+    // Get profile by ID
+    public Optional<CustomerProfile> getProfileById(int profileId) {
+        return profileRepository.findById(profileId);
+    }
+
+    // Get incidents by CustomerProfile
+    public List<Incident> getIncidentsByProfile(CustomerProfile profile) {
+        return incidentRepository.findByProfile(profile);
+    }
+
+    // Delete an incident by its ID
+    public void deleteIncidentById(int incidentID) {
+        incidentRepository.deleteById(incidentID);
     }
 }
