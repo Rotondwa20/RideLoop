@@ -50,7 +50,7 @@ GET http://localhost:8080/api/cars/model/Corolla
 
 
 ### 🔹 8. DELETE CAR BY ID (DELETE)
-DELETE http://localhost:8080/rideloop/api/cars/102
+DELETE http://localhost:8080/rideloop/api/cars/103
 
 
 ### 🔹 9. GET CAR THAT DOES NOT EXIST

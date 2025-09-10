@@ -12,7 +12,7 @@ import za.co.rideloop.Domain.Location;
 
      Date: 18 May 2025 */
 public class CarFactory {
-    public static Car createCar(int carID,
+    public static Car createCar(
             String brand,
             String model,
             int year,
@@ -26,7 +26,6 @@ public class CarFactory {
             Location location
     ) {
         return new Car.Builder()
-                .setCarId(carID)
                 .setBrand(brand)
                 .setModel(model)
                 .setYear(year)

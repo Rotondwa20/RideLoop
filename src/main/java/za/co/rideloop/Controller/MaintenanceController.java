@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/maintenance")
-@CrossOrigin(origins = "http://localhost:3000")
+
 public class MaintenanceController {
     @Autowired
     private MaintenanceService service;
@@ -28,9 +28,10 @@ public class MaintenanceController {
     }
 
 
-    @PutMapping("/update")
-    public Maintenance update(@RequestBody Maintenance maintenance) {
-        return service.update(maintenance);
+    @PutMapping("/update/{id}")
+    public Maintenance update(@PathVariable Long id, @RequestBody Maintenance maintenance) {
+
+        return service.update(id, maintenance);
     }
 
 

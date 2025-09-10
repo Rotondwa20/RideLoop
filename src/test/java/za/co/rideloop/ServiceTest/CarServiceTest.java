@@ -33,6 +33,7 @@ public class CarServiceTest {
                 .build();
 
         car = CarFactory.createCar(
+                234,
                 "Toyota",
                 "Corolla",
                 2020,
@@ -77,7 +78,7 @@ public class CarServiceTest {
                 .setLocation(car.getLocation())
                 .build();
 
-        Car result = service.updateCar(updatedCar);
+        Car result = service.updateCar(updatedCar.getCarId(), updatedCar);
         assertNotNull(result);
         assertEquals("Rented", result.getStatus());
         System.out.println("Updated Car: " + result);
@@ -123,7 +124,7 @@ public class CarServiceTest {
     @Test
     void g_findByBrand() {
         Car car1 = CarFactory.createCar(
-
+                       2336,
                 "Honda",
                 "Civic",
                 2019,

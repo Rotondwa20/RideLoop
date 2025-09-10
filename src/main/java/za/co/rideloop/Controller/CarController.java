@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/cars")
+@CrossOrigin(origins = "http://localhost:3000")
 public class CarController {
     @Autowired
     private CarService carService;
@@ -20,19 +21,22 @@ public class CarController {
         return carService.createCar(car);
     }
 
-    // 🔹 Read a car by ID
+    //  Read a car by ID
     @GetMapping("/{id}")
     public Car getCar(@PathVariable Integer id) {
         return carService.readCar(id);
     }
 
     // 🔹 Update car details (excluding location/mileage)
-    @PutMapping("/update")
-    public Car updateCar(@RequestBody Car car) {
-        return carService.updateCar(car);
+    @PutMapping("/update/{id}")
+    public Car updateCar(
+            @PathVariable Integer id,
+
+            @RequestBody Car car) {
+        return carService.updateCar(id ,car);
     }
 
-    // 🔹 Delete a car by ID
+    // Delete a car by ID
     @DeleteMapping("/{id}")
     public void deleteCar(@PathVariable Integer id) {
         carService.deleteCar(id);
@@ -44,17 +48,6 @@ public class CarController {
         return carService.getAllCars();
     }
 
-    // 🔹 Find cars by brand
-    @GetMapping("/brand/{brand}")
-    public List<Car> getCarsByBrand(@PathVariable String brand) {
-        return carService.getCarsByBrand(brand);
-    }
-
-    // 🔹 Find cars by model
-    @GetMapping("/model/{model}")
-    public List<Car> getCarsByModel(@PathVariable String model) {
-        return carService.getCarsByModel(model);
-    }
 
     // 🔹 Update car location and mileage
     @PutMapping("/update-location/{id}")

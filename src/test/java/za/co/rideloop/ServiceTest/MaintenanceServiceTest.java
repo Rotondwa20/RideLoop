@@ -22,6 +22,7 @@ public class MaintenanceServiceTest {
     @Test
     void a_create() {
         maintenance = MaintenanceFactory.createMaintenance(
+                45L,
                 "ABC Insurance",
                 "John Doe",
                 "0812345678",
@@ -48,6 +49,7 @@ public class MaintenanceServiceTest {
         List<Maintenance> maintenances = service.getAll();
         Maintenance existing = maintenances.get(0);
         Maintenance updated = new Maintenance.Builder()
+                .setId(existing.getId())
                 .setInsuranceCompanyName("XYZ Insurance")
                 .setContactPerson(existing.getContactPerson())
                 .setContactNumber(existing.getContactNumber())
@@ -55,7 +57,7 @@ public class MaintenanceServiceTest {
                 .setCostPerMonth(existing.getCostPerMonth())
                 .setDescription(existing.getDescription())
                 .build();
-        Maintenance result = service.update(updated);
+        Maintenance result = service.update(existing.getId(), updated);
         assertEquals("XYZ Insurance", result.toString().contains("XYZ Insurance") ? "XYZ Insurance" : "");
     }
 
