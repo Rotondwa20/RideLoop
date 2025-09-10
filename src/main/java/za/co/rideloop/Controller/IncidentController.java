@@ -3,82 +3,74 @@ package za.co.rideloop.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import za.co.rideloop.Domain.CustomerProfile;
 import za.co.rideloop.Domain.Incident;
-import za.co.rideloop.Repository.IncidentRepository;
+import za.co.rideloop.Service.CustomerProfileService;
 import za.co.rideloop.Service.IncidentService;
 
-import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
-/**
- * IncidentServiceController.java
- * IncidentServiceController model class
- *
- * @author : Swatsi Bongani Ratia
- * @studnr : 230724477
- * @group : 3I
- * @Java version: "21.0.3" 2024-04-16 LTS
- */
 @RestController
-@RequestMapping("/incident") // The base path for all Incident related endpoints
+@RequestMapping("/incidents")
+@CrossOrigin(origins = "http://localhost:3000")
 public class IncidentController {
 
-        private final IncidentService service;
+    private final IncidentService incidentService;
 
-        @Autowired
-        public IncidentController(IncidentService service) {
-            this.service = service;
+    @Autowired
+    public IncidentController(IncidentService incidentService) {
+        this.incidentService = incidentService;
+    }
+
+    // Create a new incident
+    @PostMapping("/create")
+    public ResponseEntity<?> createIncident(
+            @RequestParam String type,
+            @RequestParam String description,
+            @RequestParam int profileId
+    ) {
+        Optional<CustomerProfile> optionalProfile = incidentService.getProfileById(profileId);
+        if (optionalProfile.isEmpty()) {
+            return ResponseEntity.badRequest().body("Profile not found");
         }
 
-        /**
-         * Handles HTTP POST requests to create a new Incident.
-         * The Incident object is sent in the request body.
-         * @param incident The Incident object to be created.
-         * @return The created Incident object, including its generated ID.
-         */
-        @PostMapping("/create")
-        public Incident create(@RequestBody Incident incident) {
-            return service.createIncident(incident);
+        CustomerProfile profile = optionalProfile.get();
+        try {
+            Incident incident = incidentService.createIncident(type, description, profile);
+            return ResponseEntity.ok(incident);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the full stack trace
+            return ResponseEntity.status(500).body("Server error: " + e.getMessage());
         }
 
-        /**
-         * Handles HTTP GET requests to read an Incident by its ID.
-         * The Incident ID is passed as a path variable.
-         * @param id The ID of the Incident to retrieve.
-         * @return The found Incident object, or null if not found.
-         */
-        @GetMapping("/read/{id}")
-        public Incident read(@PathVariable Integer id) {
-            return service.readIncident(id);
+    }
+
+    // Get all incidents
+    @GetMapping
+    public ResponseEntity<List<Incident>> getAllIncidents() {
+        return ResponseEntity.ok(incidentService.getAllIncidents());
+    }
+
+    // Get incidents by profile ID
+    @GetMapping("/profile/{profileId}")
+    public ResponseEntity<?> getIncidentsByProfile(@PathVariable int profileId) {
+        Optional<CustomerProfile> optionalProfile = incidentService.getProfileById(profileId);
+        if (optionalProfile.isEmpty()) {
+            return ResponseEntity.badRequest().body("Profile not found");
         }
 
-        /**
-         * Handles HTTP PUT requests to update an existing Incident.
-         * The updated Incident object is sent in the request body.
-         * @param incident The Incident object with updated details.
-         * @return The updated Incident object, or null if the original Incident was not found.
-         */
-        @PutMapping("/update")
-        public Incident update(@RequestBody Incident incident) {
-            return service.updateIncident(incident);
-        }
+        CustomerProfile profile = optionalProfile.get();
+        List<Incident> incidents = incidentService.getIncidentsByProfile(profile);
+        return ResponseEntity.ok(incidents);
+    }
 
-        /**
-         * Handles HTTP DELETE requests to remove an Incident by its ID.
-         * The Incident ID is passed as a path variable.
-         * @param id The ID of the Incident to be deleted.
-         */
-        @DeleteMapping("/delete/{id}")
-        public void delete(@PathVariable Integer id) {
-            service.deleteIncident(id);
-        }
-
-        /**
-         * Handles HTTP GET requests to retrieve all Incidents.
-         * @return A list of all Incident objects in the database.
-         */
-        @GetMapping("/getAll")
-        public List<Incident> getAll() {
-            return service.getAllIncidents();
-        }
+    // Delete incident by ID
+    @DeleteMapping("/{incidentId}")
+    public ResponseEntity<Void> deleteIncident(@PathVariable int incidentId) {
+        incidentService.deleteIncidentById(incidentId);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -2,53 +2,49 @@ package za.co.rideloop.FactoryTest;
 
 import org.junit.jupiter.api.Test;
 import za.co.rideloop.Domain.Incident;
+import za.co.rideloop.Domain.CustomerProfile;
 import za.co.rideloop.Factory.IncidentFactory;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * IncidentFactoryTest.java
- * IncidentFactoryTest model class
- *
- * @author : Swatsi Bongani Ratia
- * @studnr : 230724477
- * @group : 3I
- * @Java version: "21.0.3" 2024-04-16 LTS
- */
+public class IncidentFactoryTest {
 
-class IncidentFactoryTest {
     @Test
-    void testBuildSuccess() {
-        Incident incident = IncidentFactory.build(
-                "Accident",
-                "Car was rear-ended at signal."
-        );
+    public void testCreateIncidentSuccessfully() {
+        CustomerProfile profile = new CustomerProfile();
+        profile.setProfileID(1);
+        profile.setFirstName("Alice");
+        profile.setLastName("Smith");
+
+        Incident incident = IncidentFactory.createIncident("Security", "Test incident", profile);
 
         assertNotNull(incident);
-        assertEquals("Accident", incident.getIncidentType());
-        assertEquals("Car was rear-ended at signal.", incident.getDescription());
+        assertEquals("Security", incident.getIncidentType());
+        assertEquals("Test incident", incident.getDescription());
+        assertEquals(profile, incident.getProfile());
+        assertNotNull(incident.getIncidentDate());
     }
 
     @Test
-    void testBuildWithEmptyIncidentType_shouldThrowException() {
+    public void testCreateIncidentWithInvalidType() {
+        CustomerProfile profile = new CustomerProfile();
+        profile.setProfileID(2);
+
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            IncidentFactory.build("", "Flat tyre on highway.");
+            IncidentFactory.createIncident("InvalidType", "Some description", profile);
         });
 
-        String expectedMessage = "Invalid input";
-        assertTrue(exception.getMessage().contains(expectedMessage));
-        System.err.println(exception.getMessage());
+        assertEquals("Incident type must be 'Security' or 'Maintenance'", exception.getMessage());
     }
 
     @Test
-    void testBuildWithNullDescription_shouldThrowException() {
+    public void testCreateIncidentWithoutProfile() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            IncidentFactory.build("Mechanical Failure", null);
+            IncidentFactory.createIncident("Security", "No profile", null);
         });
 
-        String expectedMessage = "Invalid input";
-        assertTrue(exception.getMessage().contains(expectedMessage));
-        System.err.println(exception.getMessage());
+        assertEquals("Incident must be linked to a CustomerProfile", exception.getMessage());
     }
-
 }

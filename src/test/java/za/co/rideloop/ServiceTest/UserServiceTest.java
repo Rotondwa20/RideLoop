@@ -4,98 +4,86 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import za.co.rideloop.Domain.User;
 import za.co.rideloop.Service.UserService;
+import za.co.rideloop.Repository.UserRepository;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
-@Rollback
+@Transactional  // Rollback after each test
+@ActiveProfiles("test")  // optional: use a test-specific application-test.properties
 public class UserServiceTest {
 
     @Autowired
     private UserService userService;
 
-    private User customerUser;
-    private User adminUser;
+    @Autowired
+    private UserRepository userRepository;
+
+    private User testUser;
 
     @BeforeEach
-    void setup() {
-        // Customer user
-        customerUser = new User();
-        customerUser.setEmail("customer@test.com");
-        customerUser.setPassword("password");
-        customerUser.setRole("CUSTOMER");
-
-        // Admin user
-        adminUser = new User();
-        adminUser.setEmail("admin@test.com");
-        adminUser.setPassword("password");
-        adminUser.setRole("ADMIN");
+    public void setUp() {
+        testUser = new User.Builder()
+                .setUsername("Test User")
+                .setEmail("testuser@example.com")
+                .setPassword("password")
+                .build();
     }
 
     @Test
-    void testRegisterCustomerSuccess() {
-        String message = userService.registerUser(customerUser, null);
-        assertEquals("User registered successfully", message);
+    public void testRegisterUserSuccessfully() {
+        String result = userService.registerUser(testUser, null);
+        assertEquals("User registered successfully", result);
 
-        Optional<User> saved = userService.findById(customerUser.getUserID());
-        assertTrue(saved.isPresent());
-        assertEquals("CUSTOMER", saved.get().getRole());
+        Optional<User> savedUser = userRepository.findByEmail("testuser@example.com");
+        assertTrue(savedUser.isPresent());
+        assertEquals("Test User", savedUser.get().getUsername());
     }
 
     @Test
-    void testRegisterCustomerEmailExists() {
-        userService.registerUser(customerUser, null);
-        String message = userService.registerUser(customerUser, null);
-        assertEquals("Email already exists", message);
+    public void testRegisterUserWithExistingEmail() {
+        userService.registerUser(testUser, null);
+        User duplicateUser = new User.Builder()
+                .setUsername("Another User")
+                .setEmail("testuser@example.com")
+                .setPassword("password123")
+                .build();
+
+        String result = userService.registerUser(duplicateUser, null);
+        assertEquals("Email already exists", result);
     }
 
     @Test
-    void testRegisterAdminWithCorrectCode() {
-        String message = userService.registerUser(adminUser, "SECRET123"); // Ensure property matches
-        assertEquals("User registered successfully", message);
+    public void testLoginUserSuccessfully() {
+        userService.registerUser(testUser, null);
+
+        Optional<User> loginResult = userService.loginUser("testuser@example.com", "password");
+        assertTrue(loginResult.isPresent());
+        assertEquals("Test User", loginResult.get().getUsername());
     }
 
     @Test
-    void testRegisterAdminWithWrongCode() {
-        String message = userService.registerUser(adminUser, "WRONGCODE");
-        assertEquals("Invalid security code for ADMIN registration", message);
+    public void testLoginUserWithWrongPassword() {
+        userService.registerUser(testUser, null);
+
+        Optional<User> loginResult = userService.loginUser("testuser@example.com", "wrongpassword");
+        assertTrue(loginResult.isEmpty());
     }
 
     @Test
-    void testValidateUserSuccess() {
-        userService.registerUser(customerUser, null);
-        String message = userService.validateUser("customer@test.com", "password");
-        assertEquals("Login successful", message);
-    }
+    public void testDeleteUserById() {
+        userService.registerUser(testUser, null);
+        int userId = userRepository.findByEmail("testuser@example.com").get().getUserID();
 
-    @Test
-    void testValidateUserWrongPassword() {
-        userService.registerUser(customerUser, null);
-        String message = userService.validateUser("customer@test.com", "wrongpass");
-        assertEquals("Invalid password", message);
-    }
+        userService.deleteById(userId);
 
-    @Test
-    void testValidateUserNotFound() {
-        String message = userService.validateUser("nonexistent@test.com", "password");
-        assertEquals("User not found", message);
-    }
-
-    @Test
-    void testDeleteUser() {
-        userService.registerUser(customerUser, null);
-        int id = customerUser.getUserID();
-        assertTrue(userService.findById(id).isPresent());
-
-        userService.deleteById(id);
-        assertTrue(userService.findById(id).isEmpty());
+        Optional<User> deletedUser = userRepository.findById(userId);
+        assertTrue(deletedUser.isEmpty());
     }
 }
