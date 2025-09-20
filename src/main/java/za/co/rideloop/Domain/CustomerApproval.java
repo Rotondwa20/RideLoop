@@ -83,7 +83,12 @@ public class CustomerApproval {
             return this;
         }
 
-
+        public approvalBuilder copy(CustomerApproval customerApproval){
+            this.customerApprovalId = customerApproval.customerApprovalId;
+            this.licenseNumber = customerApproval.licenseNumber;
+            this.approval = customerApproval.approval;
+            return this;
+        }
 
 
 

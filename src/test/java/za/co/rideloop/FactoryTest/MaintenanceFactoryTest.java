@@ -17,6 +17,7 @@ class MaintenanceFactoryTest {
     @Test
     void createMaintenance_shouldCreateValidMaintenance() {
         Maintenance maintenance = MaintenanceFactory.createMaintenance(
+                56L,
                 "SAB Insurances",
                 "Thabo Mokoena",
                 "0821234567",
