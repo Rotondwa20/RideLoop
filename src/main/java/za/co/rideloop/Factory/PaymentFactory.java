@@ -1,41 +1,46 @@
 package za.co.rideloop.Factory;
 /**
- * PaymentFactory.java
- * PaymentFactory Model Class
+
+
  *
- * @Author: Mziwamangwevu Ntutu
- * @Student Number: 217054420
+ * @Author: Ndyebo Qole
+ * @Student Number: 210018615
  * Group 3 I
  **/
 import za.co.rideloop.Domain.Payment;
+import za.co.rideloop.Domain.Rental;
 import za.co.rideloop.Util.Helper;
 
 import java.time.LocalDate;
 
 public class PaymentFactory {
-    // Factory method to create a full payment with all details
-    public static Payment createPayment(int rentalID, Double paymentAmount,
-                                        String paymentMethod, LocalDate paymentDate, String paymentStatus) {
 
-
-        // Use the Helper class to validate the parameters
-        if (
-
-                !Helper.isValidAmount(paymentAmount) ||
-                Helper.isNullOrEmpty(paymentMethod) ||
-        //  Helper.isNullOrEmpty(paymentDate) ||
-                Helper.isNullOrEmpty(paymentStatus)) {
-
-            // If any validation fails, throw an exception
-            throw new IllegalArgumentException("Invalid input provided for creating a Payment object.");
+    public static Payment createPayment(
+            Rental rental,
+            Double paymentAmount,
+            String paymentMethod,
+            String paymentStatus
+    ) {
+        if (rental == null) {
+            throw new IllegalArgumentException("Rental cannot be null");
         }
-            return new Payment.PaymentBuilder()
-
-                    .setRentalID(rentalID)
-                    .setPaymentAmount(paymentAmount)
-                    .setPaymentMethod(paymentMethod)
-                    .setPaymentDate(paymentDate)
-                    .setPaymentStatus(paymentStatus)
-                    .build();
+        if (paymentAmount == null || paymentAmount <= 0) {
+            throw new IllegalArgumentException("Payment amount must be greater than zero");
         }
+        if (paymentMethod == null || paymentMethod.trim().isEmpty()) {
+            throw new IllegalArgumentException("Payment method cannot be null or empty");
+        }
+        if (paymentStatus == null || paymentStatus.trim().isEmpty()) {
+            throw new IllegalArgumentException("Payment status cannot be null or empty");
+        }
+
+        return new Payment.PaymentBuilder()
+                .setRental(rental)
+                .setPaymentAmount(paymentAmount)
+                .setPaymentMethod(paymentMethod.trim())
+                .setPaymentDate(LocalDate.now()) // default to current date
+                .setPaymentStatus(paymentStatus.trim())
+                .build();
+
+    }
     }

@@ -1,5 +1,13 @@
 package za.co.rideloop.ServiceTest;
 
+/**
+
+ *
+ * @Author: Ndyebo Qole
+ * @Student Number: 210018615
+ * Group 3 I
+ **/
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +15,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import za.co.rideloop.Domain.Payment;
+import za.co.rideloop.Domain.Rental;
 import za.co.rideloop.Factory.PaymentFactory;
 import za.co.rideloop.Service.PaymentService;
 import za.co.rideloop.Repository.PaymentRepository;
+import za.co.rideloop.Service.RentalService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,108 +34,109 @@ class PaymentServiceTest {
     private PaymentService service;
 
     @Autowired
-    private PaymentRepository repository;
+    private RentalService rentalService;
 
-    private Payment samplePayment;
+    private Rental rental;
 
     @BeforeEach
     void setUp() {
-        // Prepare a new payment object for each test, but DO NOT save it yet.
-        // Each test method will be responsible for creating its own data.
-        // This ensures every test starts with a clean slate and is independent.
-        samplePayment = PaymentFactory.createPayment(
-                28,
-                600.00,
-                "EFT",
-                LocalDate.now(),
-                "Pending"
-        );
+        // Prepare a dummy rental object
+        rental = new Rental.RentalBuilder()
+                .setRentalID(1) // dummy ID
+                .build();
     }
 
     @Test
-    @Commit
-    void createPayment() {
-        Payment savedPayment = service.create(samplePayment);
-        assertNotNull(savedPayment);
-        assertTrue(savedPayment.getPaymentId() > 0);
-     //   assertEquals("EFT", savedPayment.getPaymentMethod());
-      //  assertEquals(1, repository.count());
-        System.out.println("Created Payment: " + savedPayment);
+    void a_createPayment() {
+        Payment payment = PaymentFactory.createPayment(rental, 650.00, "EFT", "Pending");
+
+        System.out.println(payment);
+        Payment created = service.create(payment);
+
+        assertNotNull(created);
+        assertEquals("EFT", created.getPaymentMethod());
+        System.out.println("Created Payment: " + created);
     }
 
     @Test
-    void readPayment() {
-        // Create and save a new payment for this specific test
-        Payment savedPayment = service.create(samplePayment);
-        assertNotNull(savedPayment);
+    void b_readPayment() {
+        Payment payment = PaymentFactory.createPayment(rental, 700.00, "Card", "Pending");
+        Payment created = service.create(payment);
 
-        Payment found = service.read(savedPayment.getPaymentId());
-        assertNotNull(found);
-        assertEquals(savedPayment.getPaymentId(), found.getPaymentId());
-        System.out.println("Read Payment: " + found);
+        Payment read = service.read(created.getPaymentId());
+        assertNotNull(read);
+        assertEquals(created.getPaymentId(), read.getPaymentId());
+        System.out.println("Read Payment: " + read);
     }
 
     @Test
-    @Commit
-    void updatePayment() {
-        // Create and save a new payment for this specific test
-        Payment savedPayment = service.create(samplePayment);
-        assertNotNull(savedPayment);
+    void c_updatePayment() {
+        Payment payment = PaymentFactory.createPayment(rental, 500.00, "Cash", "Pending");
+        Payment created = service.create(payment);
 
-        // Use the builder to copy the existing data and then set the new fields
         Payment updatedPayment = new Payment.PaymentBuilder()
-                .PaymentBuilderCopy(savedPayment)
+                .PaymentBuilderCopy(created)
                 .setPaymentMethod("Card")
+                .setPaymentStatus("Paid")
                 .build();
 
-        Payment result = service.update(updatedPayment);
-        assertNotNull(result);
-        assertEquals("Card", result.getPaymentMethod());
-       // assertEquals("Paid", result.getPaymentStatus()); // Ensure other fields are unchanged
-        System.out.println("Updated Payment: " + result);
+        Payment updated = service.update(updatedPayment);
+        assertNotNull(updated);
+        assertEquals("Card", updated.getPaymentMethod());
+        assertEquals("Paid", updated.getPaymentStatus());
+        System.out.println("Updated Payment: " + updated);
     }
 
     @Test
-    void getAllPayments() {
-        // Create and save multiple payments for this specific test
-        service.create(samplePayment);
-        Payment secondPayment = PaymentFactory.createPayment(
-                27, 600.00, "Cash", LocalDate.now(), "Pending"
-        );
-        service.create(secondPayment);
+    void d_deletePayment() {
+        Payment payment = PaymentFactory.createPayment(rental, 450.00, "EFT", "Pending");
+        Payment created = service.create(payment);
+
+        boolean deleted = service.delete(created.getPaymentId());
+        assertTrue(deleted);
+
+        Payment read = service.read(created.getPaymentId());
+        assertNull(read);
+        System.out.println("Deleted Payment ID: " + created.getPaymentId());
+    }
+
+    @Test
+    void e_getAllPayments() {
+        // Create multiple payments
+        Payment p1 = PaymentFactory.createPayment(rental, 600.00, "EFT", "Pending");
+        Payment p2 = PaymentFactory.createPayment(rental, 700.00, "Card", "Paid");
+        service.create(p1);
+        service.create(p2);
 
         List<Payment> all = service.getAll();
-      //  assertEquals(2, all.size());
-        System.out.println("All Payments:\n" + all + "\n");
+        assertNotNull(all);
+        assertTrue(all.size() >= 2);
+        System.out.println("All Payments: " + all);
     }
 
     @Test
-    void getPaymentsByStatus() {
-        // Create and save multiple payments for this specific test
-        service.create(samplePayment);
-        Payment pendingPayment = PaymentFactory.createPayment(
-                28, 700.00, "EFT", LocalDate.now(), "Pending"
-        );
-        service.create(pendingPayment);
+    void f_getPaymentsByStatus() {
+        Payment pending = PaymentFactory.createPayment(rental, 500.00, "EFT", "Pending");
+        Payment paid = PaymentFactory.createPayment(rental, 600.00, "Card", "Paid");
+        service.create(pending);
+        service.create(paid);
 
-        List<Payment> found = service.getPaymentsByStatus("Pending");
-        assertFalse(found.isEmpty());
-       //// assertEquals(1, found.size());
-        //assertEquals("EFT", found.get(0).getPaymentMethod());
-        System.out.println("Found by Payment Status: " + found);
+        List<Payment> pendingPayments = service.getPaymentsByStatus("Pending");
+        assertFalse(pendingPayments.isEmpty());
+        assertTrue(pendingPayments.stream().allMatch(p -> p.getPaymentStatus().equals("Pending")));
+        System.out.println("Payments with Pending status: " + pendingPayments);
     }
 
     @Test
-    void deletePayment() {
-        // Create and save a new payment for this specific test
-        Payment savedPayment = service.create(samplePayment);
-        assertNotNull(savedPayment);
+    void g_getPaymentsByMethod() {
+        Payment eft = PaymentFactory.createPayment(rental, 550.00, "EFT", "Pending");
+        Payment card = PaymentFactory.createPayment(rental, 650.00, "Card", "Paid");
+        service.create(eft);
+        service.create(card);
 
-        long idToDelete = savedPayment.getPaymentId();
-        service.delete((int) idToDelete);
-
-        assertNull(service.read((int) idToDelete));
-     //   assertEquals(0, repository.count());
-        System.out.println("Deleted Payment with ID: " + idToDelete);
+        List<Payment> cardPayments = service.getPaymentsByMethod("Card");
+        assertFalse(cardPayments.isEmpty());
+        assertTrue(cardPayments.stream().allMatch(p -> p.getPaymentMethod().equals("Card")));
+        System.out.println("Payments with Card method: " + cardPayments);
     }
 }
