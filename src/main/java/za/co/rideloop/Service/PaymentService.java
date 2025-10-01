@@ -3,95 +3,106 @@ package za.co.rideloop.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.co.rideloop.Domain.Payment;
+import za.co.rideloop.Domain.Rental;
 import za.co.rideloop.Repository.PaymentRepository;
 import za.co.rideloop.Util.Helper;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * RentalFactory.java
  * RentalFactory Model Class
  *
- * @Author: Mziwamangwevu Ntutu
- * @Student Number: 217054420
+ * @Author: Ndyebo Qole
+ * @Student Number: 210018615
  * Group 3 I
  **/
 @Service
 public class PaymentService {
 
+    private final PaymentRepository paymentRepository;
 
     @Autowired
-    private PaymentRepository repository;
-
-    public PaymentService(PaymentRepository repository) {
-        this.repository = repository;
+    public PaymentService(PaymentRepository paymentRepository) {
+        this.paymentRepository = paymentRepository;
     }
 
     // ===== Create =====
-
     public Payment create(Payment payment) {
-        if (payment == null ||
-                // !Helper.isValidId(payment.getPaymentID()) ||
-                // !Helper.isValidId(payment.getRentalID()) ||
-                !Helper.isValidAmount(payment.getPaymentAmount()) ||
-                Helper.isNullOrEmpty(payment.getPaymentMethod()) ||
-                payment.getPaymentDate() == null ||
-                !Helper.isNotFutureDate(payment.getPaymentDate()) ||
-                Helper.isNullOrEmpty(payment.getPaymentStatus())) {
-            return null;
+        if (!isValidPayment(payment)) {
+            throw new IllegalArgumentException("Invalid payment data");
         }
-        return this.repository.save(payment);
+        return paymentRepository.save(payment);
     }
 
-                     // ===== Read =====
-
-    public Payment read(Integer id) {
-
-        return this.repository.findById(id).orElse(null);
+    // ===== Read =====
+    public Payment read(Long id) {
+        if (id == null) return null;
+        return paymentRepository.findById(Math.toIntExact(id)).orElse(null);
     }
-                        // ===== Update =====
 
+    // ===== Update =====
     public Payment update(Payment payment) {
-        if (payment == null) {
+        if (payment == null || payment.getPaymentId() == null) {
             return null;
         }
 
-        // Find the existing payment
-        Payment existingPayment = repository.findById(payment.getPaymentId()).orElse(null);
+        Optional<Payment> existingOpt = paymentRepository.findById(Math.toIntExact(payment.getPaymentId()));
+        if (existingOpt.isEmpty()) return null;
 
-        if (existingPayment != null) {
-            // Update fields
-            existingPayment = new Payment.PaymentBuilder()
-                    .setPaymentId(existingPayment.getPaymentId()) // Keep same ID
-                    .setRentalID(payment.getRentalID())
-                    .setPaymentAmount(payment.getPaymentAmount())
-                    .setPaymentMethod(payment.getPaymentMethod())
-                    .setPaymentDate(payment.getPaymentDate())
-                    .setPaymentStatus(payment.getPaymentStatus())
-                    .build();
+        Payment existingPayment = existingOpt.get();
+        Payment updated = new Payment.PaymentBuilder()
+                .setPaymentId(existingPayment.getPaymentId())
+                .setRental(payment.getRental())
+                .setPaymentAmount(payment.getPaymentAmount())
+                .setPaymentMethod(payment.getPaymentMethod())
+                .setPaymentDate(payment.getPaymentDate())
+                .setPaymentStatus(payment.getPaymentStatus())
+                .build();
 
-            // Save and return updated payment
-            return repository.save(existingPayment);
-        }
-
-        return null; // Not found
+        return paymentRepository.save(updated);
     }
 
+    // ===== Delete =====
+    public boolean delete(Long id) {
+        if (id != null && paymentRepository.existsById(Math.toIntExact(id))) {
+            paymentRepository.deleteById(Math.toIntExact(id));
+            return true;
+        }
+        return false;
+    }
 
     // ===== Get All =====
-
     public List<Payment> getAll() {
-        return this.repository.findAll();
+        return paymentRepository.findAll();
     }
 
-
-    public void delete(int id) {
-        this.repository.deleteById(id);
+    // ===== Custom Queries =====
+    public List<Payment> getPaymentsByRental(Rental rental) {
+        if (rental == null) return List.of();
+        return paymentRepository.findByRental(rental);
     }
 
-    // ===== Find by Status =====
     public List<Payment> getPaymentsByStatus(String status) {
-        return this.repository.findByPaymentStatus(status);
+        if (status == null || status.isBlank()) return List.of();
+        return paymentRepository.findByPaymentStatus(status);
+    }
+
+    public List<Payment> getPaymentsByMethod(String method) {
+        if (method == null || method.isBlank()) return List.of();
+        return paymentRepository.findByPaymentMethod(method);
+    }
+
+    // ===== Validation =====
+    private boolean isValidPayment(Payment payment) {
+        return payment != null &&
+                payment.getRental() != null &&
+                Helper.isValidAmount(payment.getPaymentAmount()) &&
+                !Helper.isNullOrEmpty(payment.getPaymentMethod()) &&
+                payment.getPaymentDate() != null &&
+                Helper.isNotFutureDate(payment.getPaymentDate()) &&
+                !Helper.isNullOrEmpty(payment.getPaymentStatus());
     }
 
     }
