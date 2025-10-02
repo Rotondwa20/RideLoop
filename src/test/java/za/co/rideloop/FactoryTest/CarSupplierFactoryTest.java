@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import za.co.rideloop.Domain.CarSupplier;
 import za.co.rideloop.Factory.CarSupplierFactory;
 
+import java.time.LocalDate;
 import java.util.Date;
 /**
  * CarSupplierFactoryTest.java
@@ -24,7 +25,7 @@ class CarSupplierFactoryTest {
 
                 "AutoWorld",
                 "Kruben Naidoo",
-                new Date(),
+                LocalDate.now(),
                 "Active");
         assertNotNull(supplier);
         assertEquals("AutoWorld", supplier.getName());
@@ -40,10 +41,10 @@ class CarSupplierFactoryTest {
 
                     "",
                     "Swatsi Ratia",
-                    new Date(),
+                    LocalDate.now(),
                     "Pending");
         });
-        //String expectedMessage = "Invalid Input";
+
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains("Invalid input"));
