@@ -17,16 +17,17 @@ public class User {
     private String password;
 
 
+    // Role: CUSTOMER or ADMIN
     private String role = "CUSTOMER"; // default
 
-
+    // BCrypt encoder (can be reused)
     private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public User() {}
 
     protected User(Builder builder) {
         this.username = builder.username;
-        this.password = builder.password;
+        this.password = builder.password; // already hashed in Builder
         this.email = builder.email;
         this.role = builder.role;
     }
@@ -39,8 +40,9 @@ public class User {
 
     public String getPassword() { return password; }
 
+    // User.java
     public void setPassword(String password) {
-        this.password = password;
+        this.password = password; // store raw password from service
     }
 
     public String getEmail() { return email; }
@@ -51,6 +53,10 @@ public class User {
 
     public int getId() {
         return this.userID;
+    }
+
+    public void setUserId(int i) {
+
     }
 
     public static class Builder {
@@ -64,6 +70,7 @@ public class User {
             return this;
         }
 
+        // Hash password automatically when using builder
         public Builder setPassword(String password) {
             this.password = passwordEncoder.encode(password);
             return this;
