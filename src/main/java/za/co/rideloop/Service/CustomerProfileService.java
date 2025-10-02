@@ -56,11 +56,15 @@ public class CustomerProfileService {
         existing.setPhoneNumber(profile.getPhoneNumber());
         existing.setAddress(profile.getAddress());
 
+        // Update documents if provided
+        if (profile.getIdDocument() != null) existing.setIdDocument(profile.getIdDocument());
+        if (profile.getLicenseDoc() != null) existing.setLicenseDoc(profile.getLicenseDoc());
+        if (profile.getIdCopy() != null) existing.setIdCopy(profile.getIdCopy());
+        if (profile.getProofOfResidence() != null) existing.setProofOfResidence(profile.getProofOfResidence());
+
         return profileRepository.save(existing);
     }
 
-
-    // Direct return (throws exception if not found)
     public CustomerProfile readProfile(int profileID) {
         return profileRepository.findById(profileID)
                 .orElseThrow(() -> new RuntimeException("Profile not found with ID: " + profileID));
@@ -79,10 +83,51 @@ public class CustomerProfileService {
     }
 
     public List<CustomerProfile> getProfilesByStatus(String status) {
-        return profileRepository.findByStatusIgnoreCase(status);
+        return profileRepository.findByStatus(status);
     }
 
     public void deleteProfile(int profileID) {
         profileRepository.deleteById(profileID);
+    }
+
+    // ---------- Document Methods ----------
+    public void addIdDocument(int profileID, byte[] document) {
+        CustomerProfile profile = readProfile(profileID);
+        profile.setIdDocument(document);
+        profileRepository.save(profile);
+    }
+
+    public void addLicenseDoc(int profileID, byte[] document) {
+        CustomerProfile profile = readProfile(profileID);
+        profile.setLicenseDoc(document);
+        profileRepository.save(profile);
+    }
+
+    public void addIdCopy(int profileID, byte[] document) {
+        CustomerProfile profile = readProfile(profileID);
+        profile.setIdCopy(document);
+        profileRepository.save(profile);
+    }
+
+    public void addProofOfResidence(int profileID, byte[] document) {
+        CustomerProfile profile = readProfile(profileID);
+        profile.setProofOfResidence(document);
+        profileRepository.save(profile);
+    }
+
+    public byte[] getIdDocument(int profileID) {
+        return readProfile(profileID).getIdDocument();
+    }
+
+    public byte[] getLicenseDoc(int profileID) {
+        return readProfile(profileID).getLicenseDoc();
+    }
+
+    public byte[] getIdCopy(int profileID) {
+        return readProfile(profileID).getIdCopy();
+    }
+
+    public byte[] getProofOfResidence(int profileID) {
+        return readProfile(profileID).getProofOfResidence();
     }
 }
