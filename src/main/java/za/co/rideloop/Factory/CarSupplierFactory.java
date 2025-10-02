@@ -1,8 +1,10 @@
-package za.co.rideloop.factory;
+package za.co.rideloop.Factory;
 
 
 import za.co.rideloop.Domain.CarSupplier;
+import za.co.rideloop.Util.ValidationHelper;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -16,16 +18,17 @@ import java.util.Date;
  */
 
 public class CarSupplierFactory {
-    public static CarSupplier build(int supplierID, String name, String contactPerson, Date supplyDate, String contractStatus) {
-        if(name == null || name.isEmpty() || contactPerson == null || contactPerson.isEmpty() || contractStatus == null || contractStatus.isEmpty()){
-            throw new IllegalArgumentException("invalid input - fields must not be empty");
+        public static CarSupplier build(String name, String contactPerson, LocalDate supplyDate, String contractStatus) {
+            ValidationHelper.requireNonBlank(name, "name");
+            ValidationHelper.requireNonBlank(contactPerson, "contactPerson");
+            ValidationHelper.requireNonNull(supplyDate, "supplyDate");
+            ValidationHelper.requireNonNull(contractStatus, "contractStatus");
+
+            return new CarSupplier.Builder()
+                    .name(name.trim())
+                    .contactPerson(contactPerson.trim())
+                    .supplyDate(supplyDate)
+                    .contractStatus(contractStatus.trim())
+                    .build();
         }
-        return new CarSupplier.Builder()
-                .supplierID(supplierID)
-                .name(name)
-                .contactPerson(contactPerson)
-                .supplyDate(supplyDate)
-                .contractStatus(contractStatus)
-                .build();
-    }
 }

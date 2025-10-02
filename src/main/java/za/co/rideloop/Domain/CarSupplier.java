@@ -1,8 +1,18 @@
 package za.co.rideloop.Domain;
 
 import jakarta.persistence.*;
-import java.util.Date;
-import java.util.Objects;
+
+import java.time.LocalDate;
+/**
+ * CarSupplier.java
+ * Incident model class
+ *
+ * @author : Swatsi Bongani Ratia
+ * @studnr : 230724477
+ * @group : 3I
+ * @Java version: "21.0.3" 2024-04-16 LTS
+ */
+
 
 @Entity
 @Table(name = "car_supplier")
@@ -16,9 +26,10 @@ public class CarSupplier {
     private String name;
     private String contactPerson;
 
-    @Temporal(TemporalType.DATE)
-    private Date supplyDate;
+    @Column(name = "supply_date", columnDefinition = "DATE") // explicit DATE mapping
+    private LocalDate supplyDate;
 
+    @Column(name = "contract_status")
     private String contractStatus;
 
     protected CarSupplier() { }
@@ -35,10 +46,8 @@ public class CarSupplier {
     public int getSupplierID() { return supplierID; }
     public String getName() { return name; }
     public String getContactPerson() { return contactPerson; }
-    public Date getSupplyDate() { return supplyDate != null ? new Date(supplyDate.getTime()) : null; }
+    public LocalDate getSupplyDate() { return supplyDate; }
     public String getContractStatus() { return contractStatus; }
-
-
 
     @Override
     public String toString() {
@@ -55,9 +64,8 @@ public class CarSupplier {
         private int supplierID;
         private String name;
         private String contactPerson;
-        private Date supplyDate;
+        private LocalDate supplyDate;
         private String contractStatus;
-
 
         public Builder supplierID(int supplierID) {
             this.supplierID = supplierID;
@@ -74,8 +82,8 @@ public class CarSupplier {
             return this;
         }
 
-        public Builder supplyDate(Date supplyDate) {
-            this.supplyDate = (supplyDate != null) ? new Date(supplyDate.getTime()) : null;
+        public Builder supplyDate(LocalDate supplyDate) {
+            this.supplyDate = supplyDate;
             return this;
         }
 

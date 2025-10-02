@@ -11,6 +11,7 @@ import za.co.rideloop.Factory.CarSupplierFactory;
 import za.co.rideloop.Repository.CarSupplierRepository;
 import za.co.rideloop.Service.CarSupplierService;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class CarSupplierServiceTest {
         carSupplier = CarSupplierFactory.build(
                 "Test Supplier",
                 "John Doe",
-                new Date(),
+                LocalDate.now(),
                 "Active"
         );
     }
@@ -95,7 +96,7 @@ public class CarSupplierServiceTest {
         CarSupplier secondSupplier = CarSupplierFactory.build(
                 "Second Supplier",
                 "Alice Wonderland",
-                new Date(),
+                    LocalDate.now(),
                 "Active"
         );
         service.createCarSupplier(secondSupplier);
