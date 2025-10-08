@@ -61,6 +61,7 @@ public class CustomerProfileService {
         if (profile.getLicenseDoc() != null) existing.setLicenseDoc(profile.getLicenseDoc());
         if (profile.getIdCopy() != null) existing.setIdCopy(profile.getIdCopy());
         if (profile.getProofOfResidence() != null) existing.setProofOfResidence(profile.getProofOfResidence());
+        if (profile.getProfilePicture() != null) existing.setProfilePicture(profile.getProfilePicture());
 
         return profileRepository.save(existing);
     }
@@ -115,6 +116,13 @@ public class CustomerProfileService {
         profileRepository.save(profile);
     }
 
+    public void addProfilePicture(int profileID, byte[] picture) {
+        CustomerProfile profile = readProfile(profileID);
+        profile.setProfilePicture(picture);
+        profileRepository.save(profile);
+    }
+
+    // ---------- Document Getters ----------
     public byte[] getIdDocument(int profileID) {
         return readProfile(profileID).getIdDocument();
     }
@@ -129,5 +137,9 @@ public class CustomerProfileService {
 
     public byte[] getProofOfResidence(int profileID) {
         return readProfile(profileID).getProofOfResidence();
+    }
+
+    public byte[] getProfilePicture(int profileID) {
+        return readProfile(profileID).getProfilePicture();
     }
 }

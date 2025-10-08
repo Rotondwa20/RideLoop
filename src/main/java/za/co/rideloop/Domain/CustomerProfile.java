@@ -30,7 +30,6 @@ public class CustomerProfile {
     @Column(name = "id_document", columnDefinition = "MEDIUMBLOB")
     private byte[] idDocument;
 
-
     @Lob
     @Column(name = "license_doc", columnDefinition = "MEDIUMBLOB")
     private byte[] licenseDoc;
@@ -42,6 +41,11 @@ public class CustomerProfile {
     @Lob
     @Column(name = "proof_of_residence", columnDefinition = "MEDIUMBLOB")
     private byte[] proofOfResidence;
+
+    // ---------- Profile Picture ----------
+    @Lob
+    @Column(name = "profile_picture", columnDefinition = "MEDIUMBLOB")
+    private byte[] profilePicture;
 
     public CustomerProfile() {
         this.status = "pending"; // default status
@@ -61,6 +65,7 @@ public class CustomerProfile {
         this.licenseDoc = builder.licenseDoc;
         this.idCopy = builder.idCopy;
         this.proofOfResidence = builder.proofOfResidence;
+        this.profilePicture = builder.profilePicture;
     }
 
     // ---------- Getters ----------
@@ -80,6 +85,7 @@ public class CustomerProfile {
     public byte[] getLicenseDoc() { return licenseDoc; }
     public byte[] getIdCopy() { return idCopy; }
     public byte[] getProofOfResidence() { return proofOfResidence; }
+    public byte[] getProfilePicture() { return profilePicture; }
 
     // ---------- Setters ----------
     public void setProfileID(int profileID) { this.profileID = profileID; }
@@ -96,10 +102,11 @@ public class CustomerProfile {
     public void setLicenseDoc(byte[] licenseDoc) { this.licenseDoc = licenseDoc; }
     public void setIdCopy(byte[] idCopy) { this.idCopy = idCopy; }
     public void setProofOfResidence(byte[] proofOfResidence) { this.proofOfResidence = proofOfResidence; }
+    public void setProfilePicture(byte[] profilePicture) { this.profilePicture = profilePicture; }
 
     // ---------- Builder ----------
     public static class Builder {
-        private int profileID; // allow setting ID
+        private int profileID;
         private String firstName;
         private String lastName;
         private String idNumber;
@@ -113,6 +120,7 @@ public class CustomerProfile {
         private byte[] licenseDoc;
         private byte[] idCopy;
         private byte[] proofOfResidence;
+        private byte[] profilePicture;
 
         public Builder setProfileID(int profileID) {
             this.profileID = profileID;
@@ -179,12 +187,16 @@ public class CustomerProfile {
             return this;
         }
 
+        public Builder setProfilePicture(byte[] profilePicture) {
+            this.profilePicture = profilePicture;
+            return this;
+        }
+
         public CustomerProfile build() {
             if (this.status == null) this.status = "pending";
             CustomerProfile profile = new CustomerProfile(this);
             profile.setProfileID(this.profileID);
             return profile;
         }
-
-    }}
-
+    }
+}
