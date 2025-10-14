@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/profiles")
+@CrossOrigin(origins = "http://localhost:3000")
 public class CustomerProfileController {
 
     private final CustomerProfileService profileService;
@@ -70,6 +71,7 @@ public class CustomerProfileController {
         return ResponseEntity.noContent().build();
     }
 
+    // ---------- Document Upload ----------
     @PostMapping("/{profileId}/document/id")
     public ResponseEntity<Void> uploadIdDocument(@PathVariable int profileId,
                                                  @RequestParam("file") MultipartFile file) throws IOException {
@@ -98,6 +100,14 @@ public class CustomerProfileController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/{profileId}/document/profile-picture")
+    public ResponseEntity<Void> uploadProfilePicture(@PathVariable int profileId,
+                                                     @RequestParam("file") MultipartFile file) throws IOException {
+        profileService.addProfilePicture(profileId, file.getBytes());
+        return ResponseEntity.ok().build();
+    }
+
+    // ---------- Document View ----------
     @GetMapping("/{profileId}/document/id")
     public ResponseEntity<byte[]> viewIdDocument(@PathVariable int profileId) {
         byte[] data = profileService.getIdDocument(profileId);
@@ -131,6 +141,15 @@ public class CustomerProfileController {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"proof_of_residence_" + profileId + ".pdf\"")
+                .body(data);
+    }
+
+    @GetMapping("/{profileId}/document/profile-picture")
+    public ResponseEntity<byte[]> viewProfilePicture(@PathVariable int profileId) {
+        byte[] data = profileService.getProfilePicture(profileId);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG) // or MediaType.IMAGE_PNG depending on your files
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"profile_picture_" + profileId + ".jpg\"")
                 .body(data);
     }
 }

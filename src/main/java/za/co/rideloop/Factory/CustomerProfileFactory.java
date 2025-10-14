@@ -18,10 +18,11 @@ public class CustomerProfileFactory {
             byte[] idDocument,
             byte[] licenseDoc,
             byte[] idCopy,
-            byte[] proofOfResidence
+            byte[] proofOfResidence,
+            byte[] profilePicture // new parameter
     ) throws IllegalArgumentException {
 
-        // Validate input
+        // ---------- Validate input ----------
         CustomerProfileValidator.validateText(firstName, "First Name");
         CustomerProfileValidator.validateText(lastName, "Last Name");
         CustomerProfileValidator.validateNumber(idNumber, "ID Number");
@@ -34,8 +35,9 @@ public class CustomerProfileFactory {
         if (licenseDoc == null || licenseDoc.length == 0) throw new IllegalArgumentException("License Document must be uploaded.");
         if (idCopy == null || idCopy.length == 0) throw new IllegalArgumentException("ID Copy must be uploaded.");
         if (proofOfResidence == null || proofOfResidence.length == 0) throw new IllegalArgumentException("Proof of Residence must be uploaded.");
+        if (profilePicture == null || profilePicture.length == 0) throw new IllegalArgumentException("Profile Picture must be uploaded.");
 
-        // Build CustomerProfile
+        // ---------- Build CustomerProfile ----------
         return new CustomerProfile.Builder()
                 .setFirstName(firstName)
                 .setLastName(lastName)
@@ -48,6 +50,7 @@ public class CustomerProfileFactory {
                 .setLicenseDoc(licenseDoc)
                 .setIdCopy(idCopy)
                 .setProofOfResidence(proofOfResidence)
+                .setProfilePicture(profilePicture) // set profile picture
                 .build();
     }
 }
