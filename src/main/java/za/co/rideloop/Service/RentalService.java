@@ -1,5 +1,6 @@
 package za.co.rideloop.Service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.co.rideloop.Domain.Invoice;
@@ -19,28 +20,19 @@ import java.util.List;
  * Group 3 I
  **/
 @Service
+@Transactional
 public class RentalService {
 
 
     @Autowired
+
     private RentalRepository repository;
 
     // ===== Create =====
+
+    @Transactional
     public Rental create(Rental rental) {
 
-        if (rental == null ||
-                //  !Helper.isValidId(rental.getRentalID()) ||
-                //    !Helper.isValidId(rental.getCustomerID()) ||
-                //    !Helper.isValidId(rental.getCarID()) ||
-                rental.getStartDate() == null ||
-                rental.getEndDate() == null ||
-                //   !Helper.isValidDateRange(rental.getStartDate(), rental.getEndDate()) ||
-                Helper.isNullOrEmpty(rental.getPickupLocation()) ||
-                Helper.isNullOrEmpty(rental.getDropoffLocation()) ||
-                !Helper.isValidAmount(rental.getTotalCost()) ||
-                Helper.isNullOrEmpty(rental.getStatus())) {
-            return null;
-        }
         return this.repository.save(rental);
     }
     // ===== Create =====
@@ -69,13 +61,12 @@ public class RentalService {
                     .setRentalID(existingRental.getRentalID()) // Keep the original ID
                     .setCarID(rental.getCarID())
                     .setCustomerID(rental.getCustomerID())
-                    .setStartDate(rental.getStartDate())
-                    .setEndDate(rental.getEndDate())
+                    .setDate(rental.getDate())
                     .setPickupLocation(rental.getPickupLocation())
                     .setDropoffLocation(rental.getDropoffLocation())
-                    .setInsuranceID(rental.getInsuranceID())
+
                     .setTotalCost(rental.getTotalCost())
-                    .setStatus(rental.getStatus())
+                    .setDistanceInKm(rental.getDistanceInKm())
                     .build();
 
             // 4. Save the new, updated rental object.
@@ -98,8 +89,8 @@ public class RentalService {
         this.repository.deleteById(id);
     }
     // ===== Find by Status =====
-    public List<Rental> getRentalsByStatus(String status) {
-        return this.repository.findByStatus(status);
+    public List<Rental> getRentalsByCustomer(int customerId) {
+        return repository.findByCustomerID(customerId);
     }
 
 }

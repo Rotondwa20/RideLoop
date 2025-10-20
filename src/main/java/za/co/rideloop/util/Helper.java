@@ -28,11 +28,20 @@ public class Helper {
         if (start == null || end == null) return false;
         return !end.isBefore(start);
     }
+    // ✅ Checks if a string is null or empty
 
-    // ===== Email Validation =====
-//    public static boolean isValidEmail(String email) {
-//        if (isNullOrEmpty(email)) return false;
-//        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-//        return email.matches(emailRegex);
-//    }
+
+    // ✅ Checks if an object is null
+    public static boolean isNull(Object obj) {
+        return obj == null;
+    }
+
+    // ✅ Checks if two dates make sense (endDate after startDate)
+
+
+    // ✅ Checks if a number is positive
+    public static boolean isPositive(double number) {
+        return number > 0;
+    }
+
 }

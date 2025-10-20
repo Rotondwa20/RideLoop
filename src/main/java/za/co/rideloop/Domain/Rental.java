@@ -1,7 +1,6 @@
 package za.co.rideloop.Domain;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 
 /**
@@ -15,20 +14,17 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "rentals")
 public class Rental {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int rentalID;
     private int carID;
     private int customerID;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private String pickupLocation;
-    private String dropoffLocation;
-    private int insuranceID;
-
+    private LocalDate date;
+    private int pickupLocation;
+    private int dropoffLocation;
     private double totalCost;
-    private String status;
-
+    private double distanceInKm;
     protected Rental() {
     }
 
@@ -36,13 +32,11 @@ public class Rental {
         this.rentalID = builder.rentalID;
         this.carID = builder.carID;
         this.customerID = builder.customerID;
-        this.startDate = builder.startDate;
-        this.endDate = builder.endDate;
+        this.date = builder.date;
         this.pickupLocation = builder.pickupLocation;
         this.dropoffLocation = builder.dropoffLocation;
-        this.insuranceID = builder.insuranceID;
         this.totalCost = builder.totalCost;
-        this.status = builder.status;
+        this.distanceInKm = builder.distanceInKm;
     }
 
     public int getRentalID() {
@@ -57,60 +51,51 @@ public class Rental {
         return customerID;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public String getPickupLocation() {
+    public int  getPickupLocation() {
         return pickupLocation;
     }
 
-    public String getDropoffLocation() {
+    public int getDropoffLocation() {
         return dropoffLocation;
-    }
-
-    public int getInsuranceID() {
-        return insuranceID;
     }
 
     public double getTotalCost() {
         return totalCost;
     }
 
-    public String getStatus() {
-        return status;
+
+    public double getDistanceInKm() {
+        return distanceInKm;
     }
 
     @Override
     public String toString() {
-        return "RentalRepository{" +
+        return "Rental{" +
                 "rentalID=" + rentalID +
                 ", carID=" + carID +
                 ", customerID=" + customerID +
-                ", startDate='" + startDate + '\'' +
-                ", endDate='" + endDate + '\'' +
+                ", date=" + date +
                 ", pickupLocation='" + pickupLocation + '\'' +
                 ", dropoffLocation='" + dropoffLocation + '\'' +
-                ", insuranceID=" + insuranceID +
                 ", totalCost=" + totalCost +
-                ", status='" + status + '\'' +
+                ", distanceInKm=" + distanceInKm +
                 '}';
     }
+
     public static class RentalBuilder {
         private int rentalID;
         private int carID;
         private int customerID;
-        private LocalDate startDate;
-        private LocalDate endDate;
-        private String pickupLocation;
-        private String dropoffLocation;
-        private int insuranceID;
+        private LocalDate date;
+        private int pickupLocation;
+        private int dropoffLocation;
         private double totalCost;
-        private String status;
+
+        private double distanceInKm;
 
         public RentalBuilder() {
         }
@@ -130,28 +115,18 @@ public class Rental {
             return this;
         }
 
-        public RentalBuilder setStartDate(LocalDate startDate) {
-            this.startDate = startDate;
+        public RentalBuilder setDate(LocalDate date) {
+            this.date = date;
             return this;
         }
 
-        public RentalBuilder setEndDate(LocalDate endDate) {
-            this.endDate = endDate;
-            return this;
-        }
-
-        public RentalBuilder setPickupLocation(String pickupLocation) {
+        public RentalBuilder setPickupLocation(int pickupLocation) {
             this.pickupLocation = pickupLocation;
             return this;
         }
 
-        public RentalBuilder setDropoffLocation(String dropoffLocation) {
+        public RentalBuilder setDropoffLocation(int dropoffLocation) {
             this.dropoffLocation = dropoffLocation;
-            return this;
-        }
-
-        public RentalBuilder setInsuranceID(int insuranceID) {
-            this.insuranceID = insuranceID;
             return this;
         }
 
@@ -159,27 +134,12 @@ public class Rental {
             this.totalCost = totalCost;
             return this;
         }
-
-        public RentalBuilder setStatus(String status) {
-            this.status = status;
-            return this;
-        }
-        public RentalBuilder RentalBuilderCopy(Rental rental) {
-            this.rentalID = rental.rentalID;
-            this.carID = rental.carID;
-            this.customerID = rental.customerID;
-            this.startDate = rental.startDate;
-            this.endDate = rental.endDate;
-            this.pickupLocation = rental.pickupLocation;
-            this.dropoffLocation = rental.dropoffLocation;
-            this.insuranceID = rental.insuranceID;
-            this.totalCost = rental.totalCost;
-            this.status = rental.status;
+        public RentalBuilder setDistanceInKm(double distanceInKm) {
+            this.distanceInKm = distanceInKm;
             return this;
         }
 
         public Rental build() {
-            // You can add validation here if needed
             return new Rental(this);
         }
     }
