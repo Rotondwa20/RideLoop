@@ -8,6 +8,7 @@ package za.co.rideloop.Repository;
  **/
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import za.co.rideloop.Domain.CustomerProfile;
 import za.co.rideloop.Domain.Rental;
 
 import java.util.List;
@@ -16,5 +17,7 @@ import java.util.List;
 public interface RentalRepository  extends JpaRepository<Rental,Integer > {
 
 
-    List<Rental> findByStatus(String status);
+    List<Rental> findByCustomerID(int customerID);
+
+
 }
