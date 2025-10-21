@@ -1,64 +1,81 @@
 package za.co.rideloop.Domain;
 
 import jakarta.persistence.*;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userID;  // primary key
+    private int userID;  // Primary key
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
     private String username;
-    private String password;
 
+    private String password; // Will be hashed in UserService
 
-    // Role: CUSTOMER or ADMIN
-    private String role = "CUSTOMER"; // default
-
-    // BCrypt encoder (can be reused)
-    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    // Role can be "CUSTOMER" or "ADMIN"
+    private String role = "CUSTOMER"; // Default role
 
     public User() {}
 
+    // Private constructor for Builder
     protected User(Builder builder) {
         this.username = builder.username;
-        this.password = builder.password; // already hashed in Builder
+        this.password = builder.password;
         this.email = builder.email;
         this.role = builder.role;
     }
 
-    public int getUserID() { return userID; }
-    public void setUserID(int userID) { this.userID = userID; }
-
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
-
-    public String getPassword() { return password; }
-
-    // User.java
-    public void setPassword(String password) {
-        this.password = password; // store raw password from service
+    // Getters and Setters
+    public int getUserID() {
+        return userID;
     }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password; // plain or hashed - handled in service
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public int getId() {
         return this.userID;
     }
 
-    public void setUserId(int i) {
-
-    }
-
+    // Builder pattern (for easy object creation)
     public static class Builder {
         private String username;
         private String password;
@@ -70,9 +87,8 @@ public class User {
             return this;
         }
 
-        // Hash password automatically when using builder
         public Builder setPassword(String password) {
-            this.password = passwordEncoder.encode(password);
+            this.password = password; // no hashing here
             return this;
         }
 

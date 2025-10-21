@@ -1,3 +1,7 @@
+
+
+
+
 package za.co.rideloop.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,5 +155,4 @@ public class CustomerProfileController {
                 .contentType(MediaType.IMAGE_JPEG) // or MediaType.IMAGE_PNG depending on your files
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"profile_picture_" + profileId + ".jpg\"")
                 .body(data);
-    }
-}
+    }}

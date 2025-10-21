@@ -1,89 +1,107 @@
 package za.co.rideloop.Controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import za.co.rideloop.Domain.User;
+import za.co.rideloop.Security.CustomUserDetails;
+import za.co.rideloop.Security.JwtUtil;
 import za.co.rideloop.Service.UserService;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
 
-    @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.findAll());
+    public UserController(UserService userService,
+                          AuthenticationManager authenticationManager,
+                          JwtUtil jwtUtil) {
+        this.userService = userService;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
     }
 
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> getUserById(@PathVariable int id) {
-        Optional<User> user = userService.findById(id);
-        Map<String, Object> response = new HashMap<>();
-        if (user.isPresent()) {
-            response.put("user", user.get());
-            return ResponseEntity.ok(response);
-        } else {
-            response.put("message", "User not found");
-            return ResponseEntity.status(404).body(response);
-        }
-    }
-
-
-    @PostMapping
-    public ResponseEntity<Map<String, String>> createUser(
+    // ✅ Register user
+    @PostMapping("/register")
+    public ResponseEntity<Map<String, String>> registerUser(
             @RequestBody User user,
-            @RequestParam(required = false) String securityCode) {
+            @RequestParam(required = false) String securityCode,
+            HttpServletResponse response) {
+
+        // Add security header
+        response.setHeader("X-Content-Type-Options", "nosniff");
 
         String message = userService.registerUser(user, securityCode);
-        Map<String, String> response = new HashMap<>();
-        response.put("message", message);
+        Map<String, String> resp = new HashMap<>();
+        resp.put("message", message);
 
         if ("User registered successfully".equals(message)) {
-            return ResponseEntity.status(201).body(response);
+            return ResponseEntity.status(201)
+                    .header("X-Content-Type-Options", "nosniff")
+                    .body(resp);
         } else {
-            return ResponseEntity.status(400).body(response);
+            return ResponseEntity.status(400)
+                    .header("X-Content-Type-Options", "nosniff")
+                    .body(resp);
         }
     }
 
-
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, String>> deleteUser(@PathVariable int id) {
-        userService.deleteById(id);
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "User with ID " + id + " deleted successfully");
-        return ResponseEntity.ok(response);
-    }
-
+    // ✅ Login user (Spring Security + JWT)
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> loginUser(@RequestBody Map<String, String> loginData) {
+    public ResponseEntity<Map<String, Object>> login(
+            @RequestBody Map<String, String> loginData,
+            HttpServletResponse response) {
+
+        response.setHeader("X-Content-Type-Options", "nosniff"); // prevent MIME sniffing
+
+        Map<String, Object> resp = new HashMap<>();
         String email = loginData.get("email");
         String password = loginData.get("password");
 
-        Map<String, Object> response = new HashMap<>();
-        Optional<User> userOpt = userService.loginUser(email, password);
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(email, password)
+            );
 
-        if (userOpt.isEmpty()) {
-            response.put("message", "Invalid email or password");
-            return ResponseEntity.status(400).body(response);
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            User user = userDetails.getUser();
+
+            // Generate JWT token
+            String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
+
+            // Set JWT in a secure cookie
+            Cookie jwtCookie = new Cookie("token", token);
+            jwtCookie.setHttpOnly(true);
+            jwtCookie.setSecure(true);       // ✅ only send over HTTPS
+            jwtCookie.setPath("/");
+            jwtCookie.setMaxAge(24 * 60 * 60); // 1 day
+            jwtCookie.setSecure(Boolean.parseBoolean("Strict")); // ✅ prevent CSRF
+            response.addCookie(jwtCookie);
+
+            // Build JSON response
+            resp.put("message", "Login successful");
+            resp.put("token", token);
+            resp.put("user", user);
+
+            return ResponseEntity.ok()
+                    .header("X-Content-Type-Options", "nosniff")
+                    .body(resp);
+
+        } catch (BadCredentialsException e) {
+            resp.put("message", "Invalid email or password");
+            return ResponseEntity.status(401)
+                    .header("X-Content-Type-Options", "nosniff")
+                    .body(resp);
         }
-
-        response.put("message", "Login successful");
-        response.put("user", userOpt.get());
-        return ResponseEntity.ok(response);
     }
-
-
-
-
 }

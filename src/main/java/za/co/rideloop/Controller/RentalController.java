@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rental")
+@CrossOrigin(origins = "http://localhost:3000")
 public class RentalController {
 
     private final RentalService service;

@@ -17,5 +17,6 @@ import java.util.List;
  */
 
 public interface IncidentRepository extends JpaRepository<Incident, Integer> {
+
     List<Incident> findByRentals(Rental rental);
 }
