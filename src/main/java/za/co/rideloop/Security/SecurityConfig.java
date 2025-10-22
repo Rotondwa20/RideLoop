@@ -2,6 +2,7 @@ package za.co.rideloop.Security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -40,14 +41,13 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
-    // ✅ Global CORS Configuration for Spring Security
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("http://localhost:3000"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-        config.setAllowCredentials(true); // needed for cookies / JWTs if used in headers
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
@@ -57,32 +57,32 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // ✅ Enable CORS globally
-                .cors().and()
-                // ✅ Disable CSRF for APIs
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
-                // ✅ Configure authorization
                 .authorizeHttpRequests(auth -> auth
-
-                        // Public endpoints (no authentication)
+                        // Public endpoints
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/users/register", "/users/login").permitAll()
 
-                        // Admin-only endpoints
+                        // Admin endpoints
                         .requestMatchers(
                                 "/api/cars/create", "/api/cars/update/**", "/api/cars/delete/**",
                                 "/api/locations/create", "/api/locations/update", "/api/locations/delete/**",
                                 "/invoice/create", "/invoice/update", "/invoice/delete/**",
                                 "/maintenance/create", "/maintenance/update/**", "/maintenance/delete/**",
-                                "/payment/create", "/payment/update", "/payment/delete/**",
-                                "/rental/create", "/rental/update", "/rental/delete/**",
+                                "/payment/update", "/payment/delete/**",
+                                "/rental/update", "/rental/delete/**",
                                 "/securitycompany/create", "/securitycompany/update", "/securitycompany/delete/**",
-                                "/carsupplier/create", "/carsupplier/update", "/carsupplier/delete/**",
-                                "/incidents/delete/**"
+                                "/carsupplier/create", "/carsupplier/update", "/carsupplier/delete/**"
                         ).hasRole("ADMIN")
 
-                        // Shared endpoints
+                        // Customer-only endpoints
+                        .requestMatchers("/rental/create", "/payment/create", "/api/rewards/process")
+                        .hasRole("CUSTOMER")
+
+                        // Shared endpoints for both roles
                         .requestMatchers(
-                                "/api/cars/all", "/api/cars/{id}",
+                                "/api/cars/all", "/api/cars/**",
                                 "/api/locations/all", "/api/locations/search",
                                 "/invoice/getAll", "/invoice/read/**", "/invoice/get-by-reference/**",
                                 "/maintenance/all", "/maintenance/{id}",
@@ -90,17 +90,13 @@ public class SecurityConfig {
                                 "/rental/getAll", "/rental/read/**", "/rental/get-by-status/**",
                                 "/securitycompany/getAll", "/securitycompany/read/**",
                                 "/carsupplier/getAll", "/carsupplier/read/**",
-                                "/incidents/create", "/incidents/rental/**", "/incidents/getAll"
+                                "/incidents/**",
+                                "/api/rewards/customer/**"
                         ).hasAnyRole("ADMIN", "CUSTOMER")
 
-                        // Anything else must be authenticated
                         .anyRequest().authenticated()
                 )
-
-                // ✅ Add JWT Filter
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-
-                // ✅ Stateless (no session cookies)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();

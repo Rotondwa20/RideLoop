@@ -17,11 +17,7 @@ import java.util.List;
 public interface RentalRepository  extends JpaRepository<Rental,Integer > {
 
 
-<<<<<<< Updated upstream
     List<Rental> findByCustomerID(int customerID);
 
-=======
-    List<Rental> findByStatus(String status);
->>>>>>> Stashed changes
 
 }

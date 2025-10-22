@@ -39,7 +39,7 @@ public class PaymentService {
     // ===== Read =====
     public Payment read(Long id) {
         if (id == null) return null;
-        return paymentRepository.findById(Math.toIntExact(id)).orElse(null);
+        return paymentRepository.findById(id).orElse(null);
     }
 
     // ===== Update =====
@@ -48,7 +48,7 @@ public class PaymentService {
             return null;
         }
 
-        Optional<Payment> existingOpt = paymentRepository.findById(Math.toIntExact(payment.getPaymentId()));
+        Optional<Payment> existingOpt = paymentRepository.findById(payment.getPaymentId());
         if (existingOpt.isEmpty()) return null;
 
         Payment existingPayment = existingOpt.get();
@@ -64,14 +64,6 @@ public class PaymentService {
         return paymentRepository.save(updated);
     }
 
-    // ===== Delete =====
-    public boolean delete(Long id) {
-        if (id != null && paymentRepository.existsById(Math.toIntExact(id))) {
-            paymentRepository.deleteById(Math.toIntExact(id));
-            return true;
-        }
-        return false;
-    }
 
     // ===== Get All =====
     public List<Payment> getAll() {

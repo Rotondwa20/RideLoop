@@ -50,7 +50,7 @@ public class CustomerProfileController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<CustomerProfile> getAllProfiles() {
         return profileService.getAllProfiles();
     }

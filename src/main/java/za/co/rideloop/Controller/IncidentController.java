@@ -63,7 +63,7 @@ public class IncidentController {
     }
 
     // Get all incidents
-    @GetMapping("incidents/getAll")
+    @GetMapping("/getAll")
     public ResponseEntity<List<Incident>> getAllIncidents() {
         return ResponseEntity.ok(incidentService.getAllIncidents());
     }

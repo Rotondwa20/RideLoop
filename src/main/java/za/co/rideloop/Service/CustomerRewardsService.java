@@ -1,15 +1,15 @@
 package za.co.rideloop.Service;
 
 import org.springframework.stereotype.Service;
-import za.co.rideloop.Domain.CustomerRewards;
 import za.co.rideloop.Domain.CustomerProfile;
+import za.co.rideloop.Domain.CustomerRewards;
 import za.co.rideloop.Domain.Payment;
-import za.co.rideloop.Repository.CustomerRewardsRepository;
 import za.co.rideloop.Repository.CustomerProfileRepository;
+import za.co.rideloop.Repository.CustomerRewardsRepository;
 import za.co.rideloop.Repository.PaymentRepository;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class CustomerRewardsService {
@@ -26,61 +26,57 @@ public class CustomerRewardsService {
         this.paymentRepo = paymentRepo;
     }
 
-    /**
-     * Process a payment and update reward points for the customer.
-     */
-    public CustomerRewards processPaymentRewards(Integer paymentId, Integer profileId) {
+    /** 🎁 Each payment creates a new CustomerRewards record */
+    public CustomerRewards processPaymentRewards(Long paymentId, Integer profileId) {
         if (paymentId == null || profileId == null) {
             throw new IllegalArgumentException("Payment ID and Profile ID cannot be null");
         }
 
-        Optional<Payment> paymentOpt = paymentRepo.findById(paymentId);
-        Optional<CustomerProfile> profileOpt = profileRepo.findById(profileId);
+        Payment payment = paymentRepo.findById(paymentId)
+                .orElseThrow(() -> new IllegalArgumentException("Payment not found"));
 
-        if (paymentOpt.isEmpty() || profileOpt.isEmpty()) {
-            throw new IllegalArgumentException("Payment or Profile not found!");
-        }
+        CustomerProfile profile = profileRepo.findById(profileId)
+                .orElseThrow(() -> new IllegalArgumentException("Customer profile not found"));
 
-        Payment payment = paymentOpt.get();
-        CustomerProfile profile = profileOpt.get();
+        // 1 point per R10 spent
+        double amount = payment.getPaymentAmount() != null ? payment.getPaymentAmount() : 0;
+        int earnedPoints = (int) Math.floor(amount / 10);
 
-        // Calculate reward points: 1 point per R10 spent
-        int earnedPoints = (payment.getPaymentAmount() != null) ? (int) Math.floor(payment.getPaymentAmount() / 10) : 0;
+        // ✅ Always create a new rewards record
+        CustomerRewards newReward = new CustomerRewards.Builder()
+                .setCustomerProfile(profile)
+                .setPayment(payment)
+                .setCurrentPoints(earnedPoints)
+                .setLifetimePoints(earnedPoints)
+                .setCurrentTier(determineTier(earnedPoints))
+                .setLastActivityDate(LocalDateTime.now())
+                .build();
 
-        // Retrieve existing rewards or create new
-        CustomerRewards rewards = rewardsRepo.findByCustomerProfile(profile)
-                .orElse(new CustomerRewards.Builder()
-                        .setCustomerProfile(profile)
-                        .setPayment(payment)
-                        .build());
-
-        // Update points
-        rewards.setCurrentPoints(rewards.getCurrentPoints() + earnedPoints);
-        rewards.setLifetimePoints(rewards.getLifetimePoints() + earnedPoints);
-        rewards.setLastActivityDate(LocalDateTime.now());
-
-        // Update tier
-        rewards.setCurrentTier(determineTier(rewards.getLifetimePoints()));
-
-        return rewardsRepo.save(rewards);
+        return rewardsRepo.save(newReward);
     }
 
-    /**
-     * Get rewards for a profile by ID.
-     */
-    public Optional<CustomerRewards> getRewardsByProfileId(Integer profileId) {
-        if (profileId == null) return Optional.empty();
-        return profileRepo.findById(profileId)
-                .flatMap(rewardsRepo::findByCustomerProfile);
+    /** Get all rewards for a customer */
+    public List<CustomerRewards> getAllRewardsByProfileId(Integer profileId) {
+        return rewardsRepo.findAllByCustomerProfile_ProfileID(profileId);
     }
 
-    /**
-     * Determine tier based on lifetime points.
-     */
-    private String determineTier(int lifetimePoints) {
-        if (lifetimePoints >= 1000) return "Platinum";
-        if (lifetimePoints >= 500) return "Gold";
-        if (lifetimePoints >= 250) return "Silver";
+    /** Calculate total points across all rewards */
+    public int getTotalPointsForProfile(Integer profileId) {
+        return getAllRewardsByProfileId(profileId).stream()
+                .mapToInt(CustomerRewards::getCurrentPoints)
+                .sum();
+    }
+
+    /** Determine current tier based on points */
+    public String getTierForProfile(Integer profileId) {
+        int totalPoints = getTotalPointsForProfile(profileId);
+        return determineTier(totalPoints);
+    }
+
+    private String determineTier(int points) {
+        if (points >= 1000) return "Platinum";
+        if (points >= 500) return "Gold";
+        if (points >= 250) return "Silver";
         return "Bronze";
     }
 }
